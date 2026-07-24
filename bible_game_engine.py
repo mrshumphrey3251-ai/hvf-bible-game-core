@@ -65,7 +65,7 @@ class BibleGameEngine:
             prompt="What was the first physical manifestation commanded by God during Creation?",
             options=["The Firmament", "Light", "Dry Land", "The Sun and Moon"],
             correct_index=1,
-            explanation="In Genesis 1:3, God said, "Let there be light," and there was light."
+            explanation="In Genesis 1:3, God said, 'Let there be light,' and there was light."
         )
         q2 = ScriptureChallenge(
             era=BiblicalEra.GOSPELS,
@@ -73,7 +73,7 @@ class BibleGameEngine:
             prompt="According to the Gospel of John, what was in the beginning with God and was God?",
             options=["The Spirit", "The Light", "The Word", "The Law"],
             correct_index=2,
-            explanation="John 1:1 states: "In the beginning was the Word, and the Word was with God, and the Word was God.""
+            explanation="John 1:1 states: 'In the beginning was the Word, and the Word was with God, and the Word was God.'"
         )
         self.register_challenge(q1)
         self.register_challenge(q2)
