@@ -178,7 +178,7 @@ if __name__ == "__main__":
         print(f"[!] Executing Audit Round -> [{challenge.era}] {challenge.reference}...")
         outcome = engine.execute_round(ceo_player.player_id, cid, selected_index=selected)
         status = "CORRECT [100 PTS]" if outcome["is_correct"] else "INCORRECT"
-        print(f"    Result: {status} | Answer: {outcome[correct_answer]}\n")
+        print(f"    Result: {status} | Answer: {outcome['correct_answer']}\n")
         
     print(engine.generate_executive_scorecard(ceo_player.player_id))
     print("\n[+] Phase 2 Full-Spectrum Bible Game Engine: 100% OPERATIONAL & VERIFIED.")
