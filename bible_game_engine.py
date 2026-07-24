@@ -110,13 +110,11 @@ if __name__ == "__main__":
     
     test_challenge_id = list(engine.question_bank.keys())[0]
     test_challenge = engine.question_bank[test_challenge_id]
-    print(f"
-[?] CHALLENGE [{test_challenge.reference}]: {test_challenge.prompt}")
+    print(f"\n[?] CHALLENGE [{test_challenge.reference}]: {test_challenge.prompt}")
     for idx, opt in enumerate(test_challenge.options):
         print(f"    [{idx}] {opt}")
         
-    print("
-[!] Executing Test Answer Submission (Option 1: Light)...")
+    print("\n[!] Executing Test Answer Submission (Option 1: Light)...")
     outcome = engine.execute_round(ceo_player.player_id, test_challenge_id, selected_index=1)
     
     outcome_str = "CORRECT" if outcome["is_correct"] else "INCORRECT"
@@ -125,5 +123,4 @@ if __name__ == "__main__":
     print(f"[+] Outcome: {outcome_str}")
     print(f"[+] Explanation: {explanation_str}")
     print(f"[+] Total Mastery Score: {score_val} PTS")
-    print("
-[+] Phase 1 Bible Game Engine: 100% OPERATIONAL & VERIFIED.")
+    print("\n[+] Phase 1 Bible Game Engine: 100% OPERATIONAL & VERIFIED.")
