@@ -1,0 +1,22 @@
+{
+    "bank_version": "1.0.0",
+    "classification": "HVF_SOVEREIGN_SCRIPTURE_BANK",
+    "challenges": [
+        {
+            "era": "ERA_TORAH",
+            "reference": "Genesis 1:1",
+            "prompt": "In the beginning, God created the heavens and the...",
+            "options": ["Oceans", "Earth", "Stars", "Animals"],
+            "correct_index": 1,
+            "explanation": "Genesis 1:1 establishes the foundational creation of the heavens and the earth."
+        },
+        {
+            "era": "ERA_GOSPELS",
+            "reference": "John 1:1",
+            "prompt": "In the beginning was the Word, and the Word was with God, and the Word was...",
+            "options": ["Light", "Truth", "God", "Life"],
+            "correct_index": 2,
+            "explanation": "John 1:1 establishes the absolute deity of Jesus Christ."
+        }
+    ]
+}
