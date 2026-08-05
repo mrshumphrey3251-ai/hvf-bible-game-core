@@ -1,62 +1,14 @@
 {
-"bank_version": "1.0.0",
-"classification": "HVF_SOVEREIGN_SCRIPTURE_BANK",
-"challenges": [
-{
-  "era": "ERA_TORAH",
-  "reference": "Genesis 1:3",
-  "prompt": "What was the first physical manifestation commanded by God during Creation?",
-  "options": ["The Firmament", "Light", "Dry Land", "The Sun and Moon"],
-  "correct_index": 1,
-  "explanation": "In Genesis 1:3, God said, 'Let there be light,' and there was light."
-},
-{
-  "era": "ERA_HISTORY",
-  "reference": "Joshua 6:20",
-  "prompt": "What caused the walls of Jericho to collapse during Israel's siege?",
-  "options": ["Battering rams", "An earthquake", "Trumpet blasts and the people's shout", "Fire from heaven"],
-  "correct_index": 2,
-  "explanation": "Joshua 6:20 records that when the trumpets sounded and the army shouted, the wall collapsed."
-},
-{
-  "era": "ERA_WISDOM",
-  "reference": "Proverbs 3:5",
-  "prompt": "According to Proverbs 3:5, with what should one trust in the Lord?",
-  "options": ["All thine heart", "All thy wealth", "Thy neighbors", "Thine own understanding"],
-  "correct_index": 0,
-  "explanation": "Proverbs 3:5 states: 'Trust in the Lord with all thine heart; and lean not unto thine own understanding.'"
-},
-{
-  "era": "ERA_PROPHETS",
-  "reference": "Isaiah 9:6",
-  "prompt": "Which of the following prophetic titles is bestowed upon the Messiah in Isaiah 9:6?",
-  "options": ["The Lion of Judah", "The Prince of Peace", "The Root of David", "The Morning Star"],
-  "correct_index": 1,
-  "explanation": "Isaiah 9:6 proclaims: 'And his name shall be called Wonderful, Counseller, The mighty God, The everlasting Father, The Prince of Peace.'"
-},
-{
-  "era": "ERA_GOSPELS",
-  "reference": "John 1:1",
-  "prompt": "According to the Gospel of John, what was in the beginning with God and was God?",
-  "options": ["The Spirit", "The Light", "The Word", "The Law"],
-  "correct_index": 2,
-  "explanation": "John 1:1 states: 'In the beginning was the Word, and the Word was with God, and the Word was God.'"
-},
-{
-  "era": "ERA_EPISTLES",
-  "reference": "Ephesians 6:11",
-  "prompt": "What must a believer put on to stand against the wiles of the devil?",
-  "options": ["The cloak of righteousness", "The whole armor of God", "The crown of life", "The ring of authority"],
-  "correct_index": 1,
-  "explanation": "Ephesians 6:11 commands: 'Put on the whole armour of God, that ye may be able to stand against the wiles of the devil.'"
-},
-{
-  "era": "ERA_GOSPELS",
-  "reference": "Matthew 28:19",
-  "prompt": "In the Great Commission, in whose name are believers commanded to baptize all nations?",
-  "options": ["The Father only", "The Apostles and Saints", "The Father, the Son, and the Holy Ghost", "The Church of Jerusalem"],
-  "correct_index": 2,
-  "explanation": "Matthew 28:19 commands: 'Go ye therefore, and teach all nations, baptizing them in the name of the Father, and of the Son, and of the Holy Ghost.'"
-}
-]
+  "bank_version": "1.0.0",
+  "classification": "HVF_SOVEREIGN_SCRIPTURE_BANK_PUBLIC",
+  "challenges": [
+    {
+      "era": "ERA_TORAH",
+      "reference": "Book Chapter:Verse",
+      "prompt": "[Public Placeholder Prompt]",
+      "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
+      "correct_index": 0,
+      "explanation": "[Public Placeholder Explanation]"
+    }
+  ]
 }
