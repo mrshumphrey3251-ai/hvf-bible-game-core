@@ -14,3 +14,9 @@ The engine will operate as a Hybrid Live-Service application to maximize market 
 * **Offline Mode:** Fully functional using the local Python server bridge.
 * **Online Mode:** Enables cloud syncing, global metrics, and remote updates.
 * **Unhackable State Sovereignty (SHA-256):** To prevent local memory injection or save-file tampering during Offline Mode, all local game states are sealed using cryptographic hashing. If a player modifies their local file to cheat, the hash invalidates, and the master server will permanently reject the corrupted timeline upon reconnection.
+
+## 10. Dual-Frontend Rendering Strategy (The Omni-Client)
+Because the Python backend is completely decoupled, it is engine-agnostic. We will execute a Dual-Frontend deployment:
+* **Tier 1 (AAA Live-Service):** Unreal Engine 5. Deployed for high-end platforms, leveraging heavy graphical assets and cloud-sync capabilities.
+* **Tier 2 (Sovereign Offline):** Godot 4. Deployed for lightweight laptops, mobile, and strict offline grid-down scenarios.
+* **The Omni-Bridge:** Both frontends will communicate with the exact same Python offline backend using a universal JSON API handshake. The core logic remains centralized, immutable, and unhackable regardless of the visual client used.
