@@ -1,0 +1,22 @@
+; Engine configuration file.
+; HVF EXECUTIVE OVERRIDE - GENERATED VIA TERMINAL
+
+config_version=5
+
+[application]
+
+config/name="HVF Bible Game - Sovereign Client"
+config/description="Tier 2 Offline 3D Client for the HVF Bible Simulator."
+config/version="1.0.0"
+run/main_scene="res://scenes/main.tscn"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
+
+[rendering]
+
+renderer/rendering_method="forward_plus"
