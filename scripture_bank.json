@@ -1,22 +1,30 @@
 {
     "bank_version": "1.0.0",
-    "classification": "HVF_SOVEREIGN_SCRIPTURE_BANK",
+    "classification": "HVF_SOVEREIGN_SCRIPTURE_BANK_INTERNAL",
     "challenges": [
         {
             "era": "ERA_TORAH",
-            "reference": "Genesis 1:1",
-            "prompt": "In the beginning, God created the heavens and the...",
-            "options": ["Oceans", "Earth", "Stars", "Animals"],
+            "reference": "Exodus 20:3",
+            "prompt": "What is the first of the Ten Commandments?",
+            "options": ["Honor your father and mother", "You shall have no other gods before me", "You shall not murder", "Remember the Sabbath day"],
             "correct_index": 1,
-            "explanation": "Genesis 1:1 establishes the foundational creation of the heavens and the earth."
+            "explanation": "God establishes His ultimate sovereignty before any other law."
+        },
+        {
+            "era": "ERA_HISTORY",
+            "reference": "1 Samuel 17:49",
+            "prompt": "What weapon did David use to defeat Goliath?",
+            "options": ["A bronze sword", "A javelin", "A sling and a stone", "A wooden staff"],
+            "correct_index": 2,
+            "explanation": "David relied on God's deliverance and unconventional warfare rather than King Saul's heavy armor."
         },
         {
             "era": "ERA_GOSPELS",
-            "reference": "John 1:1",
-            "prompt": "In the beginning was the Word, and the Word was with God, and the Word was...",
-            "options": ["Light", "Truth", "God", "Life"],
-            "correct_index": 2,
-            "explanation": "John 1:1 establishes the absolute deity of Jesus Christ."
+            "reference": "John 11:35",
+            "prompt": "Which is the shortest verse in the English Bible, occurring right before Lazarus is raised?",
+            "options": ["Jesus wept.", "God is love.", "He awoke.", "Jesus prayed."],
+            "correct_index": 0,
+            "explanation": "It demonstrates the profound humanity and empathy of Christ before demonstrating His divine authority over death."
         }
     ]
 }
