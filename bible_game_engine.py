@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
-import uuid, time, json, os
-from typing import Dict, List, Optional, Any
+# ==============================================================================
+# HUMPHREY VIRTUAL FARMS: SOVEREIGN BIBLE GAME ENGINE
+# AUTHOR: Jeffery Humphrey - CEO / SME
+# DOCTRINE: Zero-Dependency, Forward-Compatible, Immutable State
+# ==============================================================================
 
-class BiblicalEra:
+import json
+import os
+import sys
+
+# --- 1. IMMUTABLE ERA CLASSIFICATIONS ---
+class BibleEras:
     TORAH = "ERA_TORAH"
     HISTORY = "ERA_HISTORY"
     WISDOM = "ERA_WISDOM"
@@ -10,156 +18,106 @@ class BiblicalEra:
     GOSPELS = "ERA_GOSPELS"
     EPISTLES = "ERA_EPISTLES"
 
-class ScriptureChallenge:
-    def __init__(self, era: str, reference: str, prompt: str, options: List[str], correct_index: int, explanation: str):
-        self.challenge_id = str(uuid.uuid4())
-        self.era = era
-        self.reference = reference
-        self.prompt = prompt
-        self.options = options
-        self.correct_index = correct_index
-        self.explanation = explanation
+    @classmethod
+    def get_all_eras(cls):
+        return [cls.TORAH, cls.HISTORY, cls.WISDOM, cls.PROPHETS, cls.GOSPELS, cls.EPISTLES]
 
-    def evaluate_answer(self, player_choice_index: int) -> Dict[str, Any]:
-        is_correct = (player_choice_index == self.correct_index)
-        return {
-            "challenge_id": self.challenge_id,
-            "reference": self.reference,
-            "era": self.era,
-            "is_correct": is_correct,
-            "correct_answer": self.options[self.correct_index],
-            "explanation": self.explanation
-        }
-
-class PlayerProfile:
-    def __init__(self, player_name: str):
-        self.player_id = str(uuid.uuid4())
-        self.player_name = player_name
+# --- 2. SECURE ENGINE STATE ---
+class GameEngineState:
+    def __init__(self):
         self.total_score = 0
-        self.challenges_completed = 0
-        self.era_mastery: Dict[str, int] = {
-            BiblicalEra.TORAH: 0, BiblicalEra.HISTORY: 0, BiblicalEra.WISDOM: 0,
-            BiblicalEra.PROPHETS: 0, BiblicalEra.GOSPELS: 0, BiblicalEra.EPISTLES: 0
-        }
-
-    def record_victory(self, era: str, points: int = 100) -> None:
-        self.total_score += points
-        self.challenges_completed += 1
+        self.era_mastery = {era: 0 for era in BibleEras.get_all_eras()}
+        
+    def award_points(self, era):
+        self.total_score += 100
         if era in self.era_mastery:
-            self.era_mastery[era] += points
+            self.era_mastery[era] += 100
 
-class BibleGameEngine:
-    def __init__(self, bank_path: str = "scripture_mastery_bank.json"):
-        self.engine_id = str(uuid.uuid4())
-        self.question_bank: Dict[str, ScriptureChallenge] = {}
-        self.active_players: Dict[str, PlayerProfile] = {}
-        self.bank_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), bank_path)
-        self._ingest_question_bank()
+# --- 3. SCRIPTURE BANK VALIDATOR ---
+class ScriptureBankValidator:
+    @staticmethod
+    def load_and_validate(json_path):
+        fallback_data = {
+            "bank_version": "1.0.0",
+            "classification": "HVF_SOVEREIGN_SCRIPTURE_BANK_INTERNAL",
+            "challenges": [{
+                "era": BibleEras.TORAH,
+                "reference": "Genesis 1:1",
+                "prompt": "In the beginning God created the heavens and the earth.",
+                "options": ["True", "False", "Unknown", "None"],
+                "correct_index": 0,
+                "explanation": "Foundational creation narrative."
+            }]
+        }
+        if not os.path.exists(json_path):
+            return fallback_data
+        try:
+            with open(json_path, 'r') as f:
+                data = json.load(f)
+            if "bank_version" not in data or "challenges" not in data:
+                raise ValueError("Schema invalid.")
+            return data
+        except:
+            return fallback_data
 
-    def _ingest_question_bank(self) -> None:
-        if os.path.exists(self.bank_path):
-            try:
-                with open(self.bank_path, "r", encoding="utf-8") as f:
-                    data = json.load(f)
-                for item in data.get("challenges", []):
-                    ch = ScriptureChallenge(
-                        era=item["era"], reference=item["reference"], prompt=item["prompt"],
-                        options=item["options"], correct_index=item["correct_index"], explanation=item["explanation"]
-                    )
-                    self.register_challenge(ch)
-                print(f"[+] Successfully ingested external bank: {self.bank_path}")
-                return
-            except Exception as e:
-                print(f"[!] Warning: External bank ingestion failed ({e}). Falling back to internal defaults.")
-        else:
-            print(f"[!] Notice: External bank {self.bank_path} not found. Loading internal defaults.")
-        self._load_fallback_defaults()
+# --- 4. TERMINAL USER INTERFACE (CLI) ---
+class GameCLI:
+    def __init__(self, state, bank):
+        self.state = state
+        self.challenges = bank.get("challenges", [])
 
-    def _load_fallback_defaults(self) -> None:
-        q1 = ScriptureChallenge(BiblicalEra.TORAH, "Genesis 1:3", "What was created first?", ["Firmament", "Light", "Earth", "Water"], 1, "God said let there be light.")
-        self.register_challenge(q1)
+    def run(self):
+        print("\n" + "="*60)
+        print(" HVF SOVEREIGN BIBLE GAME - INITIALIZATION SEQUENCE ")
+        print("="*60 + "\n")
+        
+        if not self.challenges:
+            print("[!] No challenges loaded. Exiting.")
+            return
 
-    def register_challenge(self, challenge: ScriptureChallenge) -> str:
-        self.question_bank[challenge.challenge_id] = challenge
-        return challenge.challenge_id
+        for i, challenge in enumerate(self.challenges):
+            print(f"--- Challenge {i+1} / {len(self.challenges)} | Era: {challenge['era']} ---")
+            print(f"Reference: {challenge['reference']}")
+            print(f"Prompt: {challenge['prompt']}\n")
+            
+            for idx, opt in enumerate(challenge['options']):
+                print(f"  {idx + 1}. {opt}")
+            
+            while True:
+                try:
+                    choice = int(input("\nEnter your answer (1-4): ")) - 1
+                    if 0 <= choice <= 3:
+                        break
+                    print("Invalid input. Select 1, 2, 3, or 4.")
+                except ValueError:
+                    print("Invalid input. Numbers only.")
 
-    def register_player(self, player_name: str) -> PlayerProfile:
-        player = PlayerProfile(player_name)
-        self.active_players[player.player_id] = player
-        return player
+            if choice == challenge['correct_index']:
+                print(f"\n[+] CORRECT. {challenge['explanation']}")
+                self.state.award_points(challenge['era'])
+            else:
+                correct_answer = challenge['options'][challenge['correct_index']]
+                print(f"\n[-] INCORRECT. The correct answer was: {correct_answer}")
+                print(f"Explanation: {challenge['explanation']}")
+            
+            print("\n" + "-"*60 + "\n")
 
-    def execute_round(self, player_id: str, challenge_id: str, selected_index: int) -> Dict[str, Any]:
-        if player_id not in self.active_players or challenge_id not in self.question_bank:
-            raise ValueError("Invalid Player ID or Challenge ID.")
-        player = self.active_players[player_id]
-        challenge = self.question_bank[challenge_id]
-        result = challenge.evaluate_answer(selected_index)
-        if result["is_correct"]:
-            player.record_victory(challenge.era, points=100)
-        else:
-            player.challenges_completed += 1
-        result["player_score"] = player.total_score
-        result["player_name"] = player.player_name
-        return result
+        self.display_scorecard()
 
-    def generate_executive_scorecard(self, player_id: str) -> str:
-        player = self.active_players[player_id]
-        lines = [
-            "\n=========================================================================",
-            "                 EXECUTIVE SCRIPTURE MASTERY SCORECARD                   ",
-            "=========================================================================",
-            f" Player Name:         {player.player_name}",
-            f" Total Score:         {player.total_score} PTS",
-            f" Challenges Solved:   {player.challenges_completed} / {len(self.question_bank)}",
-            "-------------------------------------------------------------------------",
-            " ERA PROFICIENCY BREAKDOWN:",
-            f"  [+] TORAH (Law):        {player.era_mastery[BiblicalEra.TORAH]} PTS",
-            f"  [+] HISTORY:            {player.era_mastery[BiblicalEra.HISTORY]} PTS",
-            f"  [+] WISDOM:             {player.era_mastery[BiblicalEra.WISDOM]} PTS",
-            f"  [+] PROPHETS:           {player.era_mastery[BiblicalEra.PROPHETS]} PTS",
-            f"  [+] GOSPELS:            {player.era_mastery[BiblicalEra.GOSPELS]} PTS",
-            f"  [+] EPISTLES:           {player.era_mastery[BiblicalEra.EPISTLES]} PTS",
-            "=========================================================================\n"
-        ]
-        return "\n".join(lines)
+    def display_scorecard(self):
+        print("="*60)
+        print(" EXECUTIVE SCORECARD ")
+        print("="*60)
+        print(f"TOTAL SCORE: {self.state.total_score}")
+        for era, score in self.state.era_mastery.items():
+            if score > 0:
+                print(f"{era} MASTERY: {score}")
+        print("="*60 + "\n")
 
 if __name__ == "__main__":
-    print("=========================================================================")
-    print("      HVF SOVEREIGN BIBLE GAME ENGINE (PHASE 8F - LIVE EXECUTION)        ")
-    print("=========================================================================")
-    engine = BibleGameEngine()
-    player_name = input("\n[>] Enter Executive Credentials (Player Name): ")
-    if not player_name.strip():
-        player_name = "Jeffery Humphrey [CEO]"
-    active_player = engine.register_player(player_name)
-    print(f"\n[+] Player Registered: {active_player.player_name}")
-    print(f"[+] Question Bank Loaded: {len(engine.question_bank)} Immutable Scripture Challenges\n")
-    print("Initiating Live Sequence. Type 1, 2, 3, or 4 for your answer.\n")
+    state = GameEngineState()
+    bank_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripture_bank.json")
+    active_bank = ScriptureBankValidator.load_and_validate(bank_path)
     
-    for cid, challenge in engine.question_bank.items():
-        print("-------------------------------------------------------------------------")
-        print(f"ERA: {challenge.era} | REFERENCE: {challenge.reference}")
-        print(f"PROMPT: {challenge.prompt}\n")
-        for i, option in enumerate(challenge.options):
-            print(f"  {i + 1}. {option}")
-        while True:
-            try:
-                choice = input("\n[>] Select Option (1-4): ")
-                choice_idx = int(choice) - 1
-                if 0 <= choice_idx <= 3:
-                    break
-                else:
-                    print("[!] Invalid selection. Enter a number between 1 and 4.")
-            except ValueError:
-                print("[!] Invalid input. Enter a number between 1 and 4.")
-        outcome = engine.execute_round(active_player.player_id, cid, choice_idx)
-        if outcome["is_correct"]:
-            print(f"\n[+] CORRECT! Awarded 100 PTS.")
-        else:
-            print(f"\n[-] INCORRECT.")
-        print(f"[*] The correct answer was: {outcome['correct_answer']}")
-        print(f"[*] EXPLANATION: {outcome['explanation']}")
-        time.sleep(1)
-
-    print(engine.generate_executive_scorecard(active_player.player_id))
-    print("[+] Engine Execution Terminated Safely.")
+    cli = GameCLI(state, active_bank)
+    cli.run()
