@@ -8,3 +8,9 @@ To resolve the human lifespan limitation across a multi-millennia timeline, the 
 To ensure the game remains unpredictable and un-gameable even for the Chief Architect, deterministic decision-making is strictly prohibited. 
 * **Dynamic Probability Outcomes:** Every player choice triggers a hidden, weighted probability roll (Stochastic Chaos Engine). 
 * A single decision (e.g., "Fight the raiders") holds multiple potential outcomes (e.g., Flawless Victory, Grievous Wound, Permadeath). The engine resolves the reality at runtime based on hidden dice rolls combined with dynamic modifiers (like NPC loyalty or player health). The creator will never know the absolute outcome of a decision beforehand.
+
+## 9. Hybrid Online/Offline Architecture & Anti-Tamper Protocol
+The engine will operate as a Hybrid Live-Service application to maximize market penetration.
+* **Offline Mode:** Fully functional using the local Python server bridge.
+* **Online Mode:** Enables cloud syncing, global metrics, and remote updates.
+* **Unhackable State Sovereignty (SHA-256):** To prevent local memory injection or save-file tampering during Offline Mode, all local game states are sealed using cryptographic hashing. If a player modifies their local file to cheat, the hash invalidates, and the master server will permanently reject the corrupted timeline upon reconnection.
