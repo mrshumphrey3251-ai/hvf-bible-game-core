@@ -1,0 +1,31 @@
+{
+    "bank_version": "1.1.0",
+    "classification": "HVF_STOCHASTIC_DECISION_MATRIX",
+    "scenarios": [
+        {
+            "id": "GEN_001",
+            "era": "ERA_TORAH",
+            "context": "A severe famine has struck Canaan. Word arrives that Egypt has grain, but the journey is treacherous.",
+            "prompt": "As a tribal leader, what is your executive order?",
+            "options": [
+                {
+                    "text": "Risk the journey to Egypt to secure grain.",
+                    "flag_required": null,
+                    "outcomes": [
+                        {"weight": 50, "text": "You secured grain, but at a heavy cost. You are now a resident alien in Egypt.", "flag": "EGYPT_SOJOURNER"},
+                        {"weight": 30, "text": "The border guards seized your wealth. You are enslaved.", "flag": "EGYPT_SLAVE"},
+                        {"weight": 20, "text": "You traded brilliantly. You arrive in Egypt as a wealthy merchant.", "flag": "EGYPT_MERCHANT"}
+                    ]
+                },
+                {
+                    "text": "Ration our remaining food and trust God for rain in Canaan.",
+                    "flag_required": null,
+                    "outcomes": [
+                        {"weight": 60, "text": "The rains eventually come, but your family suffered greatly.", "flag": "CANAAN_LOYALIST"},
+                        {"weight": 40, "text": "The drought persists. You lose half your livestock to starvation.", "flag": "CANAAN_STARVING"}
+                    ]
+                }
+            ]
+        }
+    ]
+}
