@@ -1,0 +1,93 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/omni_bridge_client.gd" id="1_bridge"]
+
+[node name="SovereignMain" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bridge")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="HeaderPanel" type="PanelContainer" parent="MarginContainer/VBox"]
+layout_mode = 2
+
+[node name="HeaderVBox" type="VBoxContainer" parent="MarginContainer/VBox/HeaderPanel"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
+layout_mode = 2
+text = "HVF SOVEREIGN BIBLE GAME ENGINE — TIER 2 GODOT 4 CLIENT (PHASE 8F)"
+
+[node name="StatusLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
+layout_mode = 2
+text = "BRIDGE STATUS: INITIALIZING..."
+
+[node name="TelemetryLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
+layout_mode = 2
+text = "ERA: ERA_TORAH  |  SCORE: 0  |  FLAGS: []  |  SHA-256: PENDING..."
+
+[node name="BodyPanel" type="PanelContainer" parent="MarginContainer/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BodyVBox" type="VBoxContainer" parent="MarginContainer/VBox/BodyPanel"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="ContextLabel" type="RichTextLabel" parent="MarginContainer/VBox/BodyPanel/BodyVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "Awaiting scenario payload from OmniClientDispatcher (127.0.0.1:65432)..."
+
+[node name="OptionsHBox" type="HBoxContainer" parent="MarginContainer/VBox/BodyPanel/BodyVBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="OptionABtn" type="Button" parent="MarginContainer/VBox/BodyPanel/BodyVBox/OptionsHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1. Option A"
+
+[node name="OptionBBtn" type="Button" parent="MarginContainer/VBox/BodyPanel/BodyVBox/OptionsHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "2. Option B"
+
+[node name="OutcomeLabel" type="RichTextLabel" parent="MarginContainer/VBox/BodyPanel/BodyVBox"]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+bbcode_enabled = true
+text = "Select an executive decision above to invoke the Stochastic Chaos Engine."
+
+[node name="FooterHBox" type="HBoxContainer" parent="MarginContainer/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ConnectBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
+layout_mode = 2
+text = "Reconnect Omni-Bridge (127.0.0.1:65432)"
+
+[node name="SaveBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
+layout_mode = 2
+text = "Seal SHA-256 Save State"
