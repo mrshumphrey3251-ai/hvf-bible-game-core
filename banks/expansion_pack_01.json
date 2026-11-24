@@ -1,0 +1,58 @@
+{
+    "bank_version": "1.0.0",
+    "classification": "HVF_MODULAR_EXPANSION_PACK_01",
+    "challenges": [
+        {
+            "era": "ERA_TORAH",
+            "reference": "Deuteronomy 6:4-5",
+            "prompt": "In the Shema, how are believers commanded to love the Lord their God?",
+            "options": [
+                "With all thine heart, and with all thy soul, and with all thy might",
+                "With burnt offerings every new moon",
+                "By building monuments in every city",
+                "With tithes of silver and gold alone"
+            ],
+            "correct_index": 0,
+            "explanation": "Deuteronomy 6:4-5 defines total, undivided covenant devotion of heart, soul, and strength."
+        },
+        {
+            "era": "ERA_WISDOM",
+            "reference": "Psalm 119:105",
+            "prompt": "How does Psalm 119:105 describe the function of God's word in a believer's walk?",
+            "options": [
+                "A sword of bronze and a shield of iron",
+                "A lamp unto my feet, and a light unto my path",
+                "A crown of gold upon the head",
+                "A fortress upon Mount Zion"
+            ],
+            "correct_index": 1,
+            "explanation": "Psalm 119:105 teaches moment-by-moment guidance ('lamp unto my feet') and long-horizon direction ('light unto my path')."
+        },
+        {
+            "era": "ERA_PROPHETS",
+            "reference": "Micah 6:8",
+            "prompt": "According to Micah 6:8, what three things does the Lord require of man?",
+            "options": [
+                "To fast twice a week, give alms, and keep silence",
+                "To conquer nations, build temples, and gather tribute",
+                "To do justly, and to love mercy, and to walk humbly with thy God",
+                "To memorize genealogies, offer rams, and wear sackcloth"
+            ],
+            "correct_index": 2,
+            "explanation": "Micah 6:8 summarizes prophetic ethics: justice, covenant mercy (hesed), and humble fellowship with God."
+        },
+        {
+            "era": "ERA_EPISTLES",
+            "reference": "Romans 12:2",
+            "prompt": "How does Romans 12:2 instruct believers to avoid being conformed to this world?",
+            "options": [
+                "By withdrawing into isolated desert caves",
+                "By be ye transformed by the renewing of your mind",
+                "By relying strictly on ancestral traditions",
+                "By debating philosophers in the marketplace"
+            ],
+            "correct_index": 1,
+            "explanation": "Romans 12:2 anchors lifelong transformation in the continuous renewal of the mind to discern God's good, acceptable, and perfect will."
+        }
+    ]
+}
