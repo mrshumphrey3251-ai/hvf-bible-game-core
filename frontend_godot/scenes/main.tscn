@@ -36,7 +36,7 @@ theme_override_constants/separation = 6
 
 [node name="TitleLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
 layout_mode = 2
-text = "HVF SOVEREIGN BIBLE GAME ENGINE — TIER 2 GODOT 4 CLIENT (PHASE 8F)"
+text = "HVF SOVEREIGN BIBLE GAME ENGINE — TIER 2 GODOT 4 CLIENT (PHASE 10)"
 
 [node name="StatusLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
 layout_mode = 2
@@ -45,6 +45,10 @@ text = "BRIDGE STATUS: INITIALIZING..."
 [node name="TelemetryLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
 layout_mode = 2
 text = "ERA: ERA_TORAH  |  SCORE: 0  |  FLAGS: []  |  SHA-256: PENDING..."
+
+[node name="BloodlineLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
+layout_mode = 2
+text = "EPOCH: 1  |  GEN: 1  |  LEADER: Adam_Line_01  |  HEIR: Seth_Line_02  |  LEGACY: []"
 
 [node name="BodyPanel" type="PanelContainer" parent="MarginContainer/VBox"]
 layout_mode = 2
@@ -86,8 +90,16 @@ theme_override_constants/separation = 12
 
 [node name="ConnectBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
 layout_mode = 2
-text = "Reconnect Omni-Bridge (127.0.0.1:65432)"
+text = "Reconnect Bridge"
+
+[node name="HandoffBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
+layout_mode = 2
+text = "Trigger Bloodline Handoff"
+
+[node name="AdvanceEraBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
+layout_mode = 2
+text = "Advance Era / Alpha-Omega Loop"
 
 [node name="SaveBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
 layout_mode = 2
-text = "Seal SHA-256 Save State"
+text = "Seal SHA-256 Save"

@@ -1,5 +1,5 @@
 {
-    "bank_version": "1.1.0",
+    "bank_version": "1.2.0",
     "classification": "HVF_STOCHASTIC_DECISION_MATRIX",
     "scenarios": [
         {
@@ -23,6 +23,126 @@
                     "outcomes": [
                         {"weight": 60, "text": "The rains eventually come, but your family suffered greatly.", "flag": "CANAAN_LOYALIST"},
                         {"weight": 40, "text": "The drought persists. You lose half your livestock to starvation.", "flag": "CANAAN_STARVING"}
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "HIS_001",
+            "era": "ERA_HISTORY",
+            "context": "Your clan stands before the fortified walls of Jericho at flood stage along the Jordan.",
+            "prompt": "How do you command the vanguard across the threshold of the Promised Land?",
+            "options": [
+                {
+                    "text": "Follow the Ark of the Covenant in silent seven-day obedience.",
+                    "flag_required": null,
+                    "outcomes": [
+                        {"weight": 75, "text": "On the seventh day the trumpet blast shatters the ramparts without a siege ramp.", "flag": "JERICHO_VICTOR"},
+                        {"weight": 25, "text": "The walls fall, though scavengers in the camp trigger an internal discipline crisis.", "flag": "ACHAN_TRIAL"}
+                    ]
+                },
+                {
+                    "text": "Dispatch covert scouts to negotiate safe passage with Rahab's household.",
+                    "flag_required": null,
+                    "outcomes": [
+                        {"weight": 65, "text": "Intelligence gathered behind the walls secures a bloodline alliance that endures for generations.", "flag": "SCARLET_CORD_COVENANT"},
+                        {"weight": 35, "text": "Pursuers close the city gates; your scouts barely escape through the hill country.", "flag": "HILL_FUGITIVE"}
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "WIS_001",
+            "era": "ERA_WISDOM",
+            "context": "Two petitioners bring a bitter royal dispute before your judgment seat in Jerusalem with no external witnesses.",
+            "prompt": "What ruling do you issue from the throne?",
+            "options": [
+                {
+                    "text": "Test both hearts with a piercing discernment trial that exposes true devotion.",
+                    "flag_required": null,
+                    "outcomes": [
+                        {"weight": 80, "text": "All Israel hears of the judgment and reveres the wisdom of God within your house.", "flag": "SOLOMONIC_DISCERNMENT"},
+                        {"weight": 20, "text": "Justice prevails, though rival court factions murmur against your severity.", "flag": "COURT_INTRIGUE"}
+                    ]
+                },
+                {
+                    "text": "Defer judgment until scribes audit the temple treasury ledgers.",
+                    "flag_required": null,
+                    "outcomes": [
+                        {"weight": 60, "text": "The audit uncovers hidden debt and stabilizes royal taxation.", "flag": "STEWARD_OF_PROVERBS"},
+                        {"weight": 40, "text": "Delays embolden false witnesses across the gate.", "flag": "DELAYED_JUSTICE"}
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "PRO_001",
+            "era": "ERA_PROPHETS",
+            "context": "Drought grips the northern kingdom. Four hundred fifty prophets of Baal assemble on Mount Carmel.",
+            "prompt": "How do you confront the divided nation on the mountain?",
+            "options": [
+                {
+                    "text": "Repair the broken altar of the Lord, drench the wood in water, and call down fire from heaven.",
+                    "flag_required": null,
+                    "outcomes": [
+                        {"weight": 85, "text": "Fire consumes the sacrifice, stones, and water—turning the hearts of the people back.", "flag": "CARMEL_FIRE_WITNESS"},
+                        {"weight": 15, "text": "The altar blazes, but royal retaliation forces you into a wilderness refuge.", "flag": "HOREB_STILL_SMALL_VOICE"}
+                    ]
+                },
+                {
+                    "text": "Preserve a hidden remnant of faithful prophets in mountain caves.",
+                    "flag_required": null,
+                    "outcomes": [
+                        {"weight": 70, "text": "Seven thousand who have not bowed the knee survive to rebuild the nation.", "flag": "REMNANT_KEEPER"},
+                        {"weight": 30, "text": "Supply lines run thin, testing the endurance of the faithful.", "flag": "WILDERNESS_BREAD"}
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "GOS_001",
+            "era": "ERA_GOSPELS",
+            "context": "A furious squall strikes the Sea of Galilee at night while crossing toward Decapolis.",
+            "prompt": "Waves swamp the vessel—how do you respond in the storm?",
+            "options": [
+                {
+                    "text": "Stand firm in faith and trust the Master's authority over wind and wave.",
+                    "flag_required": null,
+                    "outcomes": [
+                        {"weight": 80, "text": "At a single word—'Peace, be still'—a great calm settles over the deep.", "flag": "CALMED_STORM_FAITH"},
+                        {"weight": 20, "text": "The gale subsides, leaving the crew humbled by their own hesitation.", "flag": "LITTLE_FAITH_LESSON"}
+                    ]
+                },
+                {
+                    "text": "Man the oars and bail water until daybreak.",
+                    "flag_required": null,
+                    "outcomes": [
+                        {"weight": 55, "text": "Exhausted at dawn, you witness deliverance on the shoreline.", "flag": "GALILEE_FISHERMAN"},
+                        {"weight": 45, "text": "The rudder snaps in the gale, forcing complete reliance on providence.", "flag": "BROKEN_OAR_SURRENDER"}
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "EPI_001",
+            "era": "ERA_EPISTLES",
+            "context": "Elders and apostles convene in Jerusalem to decide how Gentile believers enter the fellowship of the early church.",
+            "prompt": "What apostolic decree do you send to the assemblies across the Mediterranean?",
+            "options": [
+                {
+                    "text": "Affirm salvation by grace through faith without burdening the nations with yoke-laws.",
+                    "flag_required": null,
+                    "outcomes": [
+                        {"weight": 85, "text": "The churches rejoice at the encouragement, multiplying rapidly across Antioch and Rome.", "flag": "APOSTOLIC_GRACE_CHARTER"},
+                        {"weight": 15, "text": "Unity holds in Jerusalem, though faction agitators trail your missionary journeys.", "flag": "GALATIAN_DEFENDER"}
+                    ]
+                },
+                {
+                    "text": "Dispatch trusted couriers with sealed epistles to strengthen every local assembly.",
+                    "flag_required": null,
+                    "outcomes": [
+                        {"weight": 75, "text": "The circular letters establish unshakable doctrinal foundations across the empire.", "flag": "ARMOR_OF_GOD_HERALD"},
+                        {"weight": 25, "text": "Shipwreck delays delivery, yet prisoners and islanders hear the message along the way.", "flag": "MALTA_WITNESS"}
                     ]
                 }
             ]

@@ -4,6 +4,8 @@ class_name OmniBridgeClient
 signal handshake_verified(state_data: Dictionary)
 signal scenario_loaded(scenario_data: Dictionary)
 signal decision_resolved(outcome_data: Dictionary, state_data: Dictionary)
+signal bloodline_updated(bloodline_data: Dictionary)
+signal alpha_omega_looped(bloodline_data: Dictionary)
 signal bridge_error(message: String)
 
 @export var host: String = "127.0.0.1"
@@ -11,17 +13,31 @@ signal bridge_error(message: String)
 
 @onready var status_label: Label = $MarginContainer/VBox/HeaderPanel/HeaderVBox/StatusLabel
 @onready var telemetry_label: Label = $MarginContainer/VBox/HeaderPanel/HeaderVBox/TelemetryLabel
+@onready var bloodline_label: Label = $MarginContainer/VBox/HeaderPanel/HeaderVBox/BloodlineLabel
 @onready var context_label: RichTextLabel = $MarginContainer/VBox/BodyPanel/BodyVBox/ContextLabel
 @onready var outcome_label: RichTextLabel = $MarginContainer/VBox/BodyPanel/BodyVBox/OutcomeLabel
 @onready var option_a_btn: Button = $MarginContainer/VBox/BodyPanel/BodyVBox/OptionsHBox/OptionABtn
 @onready var option_b_btn: Button = $MarginContainer/VBox/BodyPanel/BodyVBox/OptionsHBox/OptionBBtn
 @onready var connect_btn: Button = $MarginContainer/VBox/FooterHBox/ConnectBtn
+@onready var handoff_btn: Button = $MarginContainer/VBox/FooterHBox/HandoffBtn
+@onready var advance_era_btn: Button = $MarginContainer/VBox/FooterHBox/AdvanceEraBtn
 @onready var save_btn: Button = $MarginContainer/VBox/FooterHBox/SaveBtn
+
+const ERA_SCENARIO_MAP := {
+"ERA_TORAH": "GEN_001",
+"ERA_HISTORY": "HIS_001",
+"ERA_WISDOM": "WIS_001",
+"ERA_PROPHETS": "PRO_001",
+"ERA_GOSPELS": "GOS_001",
+"ERA_EPISTLES": "EPI_001"
+}
 
 var current_scenario: Dictionary = {}
 
 func _ready() -> void:
 connect_btn.pressed.connect(_on_connect_pressed)
+handoff_btn.pressed.connect(_on_handoff_pressed)
+advance_era_btn.pressed.connect(_on_advance_era_pressed)
 save_btn.pressed.connect(_on_save_pressed)
 option_a_btn.pressed.connect(func() -> void: _submit_decision(0))
 option_b_btn.pressed.connect(func() -> void: _submit_decision(1))
@@ -74,7 +90,16 @@ var state: Dictionary = resp.get("state", {})
 status_label.text = "BRIDGE STATUS: CONNECTED & VERIFIED (GODOT_4 -> %s:%d)" % [host, port]
 _update_telemetry(state)
 handshake_verified.emit(state)
-_load_active_scenario("GEN_001")
+_refresh_bloodline()
+var era_name: String = str(state.get("current_era", "ERA_TORAH"))
+_load_active_scenario(ERA_SCENARIO_MAP.get(era_name, "GEN_001"))
+
+func _refresh_bloodline() -> void:
+var resp := _send_command({"client_type": "GODOT_4", "action": "GET_BLOODLINE"})
+if resp.get("status") == "OK":
+var bl: Dictionary = resp.get("bloodline", {})
+_update_bloodline_telemetry(bl)
+bloodline_updated.emit(bl)
 
 func _load_active_scenario(scenario_id: String) -> void:
 var resp := _send_command({"client_type": "GODOT_4", "action": "GET_SCENARIO", "scenario_id": scenario_id})
@@ -113,7 +138,44 @@ str(outcome.get("text", "")),
 str(outcome.get("flag", "NONE"))
 ]
 _update_telemetry(state)
+_refresh_bloodline()
 decision_resolved.emit(outcome, state)
+
+func _on_handoff_pressed() -> void:
+var next_gen_heir := "Heir_%d" % (Time.get_ticks_msec() % 1000)
+var resp := _send_command({
+"client_type": "GODOT_4",
+"action": "TRIGGER_HANDOFF",
+"cause": "OLD_AGE",
+"next_heir": next_gen_heir
+})
+if resp.get("status") == "OK":
+var bl: Dictionary = resp.get("bloodline", {})
+var state: Dictionary = resp.get("state", {})
+_update_telemetry(state)
+_update_bloodline_telemetry(bl)
+outcome_label.text = "[b][BLOODLINE HANDOFF: %s][/b] New Leader: %s (Gen %s) | Legacy Traits: %s" % [
+str(resp.get("transition_type", "")),
+str(bl.get("current_leader", "")),
+str(bl.get("generation_number", 1)),
+str(bl.get("legacy_traits", []))
+]
+bloodline_updated.emit(bl)
+
+func _on_advance_era_pressed() -> void:
+var resp := _send_command({"client_type": "GODOT_4", "action": "ADVANCE_ERA_LOOP"})
+if resp.get("status") == "OK":
+var bl: Dictionary = resp.get("bloodline", {})
+var state: Dictionary = resp.get("state", {})
+_update_telemetry(state)
+_update_bloodline_telemetry(bl)
+var next_era: String = str(bl.get("current_era", "ERA_TORAH"))
+if resp.get("alpha_omega_loop_triggered", false):
+outcome_label.text = "[b][ALPHA-OMEGA LOOP EXECUTED: REVELATION -> GENESIS][/b] Epoch %s Initiated | Mastery & Legacy Preserved!" % str(bl.get("epoch_number", 1))
+alpha_omega_looped.emit(bl)
+else:
+outcome_label.text = "[b][WORLD CLOCK ADVANCED][/b] Active Era: %s" % next_era
+_load_active_scenario(ERA_SCENARIO_MAP.get(next_era, "GEN_001"))
 
 func _on_save_pressed() -> void:
 var resp := _send_command({"client_type": "GODOT_4", "action": "SAVE_STATE"})
@@ -128,6 +190,15 @@ str(state.get("current_era", "ERA_TORAH")),
 str(state.get("total_score", 0)),
 str(state.get("active_flags", [])),
 str(state.get("sha256_seal", "")).left(16)
+]
+
+func _update_bloodline_telemetry(bl: Dictionary) -> void:
+bloodline_label.text = "EPOCH: %s  |  GEN: %s  |  LEADER: %s  |  HEIR: %s  |  LEGACY: %s" % [
+str(bl.get("epoch_number", 1)),
+str(bl.get("generation_number", 1)),
+str(bl.get("current_leader", "Adam_Line_01")),
+str(bl.get("designated_heir", "NONE")),
+str(bl.get("legacy_traits", []))
 ]
 
 func _set_options_enabled(enabled: bool) -> void:
