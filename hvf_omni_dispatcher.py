@@ -13,6 +13,7 @@ from hvf_3d_bridge import OmniBridge
 from hvf_state_manager import StateManager
 from narrative_engine import NarrativeEngine
 from hvf_bloodline_engine import register_with_dispatcher as register_bloodline_plugin
+from hvf_covenant_trials import register_with_dispatcher as register_covenant_plugin
 
 
 class OmniClientDispatcher(OmniBridge):
@@ -41,6 +42,7 @@ class OmniClientDispatcher(OmniBridge):
             "SAVE_STATE": self._handle_save_state,
         }
         register_bloodline_plugin(self)
+        register_covenant_plugin(self)
 
     def register_action(self, action_name, handler_fn):
         """Public plugin hook for Phase 9+ modules (Bloodline, Alpha-Omega, UE5)."""

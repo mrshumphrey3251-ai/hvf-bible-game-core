@@ -36,7 +36,7 @@ theme_override_constants/separation = 6
 
 [node name="TitleLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
 layout_mode = 2
-text = "HVF SOVEREIGN BIBLE GAME ENGINE — TIER 2 GODOT 4 CLIENT (PHASE 10)"
+text = "HVF SOVEREIGN BIBLE GAME ENGINE — TIER 2 GODOT 4 CLIENT (PHASE 11)"
 
 [node name="StatusLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
 layout_mode = 2
@@ -48,7 +48,7 @@ text = "ERA: ERA_TORAH  |  SCORE: 0  |  FLAGS: []  |  SHA-256: PENDING..."
 
 [node name="BloodlineLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
 layout_mode = 2
-text = "EPOCH: 1  |  GEN: 1  |  LEADER: Adam_Line_01  |  HEIR: Seth_Line_02  |  LEGACY: []"
+text = "EPOCH: 1  |  GEN: 1  |  LEADER: Adam_Line_01  |  HEIR: Seth_Line_02  |  LEGACY & SEALS: []"
 
 [node name="BodyPanel" type="PanelContainer" parent="MarginContainer/VBox"]
 layout_mode = 2
@@ -64,25 +64,39 @@ size_flags_vertical = 3
 bbcode_enabled = true
 text = "Awaiting scenario payload from OmniClientDispatcher (127.0.0.1:65432)..."
 
-[node name="OptionsHBox" type="HBoxContainer" parent="MarginContainer/VBox/BodyPanel/BodyVBox"]
+[node name="OptionsGrid" type="GridContainer" parent="MarginContainer/VBox/BodyPanel/BodyVBox"]
 layout_mode = 2
-theme_override_constants/separation = 12
+columns = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 10
 
-[node name="OptionABtn" type="Button" parent="MarginContainer/VBox/BodyPanel/BodyVBox/OptionsHBox"]
+[node name="OptionABtn" type="Button" parent="MarginContainer/VBox/BodyPanel/BodyVBox/OptionsGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "1. Option A"
 
-[node name="OptionBBtn" type="Button" parent="MarginContainer/VBox/BodyPanel/BodyVBox/OptionsHBox"]
+[node name="OptionBBtn" type="Button" parent="MarginContainer/VBox/BodyPanel/BodyVBox/OptionsGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "2. Option B"
+
+[node name="OptionCBtn" type="Button" parent="MarginContainer/VBox/BodyPanel/BodyVBox/OptionsGrid"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+text = "3. Option C"
+
+[node name="OptionDBtn" type="Button" parent="MarginContainer/VBox/BodyPanel/BodyVBox/OptionsGrid"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+text = "4. Option D"
 
 [node name="OutcomeLabel" type="RichTextLabel" parent="MarginContainer/VBox/BodyPanel/BodyVBox"]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 bbcode_enabled = true
-text = "Select an executive decision above to invoke the Stochastic Chaos Engine."
+text = "Select an executive decision or Scripture Covenant Trial above."
 
 [node name="FooterHBox" type="HBoxContainer" parent="MarginContainer/VBox"]
 layout_mode = 2
@@ -91,6 +105,10 @@ theme_override_constants/separation = 12
 [node name="ConnectBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
 layout_mode = 2
 text = "Reconnect Bridge"
+
+[node name="TrialBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
+layout_mode = 2
+text = "Scripture Covenant Trial"
 
 [node name="HandoffBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
 layout_mode = 2
