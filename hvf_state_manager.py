@@ -12,7 +12,7 @@ class StateManager:
     def __init__(self, save_file="player_state.json"):
         self.save_file = save_file
         # This salt makes the hash impossible to forge without the source code
-        self.secret_salt = "HVF_EXECUTIVE_SALT_2026_!@#"
+        self.secret_salt = os.environ.get("HVF_EXECUTIVE_SALT", "HVF_PUBLIC_SANDBOX_SALT_2026")
 
     def generate_signature(self, data_string):
         payload = data_string + self.secret_salt

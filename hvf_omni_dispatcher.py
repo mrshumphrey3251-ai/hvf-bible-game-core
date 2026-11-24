@@ -8,7 +8,6 @@
 import json
 import os
 import socket
-import threading
 from bible_game_engine import BibleEras, GameEngineState, ScriptureBankValidator
 from hvf_3d_bridge import OmniBridge
 from hvf_state_manager import StateManager
@@ -27,7 +26,6 @@ class OmniClientDispatcher(OmniBridge):
         self.scripture_bank = ScriptureBankValidator.load_and_validate(
             os.path.join(self.base_dir, "scripture_bank.json")
         )
-        self.active_flags = []
         self.current_era = BibleEras.TORAH
         self._running = False
 
@@ -47,17 +45,18 @@ class OmniClientDispatcher(OmniBridge):
         self.action_handlers[action_name.upper()] = handler_fn
 
     def _build_snapshot(self):
+        sorted_flags = sorted(list(self.narrative.player_flags))
         return {
             "current_era": self.current_era,
             "total_score": self.engine_state.total_score,
             "era_mastery": self.engine_state.era_mastery,
-            "active_flags": list(self.active_flags),
+            "active_flags": sorted_flags,
             "sha256_seal": self.state_manager.generate_signature(
                 json.dumps(
                     {
                         "era": self.current_era,
                         "score": self.engine_state.total_score,
-                        "flags": self.active_flags,
+                        "flags": sorted_flags,
                     },
                     sort_keys=True,
                 )
@@ -75,30 +74,45 @@ class OmniClientDispatcher(OmniBridge):
         return {"status": "OK", "state": self._build_snapshot()}
 
     def _handle_get_scenario(self, payload):
-        scenarios = self.narrative.data.get("scenarios", [])
+        scenarios = self.narrative.matrix
         scenario_id = payload.get("scenario_id")
+        target = None
         if scenario_id:
-            match = next((s for s in scenarios if s.get("id") == scenario_id), None)
-            if match:
-                return {"status": "OK", "scenario": match}
-        if scenarios:
-            return {"status": "OK", "scenario": scenarios[0]}
-        return {"status": "EMPTY", "error": "No scenarios available in decision_bank.json"}
+            target = next((s for s in scenarios if s.get("id") == scenario_id), None)
+        if not target and scenarios:
+            target = scenarios[0]
+        if not target:
+            return {"status": "EMPTY", "error": "No scenarios available in decision_bank.json"}
+
+        filtered = dict(target)
+        filtered["options"] = [
+            opt for opt in target.get("options", [])
+            if opt.get("flag_required") is None or opt.get("flag_required") in self.narrative.player_flags
+        ]
+        return {"status": "OK", "scenario": filtered}
 
     def _handle_resolve_decision(self, payload):
-        scenarios = self.narrative.data.get("scenarios", [])
+        scenarios = self.narrative.matrix
         scenario_id = payload.get("scenario_id", "GEN_001")
         option_index = int(payload.get("option_index", 0))
         scenario = next((s for s in scenarios if s.get("id") == scenario_id), scenarios[0] if scenarios else None)
         if not scenario:
             return {"status": "ERROR", "error": "Scenario not found"}
-        options = scenario.get("options", [])
-        if option_index < 0 or option_index >= len(options):
+
+        valid_options = [
+            opt for opt in scenario.get("options", [])
+            if opt.get("flag_required") is None or opt.get("flag_required") in self.narrative.player_flags
+        ]
+        if option_index < 0 or option_index >= len(valid_options):
             return {"status": "ERROR", "error": "Invalid option_index"}
-        outcome = self.narrative.resolve_decision(options[option_index])
+
+        outcome = self.narrative.resolve_decision(valid_options[option_index])
+        if not outcome:
+            return {"status": "ERROR", "error": "No outcome resolved"}
+
         flag = outcome.get("flag")
-        if flag and flag not in self.active_flags:
-            self.active_flags.append(flag)
+        if flag:
+            self.narrative.player_flags.add(flag)
         self.engine_state.award_points(scenario.get("era", self.current_era))
         return {
             "status": "OK",
