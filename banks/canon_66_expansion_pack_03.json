@@ -1,0 +1,314 @@
+{
+  "pack_id": "HVF_CANON_66_EXPANSION_PACK_03",
+  "version": "1.0.0",
+  "scenarios": {
+    "TOR_005": {
+      "id": "TOR_005",
+      "era": "ERA_TORAH",
+      "title": "Caleb & Joshua at Kadesh-Barnea ? Faith Over Fear (Numbers 13?14)",
+      "context": "Ten scouts report fortified cities and giants in Canaan, causing the assembly to panic and demand a return to Egypt.",
+      "prompt": "How do you steady the twelve tribes when majority opinion is paralyzed by fear?",
+      "options": [
+        {
+          "text": "Stand with Caleb and Joshua: 'The Lord is with us; do not fear them, we are well able to overcome'",
+          "outcomes": [
+            {
+              "weight": 0.92,
+              "score_delta": 45,
+              "flag": "WHOLLY_FOLLOWED_LORD",
+              "text": "Numbers 14:24 fulfilled: wholly following the Lord secures covenant inheritance (+45 Score)."
+            },
+            {
+              "weight": 0.08,
+              "score_delta": 30,
+              "flag": "CALEB_SPIRIT",
+              "text": "Courageous faith silences panic across the camp (+30 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Yield to the fearful majority and appoint a captain to return to Egypt",
+          "outcomes": [
+            {
+              "weight": 1.0,
+              "score_delta": -20,
+              "flag": "WILDERNESS_DELAY",
+              "text": "Unbelief forfeits immediate entry into the Promised Land (-20 Score)."
+            }
+          ]
+        }
+      ]
+    },
+    "HIS_005": {
+      "id": "HIS_005",
+      "era": "ERA_HISTORY",
+      "title": "Nehemiah Rebuilding Jerusalem's Walls ? Sword & Trowel (Nehemiah 4 & 6)",
+      "context": "Sanballat and Tobiah mock the builders and plot a surprise attack while Jerusalem's gates lie half-restored.",
+      "prompt": "How do you defend the city while keeping every family on schedule?",
+      "options": [
+        {
+          "text": "Post prayerful watchmen day and night, arm every builder with sword and trowel, and refuse distraction",
+          "outcomes": [
+            {
+              "weight": 0.94,
+              "score_delta": 50,
+              "flag": "WALL_52_DAYS",
+              "text": "Nehemiah 6:15: the wall is completed in 52 days, and surrounding nations recognize God's hand (+50 Score)."
+            },
+            {
+              "weight": 0.06,
+              "score_delta": 35,
+              "flag": "SWORD_AND_TROWEL",
+              "text": "Vigilant defense and disciplined labor protect every gate (+35 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Halt construction to negotiate on the plain of Ono",
+          "outcomes": [
+            {
+              "weight": 1.0,
+              "score_delta": -15,
+              "flag": "ONO_DISTRACTION",
+              "text": "Leaving the great work stalls momentum and invites ambush (-15 Score)."
+            }
+          ]
+        }
+      ]
+    },
+    "WIS_004": {
+      "id": "WIS_004",
+      "era": "ERA_WISDOM",
+      "title": "Solomon's Temple Dedication & Wise Governance (1 Kings 3 & 8 / Proverbs 4)",
+      "context": "As steward over a vast kingdom, you must prioritize either personal wealth or a discerning heart to govern God's people.",
+      "prompt": "What foundation do you establish for generational leadership?",
+      "options": [
+        {
+          "text": "Ask God for an understanding heart to discern good and evil, and build the House of the Lord first",
+          "outcomes": [
+            {
+              "weight": 0.93,
+              "score_delta": 45,
+              "flag": "DISCERNING_HEART",
+              "text": "1 Kings 3:12: wisdom, honor, and peace flourish across every border (+45 Score)."
+            },
+            {
+              "weight": 0.07,
+              "score_delta": 30,
+              "flag": "WISDOM_PRINCIPAL",
+              "text": "Proverbs 4:7: getting wisdom establishes enduring justice (+30 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Prioritize personal luxury and heavy taxation over covenant justice",
+          "outcomes": [
+            {
+              "weight": 1.0,
+              "score_delta": -15,
+              "flag": "HEAVY_YOKE",
+              "text": "Oppressive burdens fracture tribal unity (-15 Score)."
+            }
+          ]
+        }
+      ]
+    },
+    "PRO_004": {
+      "id": "PRO_004",
+      "era": "ERA_PROPHETS",
+      "title": "Jeremiah & Ezekiel ? New Covenant Heart of Flesh (Jeremiah 31:31?34 / Ezekiel 36)",
+      "context": "Exile threatens to extinguish national identity as temples fall and captives sit by the rivers of Babylon.",
+      "prompt": "What prophetic hope anchors the remnant through seventy years of exile?",
+      "options": [
+        {
+          "text": "Proclaim God's New Covenant written on the heart, seek the welfare of the city, and prepare for restoration",
+          "outcomes": [
+            {
+              "weight": 0.95,
+              "score_delta": 50,
+              "flag": "NEW_COVENANT_HEART",
+              "text": "Jeremiah 31:33 & Ezekiel 36:26: God replaces hearts of stone with hearts of flesh (+50 Score)."
+            },
+            {
+              "weight": 0.05,
+              "score_delta": 35,
+              "flag": "DRY_BONES_LIVE",
+              "text": "Prophetic breath raises an exceeding great army from dry bones (+35 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Listen to false prophets promising effortless escape without repentance",
+          "outcomes": [
+            {
+              "weight": 1.0,
+              "score_delta": -20,
+              "flag": "UNPROFITABLE_MORTAR",
+              "text": "Whitewashed walls collapse under prophetic scrutiny (-20 Score)."
+            }
+          ]
+        }
+      ]
+    },
+    "GOS_004": {
+      "id": "GOS_004",
+      "era": "ERA_GOSPELS",
+      "title": "The Good Samaritan & Kingdom Mercy (Luke 10:25?37)",
+      "context": "A wounded traveler lies stripped and half-dead along the steep road from Jerusalem to Jericho.",
+      "prompt": "How do you demonstrate authentic covenant neighbor-love?",
+      "options": [
+        {
+          "text": "Show active compassion, bind his wounds, carry him to safety, and cover his full care",
+          "outcomes": [
+            {
+              "weight": 0.95,
+              "score_delta": 45,
+              "flag": "MERCIFUL_NEIGHBOR",
+              "text": "Luke 10:37: 'Go and do likewise'?sacrificial mercy fulfills the royal law (+45 Score)."
+            },
+            {
+              "weight": 0.05,
+              "score_delta": 30,
+              "flag": "COMPASSION_ACTION",
+              "text": "Practical generosity heals broken lives (+30 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Pass by on the other side to avoid inconvenience",
+          "outcomes": [
+            {
+              "weight": 1.0,
+              "score_delta": -15,
+              "flag": "PASSED_BY",
+              "text": "Religious titles without mercy miss the heart of the Law (-15 Score)."
+            }
+          ]
+        }
+      ]
+    },
+    "EPI_004": {
+      "id": "EPI_004",
+      "era": "ERA_EPISTLES",
+      "title": "The Great Cloud of Witnesses & Unshakable Kingdom (Hebrews 11?12)",
+      "context": "Believers under heavy pressure are tempted to drift backward instead of pressing forward in faith.",
+      "prompt": "How do you run the race set before the church?",
+      "options": [
+        {
+          "text": "Lay aside every weight, fix eyes on Jesus the Author and Finisher of faith, and receive an unshakable Kingdom",
+          "outcomes": [
+            {
+              "weight": 0.96,
+              "score_delta": 55,
+              "flag": "UNSHAKABLE_KINGDOM",
+              "text": "Hebrews 12:2 & 12:28: enduring with gratitude and awe inherits the unshakable Kingdom (+55 Score)."
+            },
+            {
+              "weight": 0.04,
+              "score_delta": 40,
+              "flag": "CLOUD_OF_WITNESSES",
+              "text": "Faithful endurance honors every patriarch and martyr (+40 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Shrink back in fear and neglect gathering with the assembly",
+          "outcomes": [
+            {
+              "weight": 1.0,
+              "score_delta": -20,
+              "flag": "DRIFT_BACKWARD",
+              "text": "Neglecting fellowship weakens spiritual resilience (-20 Score)."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "scripture_trials": [
+    {
+      "id": "TRIAL_CANON66_07",
+      "era": "ERA_TORAH",
+      "reference": "Leviticus 19:18 & Deuteronomy 6:5",
+      "prompt": "Which two Torah commandments did Jesus identify as the foundation on which all the Law and Prophets depend?",
+      "options": [
+        "Love the Lord your God with all your heart, soul, and might, and love your neighbor as yourself",
+        "Offer daily grain taxes and build stone towers in every valley",
+        "Restrict hospitality solely to royal officials",
+        "Memorize genealogy lists without practicing justice"
+      ],
+      "correct_index": 0,
+      "explanation": "Deuteronomy 6:5 and Leviticus 19:18 summarize the entire covenant ethic of love toward God and neighbor."
+    },
+    {
+      "id": "TRIAL_CANON66_08",
+      "era": "ERA_HISTORY",
+      "reference": "Nehemiah 8:10",
+      "prompt": "What declaration did Ezra and Nehemiah speak to strengthen the returned exiles as Scripture was read aloud?",
+      "options": [
+        "Do not be grieved, for the joy of the Lord is your strength",
+        "Weep continuously because the walls are weak",
+        "Close the scroll until foreign kings grant permission",
+        "Strength comes only from fortified chariots"
+      ],
+      "correct_index": 0,
+      "explanation": "Nehemiah 8:10 anchors covenant renewal in the sustaining joy of the Lord."
+    },
+    {
+      "id": "TRIAL_CANON66_09",
+      "era": "ERA_WISDOM",
+      "reference": "Proverbs 3:5?6",
+      "prompt": "According to Proverbs 3:5?6, what happens when we trust in the Lord with all our heart and acknowledge Him in all our ways?",
+      "options": [
+        "He will make straight our paths",
+        "We never face any decisions",
+        "Human understanding replaces prayer",
+        "Wealth is guaranteed without diligence"
+      ],
+      "correct_index": 0,
+      "explanation": "Proverbs 3:5?6 promises divine direction when we lean on God rather than our own limited insight."
+    },
+    {
+      "id": "TRIAL_CANON66_10",
+      "era": "ERA_PROPHETS",
+      "reference": "Micah 6:8",
+      "prompt": "What three things does the Lord require of His people according to Micah 6:8?",
+      "options": [
+        "To do justice, to love kindness (mercy), and to walk humbly with your God",
+        "To multiply burnt offerings, build palaces, and silence the poor",
+        "To isolate from every city and avoid public justice",
+        "To rely on ritual without integrity"
+      ],
+      "correct_index": 0,
+      "explanation": "Micah 6:8 distills prophetic covenant ethics into justice, steadfast mercy, and humble walk with God."
+    },
+    {
+      "id": "TRIAL_CANON66_11",
+      "era": "ERA_GOSPELS",
+      "reference": "Acts 1:8",
+      "prompt": "What power and geographic mission did Jesus promise His disciples before His ascension in Acts 1:8?",
+      "options": [
+        "Power when the Holy Spirit comes upon them, to be His witnesses in Jerusalem, Judea, Samaria, and to the end of the earth",
+        "Political office inside the Roman Senate",
+        "Immediate withdrawal from public witness",
+        "Authority limited strictly to Galilee"
+      ],
+      "correct_index": 0,
+      "explanation": "Acts 1:8 outlines the Spirit-empowered global expansion of the Gospel."
+    },
+    {
+      "id": "TRIAL_CANON66_12",
+      "era": "ERA_EPISTLES",
+      "reference": "Romans 8:28 & 8:37",
+      "prompt": "How does Romans 8 describe the believer's standing in Christ amid tribulation or distress?",
+      "options": [
+        "God works all things together for good for those who love Him, and in all these things we are more than conquerors through Him who loved us",
+        "Trials prove God has abandoned His people",
+        "Victory belongs only to those without hardship",
+        "Condemnation remains over those in Christ Jesus"
+      ],
+      "correct_index": 0,
+      "explanation": "Romans 8:28?39 guarantees unbreakable covenant love and victory in Christ."
+    }
+  ]
+}
