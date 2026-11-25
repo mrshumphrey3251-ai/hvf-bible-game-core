@@ -56,6 +56,8 @@ var trial_mode: bool = false
 var cached_total_score: int = 0
 var cached_cmd_bonus: int = 0
 var next_campaign_id: String = "CH_01_MAMRE"
+var offline_mirror := SovereignOfflineMirror.new()
+var using_offline_mirror: bool = false
 
 func _ready() -> void:
 	connect_btn.pressed.connect(_on_connect_pressed)
@@ -82,7 +84,8 @@ func _send_command(payload: Dictionary) -> Dictionary:
 	var peer := StreamPeerTCP.new()
 	var err := peer.connect_to_host(host, port)
 	if err != OK:
-		return {"status": "ERROR", "error": "TCP connect failed (code %d). Start hvf_omni_dispatcher.py." % err}
+		using_offline_mirror = true
+		return offline_mirror.dispatch(payload)
 	var deadline := Time.get_ticks_msec() + 2000
 	while Time.get_ticks_msec() < deadline:
 		peer.poll()
@@ -91,7 +94,9 @@ func _send_command(payload: Dictionary) -> Dictionary:
 		OS.delay_msec(10)
 	if peer.get_status() != StreamPeerTCP.STATUS_CONNECTED:
 		peer.disconnect_from_host()
-		return {"status": "ERROR", "error": "Backend offline at %s:%d - launch hvf_omni_dispatcher.py." % [host, port]}
+		using_offline_mirror = true
+		return offline_mirror.dispatch(payload)
+	using_offline_mirror = false
 	var wire := JSON.stringify(payload) + "\n"
 	peer.put_data(wire.to_utf8_buffer())
 	var raw := ""
@@ -121,7 +126,7 @@ func _on_connect_pressed() -> void:
 		bridge_error.emit(err_msg)
 		return
 	var state: Dictionary = resp.get("state", {})
-	status_label.text = "BRIDGE STATUS: CONNECTED & VERIFIED (GODOT_4 -> %s:%d)" % [host, port]
+	status_label.text = "BRIDGE STATUS: STANDALONE MULTI-DEVICE MIRROR (SHA-256 ACTIVE)" if using_offline_mirror else ("BRIDGE STATUS: CONNECTED & VERIFIED (GODOT_4 -> %s:%d)" % [host, port])
 	_update_telemetry(state)
 	if resp.has("generals") and typeof(resp["generals"]) == TYPE_DICTIONARY:
 		_update_generals_telemetry(resp["generals"])
