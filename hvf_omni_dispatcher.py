@@ -314,10 +314,6 @@ except Exception as _p23_err:
     print(f"[HVF WARNING] Phase 23 EdTech exporter bind skipped: {_p23_err}")
 
 
-if __name__ == "__main__":
-    dispatcher = OmniClientDispatcher()
-    dispatcher.serve_forever()
-
 # --- PHASE 33: THREAD-SAFE MULTIPLAYER PILGRIM ROOM RELAY ---
 import threading as _mp_threading
 import time as _mp_time
@@ -337,7 +333,6 @@ def handle_multiplayer_packet(payload: dict) -> dict:
     chat_text = str(payload.get("message", "")).strip()[:140]
 
     with _MP_LOCK:
-        # Prune inactive pilgrims (>25 seconds without heartbeat)
         stale = [k for k, v in _MP_PILGRIMS.items() if (now - v.get("last_seen", 0.0)) > 25.0]
         for k in stale:
             del _MP_PILGRIMS[k]
@@ -372,3 +367,7 @@ def handle_multiplayer_packet(payload: dict) -> dict:
             "peers": peers,
             "chat_log": list(_MP_CHAT_LOG[-6:]),
         }
+
+if __name__ == "__main__":
+    dispatcher = OmniClientDispatcher()
+    dispatcher.serve_forever()
