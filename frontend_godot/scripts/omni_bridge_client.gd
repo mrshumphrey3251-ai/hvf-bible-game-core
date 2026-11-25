@@ -167,6 +167,74 @@ func _ready() -> void:
 			mp_client.peers_updated.connect(func(peers: Array, online_cnt: int, chat_log: Array):
 				w_node.set_remote_pilgrims(peers)
 			)
+		# Phase 34: Interactive Pilgrim Name, Online Counter & Fellowship Chat Bar
+		var root_vbox_mp = get_node_or_null("RootScroll/MainVBox")
+		if root_vbox_mp != null:
+			var mp_bar: HBoxContainer = HBoxContainer.new()
+			mp_bar.name = "FellowshipBar"
+			mp_bar.add_theme_constant_override("separation", 6)
+
+			var online_lbl: Label = Label.new()
+			online_lbl.name = "OnlinePilgrimsLabel"
+			online_lbl.text = "Online: 1"
+			online_lbl.add_theme_color_override("font_color", Color(0.45, 0.92, 0.65))
+			mp_bar.add_child(online_lbl)
+
+			var name_edit: LineEdit = LineEdit.new()
+			name_edit.name = "PilgrimNameInput"
+			name_edit.placeholder_text = "Your Pilgrim Name..."
+			name_edit.text = mp_client.player_name
+			name_edit.custom_minimum_size = Vector2(130, 0)
+			name_edit.text_submitted.connect(func(new_name: String):
+				var clean_n: String = new_name.strip_edges()
+				if clean_n != "":
+					mp_client.player_name = clean_n
+					mp_client.dirty_pos = true
+					w_node.set_local_pilgrim_name(clean_n)
+			)
+			mp_bar.add_child(name_edit)
+
+			var chat_edit: LineEdit = LineEdit.new()
+			chat_edit.name = "FellowshipChatInput"
+			chat_edit.placeholder_text = "Speak peace to fellow pilgrims across stages..."
+			chat_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			var send_chat_fn: Callable = func(txt: String):
+				var msg_clean: String = txt.strip_edges()
+				if msg_clean != "":
+					var cur_name: String = name_edit.text.strip_edges()
+					if cur_name != "":
+						mp_client.player_name = cur_name
+						w_node.set_local_pilgrim_name(cur_name)
+					mp_client.send_fellowship_chat(msg_clean)
+					chat_edit.text = ""
+			chat_edit.text_submitted.connect(send_chat_fn)
+			mp_bar.add_child(chat_edit)
+
+			var send_btn: Button = Button.new()
+			send_btn.text = "Send Peace"
+			send_btn.pressed.connect(func():
+				send_chat_fn.call(chat_edit.text)
+			)
+			mp_bar.add_child(send_btn)
+
+			var chat_feed_lbl: Label = Label.new()
+			chat_feed_lbl.name = "FellowshipLiveFeed"
+			chat_feed_lbl.text = "Room Ready ? Move with WASD/Click or speak with Biblical NPCs!"
+			chat_feed_lbl.add_theme_color_override("font_color", Color(0.86, 0.92, 0.98))
+
+			root_vbox_mp.add_child(mp_bar)
+			root_vbox_mp.move_child(mp_bar, 2)
+			root_vbox_mp.add_child(chat_feed_lbl)
+			root_vbox_mp.move_child(chat_feed_lbl, 3)
+
+			w_node.set_local_pilgrim_name(mp_client.player_name)
+			mp_client.peers_updated.connect(func(peers: Array, online_cnt: int, chat_log: Array):
+				online_lbl.text = "Online: %d" % online_cnt
+				if chat_log.size() > 0:
+					var last_msg: Dictionary = chat_log[chat_log.size() - 1]
+					chat_feed_lbl.text = "[%s @ %s]: %s" % [str(last_msg.get("sender", "Pilgrim")), str(last_msg.get("stage", "ERA_TORAH")), str(last_msg.get("message", ""))]
+			)
+
 
 func _send_command(payload: Dictionary) -> Dictionary:
 	var peer := StreamPeerTCP.new()

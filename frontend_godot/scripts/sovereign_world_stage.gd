@@ -95,6 +95,7 @@ var active_dialogue: String = ""
 var active_npc_name: String = ""
 var active_npc_scenario: String = ""
 var remote_pilgrims: Array = []
+var local_pilgrim_name: String = "YOU"
 
 func _ready() -> void:
 	custom_minimum_size = Vector2(0, 240)
@@ -114,6 +115,11 @@ func set_stage(era_id: String) -> void:
 		active_dialogue = ""
 		portal_cooldown = 0.8
 		queue_redraw()
+
+func set_local_pilgrim_name(pname: String) -> void:
+	var clean: String = pname.strip_edges()
+	local_pilgrim_name = clean if clean != "" else "YOU"
+	queue_redraw()
 
 func set_remote_pilgrims(pilgrims: Array) -> void:
 	remote_pilgrims = pilgrims
@@ -282,7 +288,7 @@ func _draw() -> void:
 		draw_string(font, Vector2(14.0, 40.0), "Move: [WASD / Arrows / Click]  |  Walk into Side Portals to Change Stage  |  Walk to NPC + Press [E] to Talk", HORIZONTAL_ALIGNMENT_LEFT, int(w - 28.0), 11, Color(0.88, 0.88, 0.92))
 		draw_string(font, Vector2(12.0, h * 0.55 + 34.0), "< PREV ERA", HORIZONTAL_ALIGNMENT_LEFT, 90, 10, accent_col)
 		draw_string(font, Vector2(w - 86.0, h * 0.55 + 34.0), "NEXT ERA >", HORIZONTAL_ALIGNMENT_RIGHT, 76, 10, accent_col)
-		draw_string(font, pdraw + Vector2(-24.0, -22.0), "YOU", HORIZONTAL_ALIGNMENT_CENTER, 48, 11, Color.WHITE)
+		draw_string(font, pdraw + Vector2(-42.0, -22.0), local_pilgrim_name, HORIZONTAL_ALIGNMENT_CENTER, 84, 11, Color.WHITE)
 
 		if not nearby_npc.is_empty():
 			var prompt_txt: String = "Press [E] or Click to speak with %s" % str(nearby_npc.get("name", ""))
