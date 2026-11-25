@@ -128,7 +128,7 @@ func _ready() -> void:
 	if world_script != null:
 		var world_stage = world_script.new()
 		world_stage.name = "WalkableWorldStage"
-		var root_vbox = get_node_or_null("RootScroll/MainVBox")
+		var root_vbox = _find_main_vbox()
 		if root_vbox != null:
 			root_vbox.add_child(world_stage)
 			root_vbox.move_child(world_stage, 1)
@@ -136,7 +136,7 @@ func _ready() -> void:
 			world_stage.npc_dialogue_triggered.connect(func(npc_name: String, era_id: String, scenario_id: String, greeting: String):
 				if audio_synth != null and audio_synth.has_method("play_covenant_chime"):
 					audio_synth.play_covenant_chime()
-				var feed = get_node_or_null("RootScroll/MainVBox/ChronicleScroll/ChronicleFeed")
+				var feed = find_child("ChronicleFeed", true, false)
 				if feed != null:
 					feed.text = "[b][color=#f5d061]%s[/color][/b]\n%s\n\n[i]Loading Canonical Trial (%s)...[/i]" % [npc_name, greeting, scenario_id]
 				if has_method("_request_scenario"):
@@ -145,7 +145,7 @@ func _ready() -> void:
 			world_stage.stage_portal_entered.connect(func(target_era_id: String):
 				if audio_synth != null and audio_synth.has_method("play_covenant_chime"):
 					audio_synth.play_covenant_chime()
-				var feed = get_node_or_null("RootScroll/MainVBox/ChronicleScroll/ChronicleFeed")
+				var feed = find_child("ChronicleFeed", true, false)
 				if feed != null:
 					feed.text = "[b][color=#7de2d1]PORTAL TRANSITION:[/color][/b] Entered [b]%s[/b]. Walk to a Biblical NPC and press [E] to converse!" % target_era_id
 			)
@@ -156,7 +156,7 @@ func _ready() -> void:
 		var mp_client = mp_script.new()
 		mp_client.name = "MultiplayerRelayClient"
 		add_child(mp_client)
-		var w_node = get_node_or_null("RootScroll/MainVBox/WalkableWorldStage")
+		var w_node = find_child("WalkableWorldStage", true, false)
 		if w_node != null:
 			w_node.player_moved.connect(func(stage_id: String, px: float, py: float):
 				mp_client.update_local_state(stage_id, px, py)
@@ -168,7 +168,7 @@ func _ready() -> void:
 				w_node.set_remote_pilgrims(peers)
 			)
 		# Phase 34: Interactive Pilgrim Name, Online Counter & Fellowship Chat Bar
-		var root_vbox_mp = get_node_or_null("RootScroll/MainVBox")
+		var root_vbox_mp = _find_main_vbox()
 		if root_vbox_mp != null:
 			var mp_bar: HBoxContainer = HBoxContainer.new()
 			mp_bar.name = "FellowshipBar"
@@ -710,3 +710,21 @@ func _set_options_enabled(enabled: bool) -> void:
 	option_b_btn.disabled = not enabled
 	option_c_btn.disabled = not enabled
 	option_d_btn.disabled = not enabled
+
+
+func _find_main_vbox() -> VBoxContainer:
+	var direct = get_node_or_null("ScrollContainer/VBoxContainer")
+	if direct is VBoxContainer:
+		return direct
+	var alt = _find_main_vbox()
+	if alt is VBoxContainer:
+		return alt
+	var found = find_child("VBoxContainer", true, false)
+	if found is VBoxContainer:
+		return found
+	for child in get_children():
+		if child is ScrollContainer:
+			for sub in child.get_children():
+				if sub is VBoxContainer:
+					return sub
+	return null
