@@ -40,6 +40,7 @@ signal bridge_error(message: String)
 @onready var handoff_btn: Button = $MarginContainer/VBox/FooterHBox/HandoffBtn
 @onready var advance_era_btn: Button = $MarginContainer/VBox/FooterHBox/AdvanceEraBtn
 @onready var save_btn: Button = $MarginContainer/VBox/FooterHBox/SaveBtn
+@onready var export_transcript_btn: Button = $MarginContainer/VBox/FooterHBox/ExportTranscriptBtn
 
 const ERA_SCENARIO_MAP := {
 	"ERA_TORAH": "GEN_001",
@@ -79,6 +80,7 @@ func _ready() -> void:
 	handoff_btn.pressed.connect(_on_handoff_pressed)
 	advance_era_btn.pressed.connect(_on_advance_era_pressed)
 	save_btn.pressed.connect(_on_save_pressed)
+	export_transcript_btn.pressed.connect(_on_export_transcript_pressed)
 	collect_tribute_btn.pressed.connect(_on_collect_tribute_pressed)
 	upgrade_keep_btn.pressed.connect(_on_upgrade_keep_pressed)
 	conquer_chapter_btn.pressed.connect(_on_conquer_chapter_pressed)
@@ -420,6 +422,31 @@ func _on_advance_era_pressed() -> void:
 		else:
 			outcome_label.text = "[b][WORLD CLOCK ADVANCED][/b] Active Era: %s" % next_era
 		_load_active_scenario(ERA_SCENARIO_MAP.get(next_era, "GEN_001"))
+
+
+func _on_export_transcript_pressed() -> void:
+	var resp := _send_command({
+		"client_type": "GODOT_4",
+		"action": "EXPORT_EDTECH_TRANSCRIPT",
+		"student_alias": "Sovereign_Candidate",
+		"institution_name": "HVF Institutional EdTech Network"
+	})
+	if resp.get("status") == "OK":
+		var sig: String = str(resp.get("transcript_sha256", ""))
+		var md_text: String = str(resp.get("markdown_certificate", ""))
+		var out_path := "user://mastery_transcript.md"
+		var f := FileAccess.open(out_path, FileAccess.WRITE)
+		if f:
+			f.store_string(md_text)
+			f.close()
+		var t_obj: Dictionary = resp.get("transcript", {})
+		outcome_label.text = "[b][EDTECH MASTERY TRANSCRIPT EXPORTED][/b] Standing: %s | SHA-256: %s... | Saved to %s" % [
+			str(t_obj.get("academic_standing", "VERIFIED")),
+			sig.left(20),
+			ProjectSettings.globalize_path(out_path)
+		]
+	else:
+		outcome_label.text = "[b][TRANSCRIPT ERROR][/b] %s" % str(resp.get("error", resp.get("message", "Export failed")))
 
 func _on_save_pressed() -> void:
 	var resp := _send_command({"client_type": "GODOT_4", "action": "SAVE_STATE"})

@@ -253,4 +253,17 @@ func dispatch(req: Dictionary) -> Dictionary:
 		if correct:
 			state["total_score"] = int(state["total_score"]) + 50
 		return {"status": "OK", "correct": correct, "reference": "Joshua 1:8", "next_tier_label": "TIER_2", "explanation": "Joshua 1:8 anchors leadership prosperity in faithful obedience to Scripture.", "state": state}
+	if action == "EXPORT_EDTECH_TRANSCRIPT":
+		var score := int(state.get("total_score", 0))
+		var standing := "FOUNDATIONAL_INITIATE"
+		if score >= 1500:
+			standing = "SOVEREIGN_SCHOLAR_DISTINCTION"
+		elif score >= 800:
+			standing = "COVENANT_HONORS_FELLOW"
+		elif score >= 300:
+			standing = "VERIFIED_SCRIPTURE_STEWARD"
+		var t_body := {"schema_version": "HVF_EDTECH_TRANSCRIPT_V1", "student_alias": str(req.get("student_alias", "Sovereign_Candidate")), "institution_name": str(req.get("institution_name", "HVF Institutional EdTech Network")), "academic_standing": standing, "current_era": state.get("current_era", "ERA_TORAH"), "total_wisdom_score": score}
+		var t_sig := _compute_sha256(JSON.stringify(t_body))
+		var md := "# HVF SOVEREIGN BIBLE GAME ENGINE ? VERIFIED MASTERY TRANSCRIPT\n\n- **Standing:** %s\n- **Era:** %s\n- **Wisdom Score:** %d\n- **SHA-256 Seal:** `%s`\n" % [standing, str(t_body["current_era"]), score, t_sig]
+		return {"status": "OK", "transcript": t_body, "transcript_sha256": t_sig, "markdown_certificate": md}
 	return {"status": "ERROR", "message": "Unsupported offline action: " + action}

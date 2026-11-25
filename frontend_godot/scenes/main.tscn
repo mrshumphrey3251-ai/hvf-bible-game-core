@@ -36,7 +36,7 @@ theme_override_constants/separation = 5
 
 [node name="TitleLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
 layout_mode = 2
-text = "HVF SOVEREIGN BIBLE GAME ENGINE ? MULTI-DEVICE GODOT 4 CLIENT (PHASE 22)"
+text = "HVF SOVEREIGN BIBLE GAME ENGINE ? MULTI-DEVICE GODOT 4 CLIENT (PHASE 25)"
 
 [node name="StatusLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
 layout_mode = 2
@@ -192,3 +192,6 @@ text = "Advance Era / Alpha-Omega Loop"
 [node name="SaveBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
 layout_mode = 2
 text = "Seal SHA-256 Save"
+[node name="ExportTranscriptBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
+layout_mode = 2
+text = "Export Mastery Transcript"
