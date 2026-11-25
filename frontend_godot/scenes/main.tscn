@@ -23,188 +23,248 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 28
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 28
-theme_override_constants/margin_bottom = 20
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
 
-[node name="VBox" type="VBoxContainer" parent="MarginContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 12
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
 
-[node name="HeaderPanel" type="PanelContainer" parent="MarginContainer/VBox"]
+[node name="VBox" type="VBoxContainer" parent="MarginContainer/ScrollContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
 
-[node name="HeaderVBox" type="VBoxContainer" parent="MarginContainer/VBox/HeaderPanel"]
+[node name="HeaderPanel" type="PanelContainer" parent="MarginContainer/ScrollContainer/VBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HeaderVBox" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBox/HeaderPanel"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/HeaderPanel/HeaderVBox"]
+layout_mode = 2
+autowrap_mode = 3
+text = "HVF SOVEREIGN BIBLE GAME ENGINE ? MULTI-DEVICE GODOT 4 CLIENT (PHASE 28.3)"
+
+[node name="StatusLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/HeaderPanel/HeaderVBox"]
+layout_mode = 2
+autowrap_mode = 3
+text = "BRIDGE STATUS: INITIALIZING..."
+
+[node name="TelemetryLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/HeaderPanel/HeaderVBox"]
+layout_mode = 2
+autowrap_mode = 3
+text = "ERA: ERA_TORAH  |  SCORE: 0  |  FLAGS: []  |  SHA-256: PENDING..."
+
+[node name="BloodlineLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/HeaderPanel/HeaderVBox"]
+layout_mode = 2
+autowrap_mode = 3
+text = "EPOCH: 1  |  GEN: 1  |  LEADER: Adam_Line_01  |  HEIR: Seth_Line_02  |  LEGACY & SEALS: []"
+
+[node name="StrongholdPanel" type="PanelContainer" parent="MarginContainer/ScrollContainer/VBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StrongholdVBox" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBox/StrongholdPanel"]
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="TitleLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
+[node name="CitadelCanvas" type="Control" parent="MarginContainer/ScrollContainer/VBox/StrongholdPanel/StrongholdVBox"]
+custom_minimum_size = Vector2(0, 88)
 layout_mode = 2
-text = "HVF SOVEREIGN BIBLE GAME ENGINE ? MULTI-DEVICE GODOT 4 CLIENT (PHASE 28)"
-
-[node name="StatusLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
-layout_mode = 2
-text = "BRIDGE STATUS: INITIALIZING..."
-
-[node name="TelemetryLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
-layout_mode = 2
-text = "ERA: ERA_TORAH  |  SCORE: 0  |  FLAGS: []  |  SHA-256: PENDING..."
-
-[node name="BloodlineLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
-layout_mode = 2
-text = "EPOCH: 1  |  GEN: 1  |  LEADER: Adam_Line_01  |  HEIR: Seth_Line_02  |  LEGACY & SEALS: []"
-
-[node name="StrongholdPanel" type="PanelContainer" parent="MarginContainer/VBox"]
-layout_mode = 2
-
-[node name="StrongholdVBox" type="VBoxContainer" parent="MarginContainer/VBox/StrongholdPanel"]
-layout_mode = 2
-theme_override_constants/separation = 7
-
-[node name="CitadelCanvas" type="Control" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox"]
-custom_minimum_size = Vector2(0, 132)
-layout_mode = 2
+size_flags_horizontal = 3
 script = ExtResource("2_citadel")
 
-[node name="StrongholdHeaderLabel" type="Label" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox"]
+[node name="StrongholdHeaderLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/StrongholdPanel/StrongholdVBox"]
 layout_mode = 2
+autowrap_mode = 3
 text = "STRONGHOLD: Covenant Citadel of Zion  |  COMBINED POWER: 1000 (Base 1000 + Cmd +0)  |  KEEP: Lv.1  |  CONQUERED: []"
 
-[node name="ResourcesLabel" type="Label" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox"]
+[node name="ResourcesLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/StrongholdPanel/StrongholdVBox"]
 layout_mode = 2
+autowrap_mode = 3
 text = "RESOURCES -> PROVISION: 500  |  TIMBER: 400  |  STONE: 400  |  TALENTS: 150"
 
-[node name="CommandersLabel" type="Label" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox"]
+[node name="CommandersLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/StrongholdPanel/StrongholdVBox"]
 layout_mode = 2
+autowrap_mode = 3
 text = "COMMANDERS -> ACTIVE POSTS: NONE  |  COMMANDER BONUS: +0"
 
-[node name="StrongholdActionsHBox" type="HBoxContainer" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="CollectTributeBtn" type="Button" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox/StrongholdActionsHBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Collect Covenant Tribute"
-
-[node name="UpgradeKeepBtn" type="Button" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox/StrongholdActionsHBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Upgrade Sanctuary Keep"
-
-[node name="ConquerChapterBtn" type="Button" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox/StrongholdActionsHBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Conquer Campaign: Mamre"
-
-[node name="CommandersHBox" type="HBoxContainer" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox"]
+[node name="StrongholdActionsHBox" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBox/StrongholdPanel/StrongholdVBox"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="MosesBtn" type="Button" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox"]
+[node name="CollectTributeBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/StrongholdPanel/StrongholdVBox/StrongholdActionsHBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Appoint Moses (Keep)"
+clip_text = true
+text = "Collect Covenant Tribute"
 
-[node name="JoshuaBtn" type="Button" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox"]
+[node name="UpgradeKeepBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/StrongholdPanel/StrongholdVBox/StrongholdActionsHBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Appoint Joshua (Vanguard)"
+clip_text = true
+text = "Upgrade Sanctuary Keep"
 
-[node name="DeborahBtn" type="Button" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox"]
+[node name="ConquerChapterBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/StrongholdPanel/StrongholdVBox/StrongholdActionsHBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Appoint Deborah (Watchtower)"
+clip_text = true
+text = "Conquer Campaign: Mamre"
 
-[node name="DavidBtn" type="Button" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox"]
+[node name="CommandersHBox" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBox/StrongholdPanel/StrongholdVBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="MosesBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Appoint David (Walls)"
+clip_text = true
+text = "Moses (Keep)"
 
-[node name="PaulBtn" type="Button" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox"]
+[node name="JoshuaBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Appoint Paul (Scriptorium)"
+clip_text = true
+text = "Joshua (Vanguard)"
 
-[node name="BodyPanel" type="PanelContainer" parent="MarginContainer/VBox"]
+[node name="DeborahBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox"]
 layout_mode = 2
+size_flags_horizontal = 3
+clip_text = true
+text = "Deborah (Tower)"
+
+[node name="DavidBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+clip_text = true
+text = "David (Walls)"
+
+[node name="PaulBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+clip_text = true
+text = "Paul (Scriptorium)"
+
+[node name="BodyPanel" type="PanelContainer" parent="MarginContainer/ScrollContainer/VBox"]
+layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="BodyVBox" type="VBoxContainer" parent="MarginContainer/VBox/BodyPanel"]
+[node name="BodyVBox" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBox/BodyPanel"]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 8
 
-[node name="ContextLabel" type="RichTextLabel" parent="MarginContainer/VBox/BodyPanel/BodyVBox"]
+[node name="ContextLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VBox/BodyPanel/BodyVBox"]
+custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 bbcode_enabled = true
+fit_content = true
+scroll_active = false
 text = "Awaiting scenario payload from OmniClientDispatcher (127.0.0.1:65432)..."
 
-[node name="OptionsGrid" type="GridContainer" parent="MarginContainer/VBox/BodyPanel/BodyVBox"]
-layout_mode = 2
-columns = 2
-theme_override_constants/h_separation = 12
-theme_override_constants/v_separation = 10
-
-[node name="OptionABtn" type="Button" parent="MarginContainer/VBox/BodyPanel/BodyVBox/OptionsGrid"]
+[node name="OptionsGrid" type="GridContainer" parent="MarginContainer/ScrollContainer/VBox/BodyPanel/BodyVBox"]
 layout_mode = 2
 size_flags_horizontal = 3
+columns = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 6
+
+[node name="OptionABtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/BodyPanel/BodyVBox/OptionsGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 3
 text = "1. Option A"
 
-[node name="OptionBBtn" type="Button" parent="MarginContainer/VBox/BodyPanel/BodyVBox/OptionsGrid"]
+[node name="OptionBBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/BodyPanel/BodyVBox/OptionsGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
+autowrap_mode = 3
 text = "2. Option B"
 
-[node name="OptionCBtn" type="Button" parent="MarginContainer/VBox/BodyPanel/BodyVBox/OptionsGrid"]
+[node name="OptionCBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/BodyPanel/BodyVBox/OptionsGrid"]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
+autowrap_mode = 3
 text = "3. Option C"
 
-[node name="OptionDBtn" type="Button" parent="MarginContainer/VBox/BodyPanel/BodyVBox/OptionsGrid"]
+[node name="OptionDBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/BodyPanel/BodyVBox/OptionsGrid"]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
+autowrap_mode = 3
 text = "4. Option D"
 
-[node name="OutcomeLabel" type="RichTextLabel" parent="MarginContainer/VBox/BodyPanel/BodyVBox"]
-custom_minimum_size = Vector2(0, 88)
+[node name="OutcomeLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VBox/BodyPanel/BodyVBox"]
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
+size_flags_horizontal = 3
 bbcode_enabled = true
+fit_content = true
+scroll_active = false
 text = "Select an executive decision, Scripture Trial, Stronghold upgrade, or Biblical Commander above."
 
-[node name="FooterHBox" type="HBoxContainer" parent="MarginContainer/VBox"]
+[node name="FooterGrid" type="GridContainer" parent="MarginContainer/ScrollContainer/VBox"]
 layout_mode = 2
-theme_override_constants/separation = 12
+size_flags_horizontal = 3
+columns = 4
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 6
 
-[node name="ConnectBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
+[node name="ConnectBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/FooterGrid"]
 layout_mode = 2
+size_flags_horizontal = 3
+clip_text = true
 text = "Reconnect Bridge"
 
-[node name="NextScenarioBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
+[node name="NextScenarioBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/FooterGrid"]
 layout_mode = 2
+size_flags_horizontal = 3
+clip_text = true
 text = "Next Scenario in Era"
 
-[node name="TrialBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
+[node name="TrialBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/FooterGrid"]
 layout_mode = 2
-text = "Scripture Covenant Trial"
+size_flags_horizontal = 3
+clip_text = true
+text = "Perpetual Scripture Trial"
 
-[node name="HandoffBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
+[node name="HandoffBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/FooterGrid"]
 layout_mode = 2
-text = "Trigger Bloodline Handoff"
+size_flags_horizontal = 3
+clip_text = true
+text = "Bloodline Handoff"
 
-[node name="AdvanceEraBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
+[node name="AdvanceEraBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/FooterGrid"]
 layout_mode = 2
-text = "Advance Era / Alpha-Omega Loop"
+size_flags_horizontal = 3
+clip_text = true
+text = "Advance Era / Loop"
 
-[node name="SaveBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
+[node name="SaveBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/FooterGrid"]
 layout_mode = 2
+size_flags_horizontal = 3
+clip_text = true
 text = "Seal SHA-256 Save"
-[node name="ExportTranscriptBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
+
+[node name="ExportTranscriptBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/FooterGrid"]
 layout_mode = 2
-text = "Export Mastery Transcript"
-[node name="MuteAudioBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
+size_flags_horizontal = 3
+clip_text = true
+text = "Export Transcript"
+
+[node name="MuteAudioBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/FooterGrid"]
 layout_mode = 2
+size_flags_horizontal = 3
+clip_text = true
 text = "Audio: ON"
