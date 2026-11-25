@@ -6,6 +6,7 @@ signal scenario_loaded(scenario_data: Dictionary)
 signal decision_resolved(outcome_data: Dictionary, state_data: Dictionary)
 signal bloodline_updated(bloodline_data: Dictionary)
 signal stronghold_updated(stronghold_data: Dictionary)
+signal generals_updated(generals_data: Dictionary)
 signal alpha_omega_looped(bloodline_data: Dictionary)
 signal perpetual_trial_resolved(trial_result: Dictionary)
 signal bridge_error(message: String)
@@ -18,9 +19,15 @@ signal bridge_error(message: String)
 @onready var bloodline_label: Label = $MarginContainer/VBox/HeaderPanel/HeaderVBox/BloodlineLabel
 @onready var stronghold_header_label: Label = $MarginContainer/VBox/StrongholdPanel/StrongholdVBox/StrongholdHeaderLabel
 @onready var resources_label: Label = $MarginContainer/VBox/StrongholdPanel/StrongholdVBox/ResourcesLabel
+@onready var commanders_label: Label = $MarginContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersLabel
 @onready var collect_tribute_btn: Button = $MarginContainer/VBox/StrongholdPanel/StrongholdVBox/StrongholdActionsHBox/CollectTributeBtn
 @onready var upgrade_keep_btn: Button = $MarginContainer/VBox/StrongholdPanel/StrongholdVBox/StrongholdActionsHBox/UpgradeKeepBtn
 @onready var conquer_chapter_btn: Button = $MarginContainer/VBox/StrongholdPanel/StrongholdVBox/StrongholdActionsHBox/ConquerChapterBtn
+@onready var moses_btn: Button = $MarginContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox/MosesBtn
+@onready var joshua_btn: Button = $MarginContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox/JoshuaBtn
+@onready var deborah_btn: Button = $MarginContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox/DeborahBtn
+@onready var david_btn: Button = $MarginContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox/DavidBtn
+@onready var paul_btn: Button = $MarginContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox/PaulBtn
 @onready var context_label: RichTextLabel = $MarginContainer/VBox/BodyPanel/BodyVBox/ContextLabel
 @onready var outcome_label: RichTextLabel = $MarginContainer/VBox/BodyPanel/BodyVBox/OutcomeLabel
 @onready var option_a_btn: Button = $MarginContainer/VBox/BodyPanel/BodyVBox/OptionsGrid/OptionABtn
@@ -47,6 +54,7 @@ var current_trial: Dictionary = {}
 var active_trial_token: String = ""
 var trial_mode: bool = false
 var cached_total_score: int = 0
+var cached_cmd_bonus: int = 0
 var next_campaign_id: String = "CH_01_MAMRE"
 
 func _ready() -> void:
@@ -58,6 +66,11 @@ func _ready() -> void:
 	collect_tribute_btn.pressed.connect(_on_collect_tribute_pressed)
 	upgrade_keep_btn.pressed.connect(_on_upgrade_keep_pressed)
 	conquer_chapter_btn.pressed.connect(_on_conquer_chapter_pressed)
+	moses_btn.pressed.connect(func() -> void: _on_appoint_general_pressed("MOSES", "sanctuary_keep"))
+	joshua_btn.pressed.connect(func() -> void: _on_appoint_general_pressed("JOSHUA", "campaign_vanguard"))
+	deborah_btn.pressed.connect(func() -> void: _on_appoint_general_pressed("DEBORAH", "watchtower"))
+	david_btn.pressed.connect(func() -> void: _on_appoint_general_pressed("DAVID", "rampart_walls"))
+	paul_btn.pressed.connect(func() -> void: _on_appoint_general_pressed("PAUL", "scriptorium"))
 	option_a_btn.pressed.connect(func() -> void: _handle_option_press(0))
 	option_b_btn.pressed.connect(func() -> void: _handle_option_press(1))
 	option_c_btn.pressed.connect(func() -> void: _handle_option_press(2))
@@ -110,6 +123,10 @@ func _on_connect_pressed() -> void:
 	var state: Dictionary = resp.get("state", {})
 	status_label.text = "BRIDGE STATUS: CONNECTED & VERIFIED (GODOT_4 -> %s:%d)" % [host, port]
 	_update_telemetry(state)
+	if resp.has("generals") and typeof(resp["generals"]) == TYPE_DICTIONARY:
+		_update_generals_telemetry(resp["generals"])
+	else:
+		_refresh_generals()
 	if resp.has("stronghold") and typeof(resp["stronghold"]) == TYPE_DICTIONARY:
 		_update_stronghold_telemetry(resp["stronghold"])
 	else:
@@ -124,9 +141,43 @@ func _on_connect_pressed() -> void:
 func _refresh_stronghold() -> void:
 	var resp := _send_command({"client_type": "GODOT_4", "action": "GET_STRONGHOLD"})
 	if resp.get("status") == "OK":
+		if resp.has("generals") and typeof(resp["generals"]) == TYPE_DICTIONARY:
+			_update_generals_telemetry(resp["generals"])
 		var sh: Dictionary = resp.get("stronghold", {})
 		_update_stronghold_telemetry(sh)
 		stronghold_updated.emit(sh)
+
+func _refresh_generals() -> void:
+	var resp := _send_command({"client_type": "GODOT_4", "action": "GET_GENERALS"})
+	if resp.get("status") == "OK":
+		var gen: Dictionary = resp.get("generals", {})
+		_update_generals_telemetry(gen)
+		generals_updated.emit(gen)
+
+func _on_appoint_general_pressed(general_id: String, slot: String) -> void:
+	var resp := _send_command({
+		"client_type": "GODOT_4",
+		"action": "APPOINT_GENERAL",
+		"general_id": general_id,
+		"slot": slot
+	})
+	if resp.get("status") == "OK":
+		var gen: Dictionary = resp.get("generals", {})
+		_update_generals_telemetry(gen)
+		generals_updated.emit(gen)
+		if resp.has("stronghold") and typeof(resp["stronghold"]) == TYPE_DICTIONARY:
+			_update_stronghold_telemetry(resp["stronghold"])
+		else:
+			_refresh_stronghold()
+		var syn_tag := " (+25% PREFERRED POST SYNERGY!)" if resp.get("specialty_synergy", false) else ""
+		outcome_label.text = "[b][COMMANDER APPOINTED: %s -> %s][/b]%s | Total Commander Bonus: +%s" % [
+			str(resp.get("general_name", general_id)),
+			slot.to_upper(),
+			syn_tag,
+			str(resp.get("command_power_bonus", 0))
+		]
+	else:
+		outcome_label.text = "[b][APPOINTMENT NOTICE][/b] %s" % str(resp.get("message", resp.get("error", "Failed")))
 
 func _on_collect_tribute_pressed() -> void:
 	var resp := _send_command({
@@ -158,7 +209,7 @@ func _on_upgrade_keep_pressed() -> void:
 		var sh: Dictionary = resp.get("stronghold", {})
 		_update_stronghold_telemetry(sh)
 		stronghold_updated.emit(sh)
-		outcome_label.text = "[b][SANCTUARY KEEP UPGRADED TO LEVEL %s][/b] Dynasty Power increased to %s!" % [
+		outcome_label.text = "[b][SANCTUARY KEEP UPGRADED TO LEVEL %s][/b] Base Stronghold Power now %s!" % [
 			str(resp.get("new_level", 1)),
 			str(sh.get("dynasty_power", 1000))
 		]
@@ -176,7 +227,7 @@ func _on_conquer_chapter_pressed() -> void:
 		var sh: Dictionary = resp.get("stronghold", {})
 		_update_stronghold_telemetry(sh)
 		stronghold_updated.emit(sh)
-		outcome_label.text = "[b][CAMPAIGN VICTORY: %s][/b] Dynasty Power now %s | Spoils added to Stronghold treasury!" % [
+		outcome_label.text = "[b][CAMPAIGN VICTORY: %s][/b] Base Power now %s | Spoils added to Stronghold treasury!" % [
 			str(ch.get("title", next_campaign_id)),
 			str(sh.get("dynasty_power", 1000))
 		]
@@ -341,6 +392,8 @@ func _on_save_pressed() -> void:
 	if resp.get("status") == "SAVED":
 		var state: Dictionary = resp.get("state", {})
 		_update_telemetry(state)
+		if resp.has("generals") and typeof(resp["generals"]) == TYPE_DICTIONARY:
+			_update_generals_telemetry(resp["generals"])
 		if resp.has("stronghold") and typeof(resp["stronghold"]) == TYPE_DICTIONARY:
 			_update_stronghold_telemetry(resp["stronghold"])
 		outcome_label.text += "\n[b][SHA-256 SEALED SAVE COMMITTED TO PLAYER_STATE.JSON][/b]"
@@ -354,15 +407,30 @@ func _update_telemetry(state: Dictionary) -> void:
 		str(state.get("sha256_seal", "")).left(16)
 	]
 
+func _update_generals_telemetry(gen: Dictionary) -> void:
+	cached_cmd_bonus = int(gen.get("total_command_power_bonus", 0))
+	var assigns: Dictionary = gen.get("assignments", {})
+	var posts_label := "NONE"
+	if not assigns.is_empty():
+		var parts: Array[String] = []
+		for slot_key in assigns.keys():
+			parts.append("%s=%s" % [str(slot_key).to_upper(), str(assigns[slot_key])])
+		posts_label = ", ".join(parts)
+	commanders_label.text = "COMMANDERS -> ACTIVE POSTS: %s  |  COMMANDER BONUS: +%d" % [
+		posts_label, cached_cmd_bonus
+	]
+
 func _update_stronghold_telemetry(sh: Dictionary) -> void:
 	var sh_name: String = str(sh.get("stronghold_name", "Covenant Citadel of Zion"))
-	var power: int = int(sh.get("dynasty_power", 1000))
+	var base_power: int = int(sh.get("dynasty_power", 1000))
+	var cmd_bonus: int = int(sh.get("commander_power_bonus", cached_cmd_bonus))
+	var total_power: int = int(sh.get("total_combined_power", base_power + cmd_bonus))
 	var blds: Dictionary = sh.get("buildings", {})
 	var keep_info: Dictionary = blds.get("sanctuary_keep", {})
 	var keep_lvl: int = int(keep_info.get("level", 1))
 	var conquered: Array = sh.get("conquered_chapters", [])
-	stronghold_header_label.text = "STRONGHOLD: %s  |  DYNASTY POWER: %d  |  KEEP: Lv.%d  |  CONQUERED: %s" % [
-		sh_name, power, keep_lvl, str(conquered)
+	stronghold_header_label.text = "STRONGHOLD: %s  |  COMBINED POWER: %d (Base %d + Cmd +%d)  |  KEEP: Lv.%d  |  CONQUERED: %s" % [
+		sh_name, total_power, base_power, cmd_bonus, keep_lvl, str(conquered)
 	]
 	var res: Dictionary = sh.get("resources", {})
 	resources_label.text = "RESOURCES -> PROVISION: %s  |  TIMBER: %s  |  STONE: %s  |  TALENTS: %s" % [

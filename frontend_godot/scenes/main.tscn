@@ -1,4 +1,4 @@
-﻿[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=2 format=3]
 
 [ext_resource type="Script" path="res://scripts/omni_bridge_client.gd" id="1_bridge"]
 
@@ -19,24 +19,24 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 28
-theme_override_constants/margin_top = 24
+theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 28
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_bottom = 20
 
 [node name="VBox" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 12
 
 [node name="HeaderPanel" type="PanelContainer" parent="MarginContainer/VBox"]
 layout_mode = 2
 
 [node name="HeaderVBox" type="VBoxContainer" parent="MarginContainer/VBox/HeaderPanel"]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 5
 
 [node name="TitleLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
 layout_mode = 2
-text = "HVF SOVEREIGN BIBLE GAME ENGINE — MULTI-DEVICE GODOT 4 CLIENT (PHASE 17)"
+text = "HVF SOVEREIGN BIBLE GAME ENGINE ? MULTI-DEVICE GODOT 4 CLIENT (PHASE 19)"
 
 [node name="StatusLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
 layout_mode = 2
@@ -55,19 +55,23 @@ layout_mode = 2
 
 [node name="StrongholdVBox" type="VBoxContainer" parent="MarginContainer/VBox/StrongholdPanel"]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 7
 
 [node name="StrongholdHeaderLabel" type="Label" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox"]
 layout_mode = 2
-text = "STRONGHOLD: Covenant Citadel of Zion  |  DYNASTY POWER: 1000  |  KEEP: Lv.1  |  CONQUERED: []"
+text = "STRONGHOLD: Covenant Citadel of Zion  |  COMBINED POWER: 1000 (Base 1000 + Cmd +0)  |  KEEP: Lv.1  |  CONQUERED: []"
 
 [node name="ResourcesLabel" type="Label" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox"]
 layout_mode = 2
 text = "RESOURCES -> PROVISION: 500  |  TIMBER: 400  |  STONE: 400  |  TALENTS: 150"
 
+[node name="CommandersLabel" type="Label" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox"]
+layout_mode = 2
+text = "COMMANDERS -> ACTIVE POSTS: NONE  |  COMMANDER BONUS: +0"
+
 [node name="StrongholdActionsHBox" type="HBoxContainer" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox"]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 10
 
 [node name="CollectTributeBtn" type="Button" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox/StrongholdActionsHBox"]
 layout_mode = 2
@@ -84,13 +88,42 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Conquer Campaign: Mamre"
 
+[node name="CommandersHBox" type="HBoxContainer" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="MosesBtn" type="Button" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Appoint Moses (Keep)"
+
+[node name="JoshuaBtn" type="Button" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Appoint Joshua (Vanguard)"
+
+[node name="DeborahBtn" type="Button" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Appoint Deborah (Watchtower)"
+
+[node name="DavidBtn" type="Button" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Appoint David (Walls)"
+
+[node name="PaulBtn" type="Button" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Appoint Paul (Scriptorium)"
+
 [node name="BodyPanel" type="PanelContainer" parent="MarginContainer/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
 
 [node name="BodyVBox" type="VBoxContainer" parent="MarginContainer/VBox/BodyPanel"]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 12
 
 [node name="ContextLabel" type="RichTextLabel" parent="MarginContainer/VBox/BodyPanel/BodyVBox"]
 layout_mode = 2
@@ -127,10 +160,10 @@ size_flags_horizontal = 3
 text = "4. Option D"
 
 [node name="OutcomeLabel" type="RichTextLabel" parent="MarginContainer/VBox/BodyPanel/BodyVBox"]
-custom_minimum_size = Vector2(0, 96)
+custom_minimum_size = Vector2(0, 88)
 layout_mode = 2
 bbcode_enabled = true
-text = "Select an executive decision, Scripture Covenant Trial, or Stronghold action above."
+text = "Select an executive decision, Scripture Trial, Stronghold upgrade, or Biblical Commander above."
 
 [node name="FooterHBox" type="HBoxContainer" parent="MarginContainer/VBox"]
 layout_mode = 2
