@@ -124,86 +124,100 @@ func _ready() -> void:
 	_on_connect_pressed()
 
 
-	# Phase 35.2: Mount 6-Stage Walkable World & Multiplayer Fellowship Bar into MarginContainer/ScrollContainer/VBox
-	var main_vbox: VBoxContainer = get_node_or_null("MarginContainer/ScrollContainer/VBox")
-	var world_script = load("res://scripts/sovereign_world_stage.gd")
+
+	# Phase 36: Full-Screen Immersive Action-Adventure World + Floating Bottom HUD + Toggleable Campaign Drawer
+	var margin_ui: Control = get_node_or_null("MarginContainer")
+	var world_script = load("res://scripts/sovereign_immersive_world.gd")
 	var mp_script = load("res://scripts/sovereign_multiplayer_client.gd")
-	if main_vbox != null and world_script != null:
-		if citadel_canvas != null:
-			citadel_canvas.visible = false
+	if world_script != null:
+		if margin_ui != null:
+			margin_ui.visible = false
+			margin_ui.z_index = 20
 
-		var world_panel: PanelContainer = PanelContainer.new()
-		world_panel.name = "WalkableWorldPanel"
-		world_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var world_node = world_script.new()
+		world_node.name = "ImmersiveBibleWorld"
+		add_child(world_node)
+		move_child(world_node, 0)
 
-		var world_vbox: VBoxContainer = VBoxContainer.new()
-		world_vbox.name = "WalkableWorldVBox"
-		world_vbox.add_theme_constant_override("separation", 6)
+		# Floating Bottom Multiplayer, Combat & Campaign HUD Dock
+		var hud_panel: PanelContainer = PanelContainer.new()
+		hud_panel.name = "BottomActionHUD"
+		hud_panel.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+		hud_panel.offset_top = -62.0
+		hud_panel.offset_left = 14.0
+		hud_panel.offset_right = -14.0
+		hud_panel.offset_bottom = -10.0
+		hud_panel.z_index = 10
 
-		var world_stage = world_script.new()
-		world_stage.name = "WalkableWorldStage"
-		world_stage.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		world_vbox.add_child(world_stage)
+		var hud_hbox: HBoxContainer = HBoxContainer.new()
+		hud_hbox.add_theme_constant_override("separation", 6)
 
-		var mp_bar: HBoxContainer = HBoxContainer.new()
-		mp_bar.name = "FellowshipBar"
-		mp_bar.add_theme_constant_override("separation", 6)
+		var toggle_drawer_btn: Button = Button.new()
+		toggle_drawer_btn.text = "Covenant Trials & Ledger"
+		toggle_drawer_btn.pressed.connect(func():
+			if margin_ui != null:
+				margin_ui.visible = not margin_ui.visible
+		)
+		hud_hbox.add_child(toggle_drawer_btn)
+
+		var strike_btn: Button = Button.new()
+		strike_btn.text = "Sword [F]"
+		strike_btn.pressed.connect(func():
+			world_node._perform_sword_strike()
+		)
+		hud_hbox.add_child(strike_btn)
+
+		var shield_btn: Button = Button.new()
+		shield_btn.text = "Shield [Q]"
+		shield_btn.pressed.connect(func():
+			world_node._raise_shield_of_faith()
+		)
+		hud_hbox.add_child(shield_btn)
 
 		var online_lbl: Label = Label.new()
-		online_lbl.name = "OnlinePilgrimsLabel"
 		online_lbl.text = "Online: 1"
-		online_lbl.add_theme_color_override("font_color", Color(0.45, 0.92, 0.65))
-		mp_bar.add_child(online_lbl)
+		online_lbl.add_theme_color_override("font_color", Color(0.45, 0.94, 0.65))
+		hud_hbox.add_child(online_lbl)
 
 		var name_edit: LineEdit = LineEdit.new()
-		name_edit.name = "PilgrimNameInput"
 		name_edit.placeholder_text = "Pilgrim Name..."
-		name_edit.custom_minimum_size = Vector2(130, 0)
-		mp_bar.add_child(name_edit)
+		name_edit.custom_minimum_size = Vector2(120, 0)
+		hud_hbox.add_child(name_edit)
 
 		var robe_picker: OptionButton = OptionButton.new()
-		robe_picker.name = "RobeColorPicker"
 		for r_opt in ["Sapphire", "Judah Gold", "Emerald", "Tyrian Purple", "Crimson", "Galilee Cyan"]:
 			robe_picker.add_item(r_opt)
-		mp_bar.add_child(robe_picker)
+		hud_hbox.add_child(robe_picker)
 
 		var chat_edit: LineEdit = LineEdit.new()
-		chat_edit.name = "FellowshipChatInput"
-		chat_edit.placeholder_text = "Speak peace to fellow pilgrims across stages..."
+		chat_edit.placeholder_text = "Fellowship chat across stages..."
 		chat_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		mp_bar.add_child(chat_edit)
+		hud_hbox.add_child(chat_edit)
 
 		var send_btn: Button = Button.new()
-		send_btn.text = "Send Peace"
-		mp_bar.add_child(send_btn)
+		send_btn.text = "Send"
+		hud_hbox.add_child(send_btn)
 
-		world_vbox.add_child(mp_bar)
+		hud_panel.add_child(hud_hbox)
+		add_child(hud_panel)
 
-		var chat_feed_lbl: Label = Label.new()
-		chat_feed_lbl.name = "FellowshipLiveFeed"
-		chat_feed_lbl.text = "MULTIPLAYER WORLD ACTIVE ? Walk with [WASD / Arrows / Click], enter side portals to switch stages, or press [E] near an NPC!"
-		chat_feed_lbl.add_theme_color_override("font_color", Color(0.95, 0.86, 0.48))
-		world_vbox.add_child(chat_feed_lbl)
-
-		world_panel.add_child(world_vbox)
-		main_vbox.add_child(world_panel)
-		main_vbox.move_child(world_panel, 1)
-		world_stage.set_stage("ERA_TORAH")
-
-		world_stage.npc_dialogue_triggered.connect(func(npc_name: String, era_id: String, scenario_id: String, greeting: String):
+		world_node.npc_dialogue_triggered.connect(func(npc_name: String, era_id: String, scenario_id: String, greeting: String):
 			if audio_synth != null and audio_synth.has_method("play_covenant_chime"):
 				audio_synth.play_covenant_chime()
-			if outcome_label != null:
-				outcome_label.text = "[b][color=#f5d061]%s (%s)[/color][/b]: %s" % [npc_name, era_id, greeting]
 			if has_method("_request_scenario"):
 				call("_request_scenario", scenario_id)
+			if margin_ui != null:
+				margin_ui.visible = true
 		)
 
-		world_stage.stage_portal_entered.connect(func(target_era_id: String):
+		world_node.chest_looted.connect(func(chest_id: String, loot_summary: String):
 			if audio_synth != null and audio_synth.has_method("play_covenant_chime"):
 				audio_synth.play_covenant_chime()
-			if outcome_label != null:
-				outcome_label.text = "[b][color=#7de2d1]STAGE PORTAL:[/color][/b] Traveled to [b]%s[/b]. Walk up to any NPC and press [E] to speak!" % target_era_id
+		)
+
+		world_node.battle_won.connect(func(enemy_name: String, reward_score: int):
+			if audio_synth != null and audio_synth.has_method("play_covenant_chime"):
+				audio_synth.play_covenant_chime()
 		)
 
 		if mp_script != null:
@@ -211,21 +225,21 @@ func _ready() -> void:
 			mp_client.name = "MultiplayerRelayClient"
 			add_child(mp_client)
 			name_edit.text = mp_client.player_name
-			world_stage.set_local_pilgrim_name(mp_client.player_name)
+			world_node.set_local_pilgrim_name(mp_client.player_name)
 
 			name_edit.text_submitted.connect(func(new_name: String):
 				var clean_n: String = new_name.strip_edges()
 				if clean_n != "":
 					mp_client.player_name = clean_n
 					mp_client.dirty_pos = true
-					world_stage.set_local_pilgrim_name(clean_n)
+					world_node.set_local_pilgrim_name(clean_n)
 			)
 
 			robe_picker.item_selected.connect(func(idx: int):
 				var chosen: String = robe_picker.get_item_text(idx)
 				mp_client.robe_name = chosen
 				mp_client.dirty_pos = true
-				world_stage.set_local_robe_color(chosen)
+				world_node.set_local_robe_color(chosen)
 			)
 
 			var send_chat_fn: Callable = func(txt: String):
@@ -234,7 +248,7 @@ func _ready() -> void:
 					var cur_name: String = name_edit.text.strip_edges()
 					if cur_name != "":
 						mp_client.player_name = cur_name
-						world_stage.set_local_pilgrim_name(cur_name)
+						world_node.set_local_pilgrim_name(cur_name)
 					mp_client.send_fellowship_chat(msg_clean)
 					chat_edit.text = ""
 
@@ -243,21 +257,22 @@ func _ready() -> void:
 				send_chat_fn.call(chat_edit.text)
 			)
 
-			world_stage.player_moved.connect(func(stage_id: String, px: float, py: float):
+			world_node.player_moved.connect(func(stage_id: String, px: float, py: float):
 				mp_client.update_local_state(stage_id, px, py)
 			)
-			world_stage.stage_portal_entered.connect(func(target_era_id: String):
-				mp_client.update_local_state(target_era_id, 410.0, 185.0)
+			world_node.stage_portal_entered.connect(func(target_era_id: String):
+				mp_client.update_local_state(target_era_id, 420.0, 340.0)
+			)
+			world_node.battle_won.connect(func(enemy_name: String, reward_score: int):
+				mp_client.broadcast_covenant_blessing("Defeated %s" % enemy_name, reward_score)
 			)
 			mp_client.peers_updated.connect(func(peers: Array, online_cnt: int, chat_log: Array):
-				world_stage.set_remote_pilgrims(peers)
+				world_node.set_remote_pilgrims(peers)
 				online_lbl.text = "Online: %d" % online_cnt
 				if chat_log.size() > 0:
 					var last_msg: Dictionary = chat_log[chat_log.size() - 1]
 					var l_txt: String = str(last_msg.get("message", ""))
-					chat_feed_lbl.text = "[%s @ %s]: %s" % [str(last_msg.get("sender", "Pilgrim")), str(last_msg.get("stage", "ERA_TORAH")), l_txt]
-					if l_txt.begins_with("COVENANT BLESSING:"):
-						world_stage.show_coop_blessing(l_txt)
+					world_node.show_coop_blessing("[%s @ %s]: %s" % [str(last_msg.get("sender", "Pilgrim")), str(last_msg.get("stage", "ERA_TORAH")), l_txt])
 			)
 
 func _send_command(payload: Dictionary) -> Dictionary:
