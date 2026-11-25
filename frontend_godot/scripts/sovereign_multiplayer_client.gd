@@ -7,6 +7,7 @@ var host: String = "127.0.0.1"
 var port: int = 65432
 var player_id: String = ""
 var player_name: String = "Pilgrim"
+var robe_name: String = "Sapphire"
 var current_stage: String = "ERA_TORAH"
 var pos_x: float = 220.0
 var pos_y: float = 145.0
@@ -34,6 +35,10 @@ func send_fellowship_chat(msg: String) -> void:
 		return
 	_send_sync_packet("MULTIPLAYER_CHAT", clean)
 
+func broadcast_covenant_blessing(trial_label: String, score_gain: int) -> void:
+	var b_msg: String = "COVENANT BLESSING: %s completed %s (+%d Score)!" % [player_name, trial_label, score_gain]
+	_send_sync_packet("MULTIPLAYER_CHAT", b_msg)
+
 func _process(delta: float) -> void:
 	sync_timer += delta
 	if sync_timer >= sync_interval or (dirty_pos and sync_timer >= 0.25):
@@ -60,6 +65,7 @@ func _send_sync_packet(action_name: String, chat_msg: String) -> void:
 		"action": action_name,
 		"player_id": player_id,
 		"name": player_name,
+		"robe": robe_name,
 		"stage": current_stage,
 		"x": pos_x,
 		"y": pos_y,

@@ -327,6 +327,7 @@ def handle_multiplayer_packet(payload: dict) -> dict:
     now = _mp_time.time()
     pid = str(payload.get("player_id", "")).strip() or "PILGRIM_ANON"
     pname = str(payload.get("name", "Pilgrim")).strip()[:24] or "Pilgrim"
+    robe = str(payload.get("robe", "Galilee Cyan")).strip()[:24] or "Galilee Cyan"
     stage = str(payload.get("stage", "ERA_TORAH")).strip()
     px = float(payload.get("x", 220.0))
     py = float(payload.get("y", 145.0))
@@ -343,6 +344,7 @@ def handle_multiplayer_packet(payload: dict) -> dict:
             _MP_PILGRIMS[pid] = {
                 "player_id": pid,
                 "name": pname,
+                "robe": robe,
                 "stage": stage,
                 "x": round(px, 1),
                 "y": round(py, 1),

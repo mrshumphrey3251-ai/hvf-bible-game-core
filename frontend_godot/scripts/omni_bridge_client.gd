@@ -193,6 +193,18 @@ func _ready() -> void:
 					w_node.set_local_pilgrim_name(clean_n)
 			)
 			mp_bar.add_child(name_edit)
+			var robe_picker: OptionButton = OptionButton.new()
+			robe_picker.name = "RobeColorPicker"
+			for r_opt in ["Sapphire", "Judah Gold", "Emerald", "Tyrian Purple", "Crimson", "Galilee Cyan"]:
+				robe_picker.add_item(r_opt)
+			robe_picker.item_selected.connect(func(idx: int):
+				var chosen: String = robe_picker.get_item_text(idx)
+				mp_client.robe_name = chosen
+				mp_client.dirty_pos = true
+				w_node.set_local_robe_color(chosen)
+			)
+			mp_bar.add_child(robe_picker)
+
 
 			var chat_edit: LineEdit = LineEdit.new()
 			chat_edit.name = "FellowshipChatInput"
@@ -232,7 +244,10 @@ func _ready() -> void:
 				online_lbl.text = "Online: %d" % online_cnt
 				if chat_log.size() > 0:
 					var last_msg: Dictionary = chat_log[chat_log.size() - 1]
-					chat_feed_lbl.text = "[%s @ %s]: %s" % [str(last_msg.get("sender", "Pilgrim")), str(last_msg.get("stage", "ERA_TORAH")), str(last_msg.get("message", ""))]
+					var l_txt: String = str(last_msg.get("message", ""))
+					chat_feed_lbl.text = "[%s @ %s]: %s" % [str(last_msg.get("sender", "Pilgrim")), str(last_msg.get("stage", "ERA_TORAH")), l_txt]
+					if l_txt.begins_with("COVENANT BLESSING:"):
+						w_node.show_coop_blessing(l_txt)
 			)
 
 
