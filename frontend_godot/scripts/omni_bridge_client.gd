@@ -56,7 +56,8 @@ var trial_mode: bool = false
 var cached_total_score: int = 0
 var cached_cmd_bonus: int = 0
 var next_campaign_id: String = "CH_01_MAMRE"
-var offline_mirror := SovereignOfflineMirror.new()
+const OfflineMirrorScript = preload("res://scripts/sovereign_offline_mirror.gd")
+var offline_mirror = OfflineMirrorScript.new()
 var using_offline_mirror: bool = false
 
 func _ready() -> void:
