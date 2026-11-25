@@ -315,3 +315,60 @@ except Exception as _p23_err:
 if __name__ == "__main__":
     dispatcher = OmniClientDispatcher()
     dispatcher.serve_forever()
+
+# --- PHASE 33: THREAD-SAFE MULTIPLAYER PILGRIM ROOM RELAY ---
+import threading as _mp_threading
+import time as _mp_time
+
+_MP_LOCK = _mp_threading.Lock()
+_MP_PILGRIMS = {}
+_MP_CHAT_LOG = []
+
+def handle_multiplayer_packet(payload: dict) -> dict:
+    action = str(payload.get("action", "")).upper()
+        if action.startswith("MULTIPLAYER_"):
+            return handle_multiplayer_packet(payload)
+    now = _mp_time.time()
+    pid = str(payload.get("player_id", "")).strip() or "PILGRIM_ANON"
+    pname = str(payload.get("name", "Pilgrim")).strip()[:24] or "Pilgrim"
+    stage = str(payload.get("stage", "ERA_TORAH")).strip()
+    px = float(payload.get("x", 220.0))
+    py = float(payload.get("y", 145.0))
+    chat_text = str(payload.get("message", "")).strip()[:140]
+
+    with _MP_LOCK:
+        # Prune inactive pilgrims (>25 seconds without heartbeat)
+        stale = [k for k, v in _MP_PILGRIMS.items() if (now - v.get("last_seen", 0.0)) > 25.0]
+        for k in stale:
+            del _MP_PILGRIMS[k]
+
+        if action == "MULTIPLAYER_LEAVE":
+            _MP_PILGRIMS.pop(pid, None)
+        else:
+            _MP_PILGRIMS[pid] = {
+                "player_id": pid,
+                "name": pname,
+                "stage": stage,
+                "x": round(px, 1),
+                "y": round(py, 1),
+                "last_seen": now,
+            }
+
+        if action == "MULTIPLAYER_CHAT" and chat_text:
+            _MP_CHAT_LOG.append({
+                "sender": pname,
+                "stage": stage,
+                "message": chat_text,
+                "ts": round(now, 2),
+            })
+            if len(_MP_CHAT_LOG) > 15:
+                del _MP_CHAT_LOG[:-15]
+
+        peers = [v for k, v in _MP_PILGRIMS.items() if k != pid]
+        return {
+            "status": "OK",
+            "action": action,
+            "online_count": len(_MP_PILGRIMS),
+            "peers": peers,
+            "chat_log": list(_MP_CHAT_LOG[-6:]),
+        }

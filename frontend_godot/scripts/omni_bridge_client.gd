@@ -150,6 +150,24 @@ func _ready() -> void:
 					feed.text = "[b][color=#7de2d1]PORTAL TRANSITION:[/color][/b] Entered [b]%s[/b]. Walk to a Biblical NPC and press [E] to converse!" % target_era_id
 			)
 
+	# Phase 33: Attach Real-Time Multiplayer Pilgrim Sync & Fellowship Chat
+	var mp_script = load("res://scripts/sovereign_multiplayer_client.gd")
+	if mp_script != null:
+		var mp_client = mp_script.new()
+		mp_client.name = "MultiplayerRelayClient"
+		add_child(mp_client)
+		var w_node = get_node_or_null("RootScroll/MainVBox/WalkableWorldStage")
+		if w_node != null:
+			w_node.player_moved.connect(func(stage_id: String, px: float, py: float):
+				mp_client.update_local_state(stage_id, px, py)
+			)
+			w_node.stage_portal_entered.connect(func(target_era_id: String):
+				mp_client.update_local_state(target_era_id, 410.0, 148.0)
+			)
+			mp_client.peers_updated.connect(func(peers: Array, online_cnt: int, chat_log: Array):
+				w_node.set_remote_pilgrims(peers)
+			)
+
 func _send_command(payload: Dictionary) -> Dictionary:
 	var peer := StreamPeerTCP.new()
 	var err := peer.connect_to_host(host, port)
