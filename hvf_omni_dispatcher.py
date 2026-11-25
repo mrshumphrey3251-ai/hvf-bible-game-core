@@ -326,8 +326,8 @@ _MP_CHAT_LOG = []
 
 def handle_multiplayer_packet(payload: dict) -> dict:
     action = str(payload.get("action", "")).upper()
-        if action.startswith("MULTIPLAYER_"):
-            return handle_multiplayer_packet(payload)
+    if action.startswith("MULTIPLAYER_"):
+        return handle_multiplayer_packet(payload)
     now = _mp_time.time()
     pid = str(payload.get("player_id", "")).strip() or "PILGRIM_ANON"
     pname = str(payload.get("name", "Pilgrim")).strip()[:24] or "Pilgrim"
