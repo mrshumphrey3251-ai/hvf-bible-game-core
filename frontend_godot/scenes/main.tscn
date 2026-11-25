@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/omni_bridge_client.gd" id="1_bridge"]
 [ext_resource type="Script" path="res://scripts/sovereign_citadel_canvas.gd" id="2_citadel"]
+[ext_resource type="Script" path="res://scripts/sovereign_audio_synth.gd" id="3_audio"]
 
 [node name="SovereignMain" type="Control"]
 layout_mode = 3
@@ -11,6 +12,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_bridge")
+
+[node name="AudioSynth" type="Node" parent="."]
+script = ExtResource("3_audio")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -37,7 +41,7 @@ theme_override_constants/separation = 5
 
 [node name="TitleLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
 layout_mode = 2
-text = "HVF SOVEREIGN BIBLE GAME ENGINE ? MULTI-DEVICE GODOT 4 CLIENT (PHASE 27)"
+text = "HVF SOVEREIGN BIBLE GAME ENGINE ? MULTI-DEVICE GODOT 4 CLIENT (PHASE 28)"
 
 [node name="StatusLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
 layout_mode = 2
@@ -201,3 +205,6 @@ text = "Seal SHA-256 Save"
 [node name="ExportTranscriptBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
 layout_mode = 2
 text = "Export Mastery Transcript"
+[node name="MuteAudioBtn" type="Button" parent="MarginContainer/VBox/FooterHBox"]
+layout_mode = 2
+text = "Audio: ON"

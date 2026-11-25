@@ -14,6 +14,7 @@ signal bridge_error(message: String)
 @export var host: String = "127.0.0.1"
 @export var port: int = 65432
 
+@onready var audio_synth = $AudioSynth
 @onready var status_label: Label = $MarginContainer/VBox/HeaderPanel/HeaderVBox/StatusLabel
 @onready var telemetry_label: Label = $MarginContainer/VBox/HeaderPanel/HeaderVBox/TelemetryLabel
 @onready var bloodline_label: Label = $MarginContainer/VBox/HeaderPanel/HeaderVBox/BloodlineLabel
@@ -42,6 +43,7 @@ signal bridge_error(message: String)
 @onready var advance_era_btn: Button = $MarginContainer/VBox/FooterHBox/AdvanceEraBtn
 @onready var save_btn: Button = $MarginContainer/VBox/FooterHBox/SaveBtn
 @onready var export_transcript_btn: Button = $MarginContainer/VBox/FooterHBox/ExportTranscriptBtn
+@onready var mute_audio_btn: Button = $MarginContainer/VBox/FooterHBox/MuteAudioBtn
 
 const ERA_SCENARIO_MAP := {
 	"ERA_TORAH": "GEN_001",
@@ -105,6 +107,7 @@ func _ready() -> void:
 	advance_era_btn.pressed.connect(_on_advance_era_pressed)
 	save_btn.pressed.connect(_on_save_pressed)
 	export_transcript_btn.pressed.connect(_on_export_transcript_pressed)
+	mute_audio_btn.pressed.connect(_on_mute_audio_pressed)
 	collect_tribute_btn.pressed.connect(_on_collect_tribute_pressed)
 	upgrade_keep_btn.pressed.connect(_on_upgrade_keep_pressed)
 	conquer_chapter_btn.pressed.connect(_on_conquer_chapter_pressed)
@@ -215,6 +218,8 @@ func _on_appoint_general_pressed(general_id: String, slot: String) -> void:
 		else:
 			_refresh_stronghold()
 		var syn_tag := " (+25% PREFERRED POST SYNERGY!)" if resp.get("specialty_synergy", false) else ""
+		if audio_synth and audio_synth.has_method("play_commander_horn"):
+			audio_synth.play_commander_horn()
 		outcome_label.text = "[b][COMMANDER APPOINTED: %s -> %s][/b]%s | Total Commander Bonus: +%s" % [
 			str(resp.get("general_name", general_id)),
 			slot.to_upper(),
@@ -235,6 +240,8 @@ func _on_collect_tribute_pressed() -> void:
 		var sh: Dictionary = resp.get("stronghold", {})
 		_update_stronghold_telemetry(sh)
 		stronghold_updated.emit(sh)
+		if audio_synth and audio_synth.has_method("play_harp_chime"):
+			audio_synth.play_harp_chime()
 		outcome_label.text = "[b][COVENANT TRIBUTE COLLECTED][/b] +Provision: %s | +Timber: %s | +Stone: %s | +Talents: %s" % [
 			str(gained.get("provision", 0)),
 			str(gained.get("timber", 0)),
@@ -254,6 +261,8 @@ func _on_upgrade_keep_pressed() -> void:
 		var sh: Dictionary = resp.get("stronghold", {})
 		_update_stronghold_telemetry(sh)
 		stronghold_updated.emit(sh)
+		if audio_synth and audio_synth.has_method("play_upgrade_fanfare"):
+			audio_synth.play_upgrade_fanfare()
 		outcome_label.text = "[b][SANCTUARY KEEP UPGRADED TO LEVEL %s][/b] Base Stronghold Power now %s!" % [
 			str(resp.get("new_level", 1)),
 			str(sh.get("dynasty_power", 1000))
@@ -272,6 +281,8 @@ func _on_conquer_chapter_pressed() -> void:
 		var sh: Dictionary = resp.get("stronghold", {})
 		_update_stronghold_telemetry(sh)
 		stronghold_updated.emit(sh)
+		if audio_synth and audio_synth.has_method("play_campaign_victory"):
+			audio_synth.play_campaign_victory()
 		outcome_label.text = "[b][CAMPAIGN VICTORY: %s][/b] Base Power now %s | Spoils added to Stronghold treasury!" % [
 			str(ch.get("title", next_campaign_id)),
 			str(sh.get("dynasty_power", 1000))
@@ -376,6 +387,8 @@ func _submit_perpetual_trial(answer_index: int) -> void:
 	var state: Dictionary = resp.get("state", {})
 	_update_telemetry(state)
 	if resp.get("correct", false):
+		if audio_synth and audio_synth.has_method("play_harp_chime"):
+			audio_synth.play_harp_chime()
 		outcome_label.text = "[b][MASTERY VERIFIED: %s -> ESCALATED TO %s][/b]\n%s" % [
 			str(resp.get("reference", "")),
 			str(resp.get("next_tier_label", "")),
@@ -471,6 +484,14 @@ func _on_export_transcript_pressed() -> void:
 		]
 	else:
 		outcome_label.text = "[b][TRANSCRIPT ERROR][/b] %s" % str(resp.get("error", resp.get("message", "Export failed")))
+
+
+func _on_mute_audio_pressed() -> void:
+	if audio_synth and audio_synth.has_method("toggle_mute"):
+		var is_muted: bool = audio_synth.toggle_mute()
+		mute_audio_btn.text = "Audio: MUTED" if is_muted else "Audio: ON"
+		if not is_muted and audio_synth.has_method("play_harp_chime"):
+			audio_synth.play_harp_chime()
 
 func _on_save_pressed() -> void:
 	var resp := _send_command({"client_type": "GODOT_4", "action": "SAVE_STATE"})
