@@ -231,6 +231,19 @@ except Exception as _sh_bind_err:
     print(f"[HVF WARNING] Stronghold bind error: {_sh_bind_err}")
 
 
+
+# --- Phase 18 Direct Biblical Generals Binding (Active Before __main__) ---
+try:
+    from hvf_dynasty_generals import attach_generals_to_dispatcher as _hvf_attach_generals
+    _hvf_p16_omni_init = OmniClientDispatcher.__init__
+    def _hvf_generals_omni_init(self, *args, **kwargs):
+        _hvf_p16_omni_init(self, *args, **kwargs)
+        _hvf_attach_generals(self)
+    OmniClientDispatcher.__init__ = _hvf_generals_omni_init
+except Exception as _gen_bind_err:
+    print(f"[HVF WARNING] Generals bind error: {_gen_bind_err}")
+
+
 if __name__ == "__main__":
     dispatcher = OmniClientDispatcher()
     dispatcher.serve_forever()
