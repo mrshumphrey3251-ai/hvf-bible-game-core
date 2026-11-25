@@ -2,6 +2,23 @@ extends RefCounted
 class_name SovereignOfflineMirror
 
 const SAVE_PATH := "user://player_state.json"
+const OFFLINE_SCENARIO_TITLES := {
+	"GEN_001": "Covenant Call & Stewardship of Creation",
+	"TOR_002": "Jethro's Counsel at Mount Sinai (Exodus 18)",
+	"TOR_003": "The Year of Jubilee & Land Restoration (Leviticus 25)",
+	"HIS_001": "Crossing the Jordan & Covenant Memorial Stones",
+	"HIS_002": "Gideon's 300 at the Spring of Harod (Judges 7)",
+	"HIS_003": "Nehemiah's Wall Builders with Trowel & Sword (Nehemiah 4)",
+	"WIS_001": "Solomon's Petition for an Understanding Heart",
+	"WIS_002": "Storehouse Preparation of the Ant (Proverbs 6 & 30)",
+	"PRO_001": "Elijah's Stand & Prophetic Remnant Fidelity",
+	"PRO_002": "King Josiah & the Discovered Book of the Law (2 Kings 22)",
+	"GOS_001": "Sermon on the Mount & Kingdom Beatitudes",
+	"GOS_002": "House Built on the Rock vs. Shifting Sand (Matthew 7:24-27)",
+	"EPI_001": "Apostolic Council & Unity of the Church",
+	"EPI_002": "The Berean Standard of Daily Scripture Verification (Acts 17:11)"
+}
+
 const ERAS := [
 	"ERA_TORAH", "ERA_HISTORY", "ERA_WISDOM",
 	"ERA_PROPHETS", "ERA_GOSPELS", "ERA_EPISTLES"
@@ -223,7 +240,8 @@ func dispatch(req: Dictionary) -> Dictionary:
 		return {"status": "OK", "alpha_omega_loop_triggered": looped, "bloodline": state["bloodline"], "state": state}
 	if action == "GET_SCENARIO":
 		var sid := str(req.get("scenario_id", "GEN_001"))
-		return {"status": "OK", "scenario": {"id": sid, "era": state["current_era"], "context": "Sovereign Offline Multi-Device Simulation Mode active.", "prompt": "How will your dynasty steward this Biblical epoch?", "options": [{"text": "Uphold Covenant Law & Wisdom"}, {"text": "Fortify Stronghold & Provisions"}]}}
+		var s_title: String = str(OFFLINE_SCENARIO_TITLES.get(sid, "Sovereign Biblical Scenario"))
+		return {"status": "OK", "scenario": {"id": sid, "era": state["current_era"], "context": "[%s] Sovereign Offline Multi-Device Simulation Mode active." % s_title, "prompt": "How will your dynasty steward %s?" % s_title, "options": [{"text": "Uphold Covenant Law & Wisdom"}, {"text": "Fortify Stronghold & Provisions"}]}}
 	if action == "RESOLVE_DECISION":
 		state["total_score"] = int(state["total_score"]) + 25
 		return {"status": "OK", "outcome": {"text": "Covenant stewardship honored (+25 Wisdom Score).", "flag": "COVENANT_FAITHFUL"}, "state": state}

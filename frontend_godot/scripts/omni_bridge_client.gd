@@ -35,6 +35,7 @@ signal bridge_error(message: String)
 @onready var option_c_btn: Button = $MarginContainer/VBox/BodyPanel/BodyVBox/OptionsGrid/OptionCBtn
 @onready var option_d_btn: Button = $MarginContainer/VBox/BodyPanel/BodyVBox/OptionsGrid/OptionDBtn
 @onready var connect_btn: Button = $MarginContainer/VBox/FooterHBox/ConnectBtn
+@onready var next_scenario_btn: Button = $MarginContainer/VBox/FooterHBox/NextScenarioBtn
 @onready var trial_btn: Button = $MarginContainer/VBox/FooterHBox/TrialBtn
 @onready var handoff_btn: Button = $MarginContainer/VBox/FooterHBox/HandoffBtn
 @onready var advance_era_btn: Button = $MarginContainer/VBox/FooterHBox/AdvanceEraBtn
@@ -49,11 +50,22 @@ const ERA_SCENARIO_MAP := {
 	"ERA_EPISTLES": "EPI_001"
 }
 
+const ERA_SCENARIO_ROSTER := {
+	"ERA_TORAH": ["GEN_001", "TOR_002", "TOR_003"],
+	"ERA_HISTORY": ["HIS_001", "HIS_002", "HIS_003"],
+	"ERA_WISDOM": ["WIS_001", "WIS_002"],
+	"ERA_PROPHETS": ["PRO_001", "PRO_002"],
+	"ERA_GOSPELS": ["GOS_001", "GOS_002"],
+	"ERA_EPISTLES": ["EPI_001", "EPI_002"]
+}
+
 var current_scenario: Dictionary = {}
 var current_trial: Dictionary = {}
 var active_trial_token: String = ""
 var trial_mode: bool = false
 var cached_total_score: int = 0
+var cached_current_era: String = "ERA_TORAH"
+var era_scenario_cursor: int = 0
 var cached_cmd_bonus: int = 0
 var next_campaign_id: String = "CH_01_MAMRE"
 const OfflineMirrorScript = preload("res://scripts/sovereign_offline_mirror.gd")
@@ -62,6 +74,7 @@ var using_offline_mirror: bool = false
 
 func _ready() -> void:
 	connect_btn.pressed.connect(_on_connect_pressed)
+	next_scenario_btn.pressed.connect(_on_next_scenario_pressed)
 	trial_btn.pressed.connect(_on_toggle_trial_mode)
 	handoff_btn.pressed.connect(_on_handoff_pressed)
 	advance_era_btn.pressed.connect(_on_advance_era_pressed)
@@ -247,6 +260,21 @@ func _refresh_bloodline() -> void:
 		_update_bloodline_telemetry(bl)
 		bloodline_updated.emit(bl)
 
+
+func _on_next_scenario_pressed() -> void:
+	trial_mode = false
+	trial_btn.text = "Perpetual Scripture Trial"
+	var roster: Array = ERA_SCENARIO_ROSTER.get(cached_current_era, ["GEN_001"])
+	era_scenario_cursor = (era_scenario_cursor + 1) % roster.size()
+	var target_id: String = str(roster[era_scenario_cursor])
+	_load_active_scenario(target_id)
+	outcome_label.text = "[b][ERA SCENARIO ROTATED (%d/%d)][/b] Loaded %s in %s." % [
+		era_scenario_cursor + 1,
+		roster.size(),
+		target_id,
+		cached_current_era
+	]
+
 func _on_toggle_trial_mode() -> void:
 	trial_mode = not trial_mode
 	if trial_mode:
@@ -406,6 +434,7 @@ func _on_save_pressed() -> void:
 
 func _update_telemetry(state: Dictionary) -> void:
 	cached_total_score = int(state.get("total_score", 0))
+	cached_current_era = str(state.get("current_era", "ERA_TORAH"))
 	telemetry_label.text = "ERA: %s  |  SCORE: %s  |  FLAGS: %s  |  SHA-256: %s..." % [
 		str(state.get("current_era", "ERA_TORAH")),
 		str(cached_total_score),
