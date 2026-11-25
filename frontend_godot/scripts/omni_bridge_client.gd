@@ -123,6 +123,33 @@ func _ready() -> void:
 	_set_options_enabled(false)
 	_on_connect_pressed()
 
+	# Phase 32: Mount Interactive 6-Stage Walkable World & NPC Dialogue Stage
+	var world_script = load("res://scripts/sovereign_world_stage.gd")
+	if world_script != null:
+		var world_stage = world_script.new()
+		world_stage.name = "WalkableWorldStage"
+		var root_vbox = get_node_or_null("RootScroll/MainVBox")
+		if root_vbox != null:
+			root_vbox.add_child(world_stage)
+			root_vbox.move_child(world_stage, 1)
+			world_stage.set_stage("ERA_TORAH")
+			world_stage.npc_dialogue_triggered.connect(func(npc_name: String, era_id: String, scenario_id: String, greeting: String):
+				if audio_synth != null and audio_synth.has_method("play_covenant_chime"):
+					audio_synth.play_covenant_chime()
+				var feed = get_node_or_null("RootScroll/MainVBox/ChronicleScroll/ChronicleFeed")
+				if feed != null:
+					feed.text = "[b][color=#f5d061]%s[/color][/b]\n%s\n\n[i]Loading Canonical Trial (%s)...[/i]" % [npc_name, greeting, scenario_id]
+				if has_method("_request_scenario"):
+					call("_request_scenario", scenario_id)
+			)
+			world_stage.stage_portal_entered.connect(func(target_era_id: String):
+				if audio_synth != null and audio_synth.has_method("play_covenant_chime"):
+					audio_synth.play_covenant_chime()
+				var feed = get_node_or_null("RootScroll/MainVBox/ChronicleScroll/ChronicleFeed")
+				if feed != null:
+					feed.text = "[b][color=#7de2d1]PORTAL TRANSITION:[/color][/b] Entered [b]%s[/b]. Walk to a Biblical NPC and press [E] to converse!" % target_era_id
+			)
+
 func _send_command(payload: Dictionary) -> Dictionary:
 	var peer := StreamPeerTCP.new()
 	var err := peer.connect_to_host(host, port)
