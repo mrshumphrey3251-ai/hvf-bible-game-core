@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3]
+﻿[gd_scene load_steps=2 format=3]
 
 [ext_resource type="Script" path="res://scripts/omni_bridge_client.gd" id="1_bridge"]
 
@@ -25,7 +25,7 @@ theme_override_constants/margin_bottom = 24
 
 [node name="VBox" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 14
 
 [node name="HeaderPanel" type="PanelContainer" parent="MarginContainer/VBox"]
 layout_mode = 2
@@ -36,7 +36,7 @@ theme_override_constants/separation = 6
 
 [node name="TitleLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
 layout_mode = 2
-text = "HVF SOVEREIGN BIBLE GAME ENGINE — TIER 2 GODOT 4 CLIENT (PHASE 11)"
+text = "HVF SOVEREIGN BIBLE GAME ENGINE — MULTI-DEVICE GODOT 4 CLIENT (PHASE 17)"
 
 [node name="StatusLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
 layout_mode = 2
@@ -49,6 +49,40 @@ text = "ERA: ERA_TORAH  |  SCORE: 0  |  FLAGS: []  |  SHA-256: PENDING..."
 [node name="BloodlineLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
 layout_mode = 2
 text = "EPOCH: 1  |  GEN: 1  |  LEADER: Adam_Line_01  |  HEIR: Seth_Line_02  |  LEGACY & SEALS: []"
+
+[node name="StrongholdPanel" type="PanelContainer" parent="MarginContainer/VBox"]
+layout_mode = 2
+
+[node name="StrongholdVBox" type="VBoxContainer" parent="MarginContainer/VBox/StrongholdPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StrongholdHeaderLabel" type="Label" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox"]
+layout_mode = 2
+text = "STRONGHOLD: Covenant Citadel of Zion  |  DYNASTY POWER: 1000  |  KEEP: Lv.1  |  CONQUERED: []"
+
+[node name="ResourcesLabel" type="Label" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox"]
+layout_mode = 2
+text = "RESOURCES -> PROVISION: 500  |  TIMBER: 400  |  STONE: 400  |  TALENTS: 150"
+
+[node name="StrongholdActionsHBox" type="HBoxContainer" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="CollectTributeBtn" type="Button" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox/StrongholdActionsHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Collect Covenant Tribute"
+
+[node name="UpgradeKeepBtn" type="Button" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox/StrongholdActionsHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Upgrade Sanctuary Keep"
+
+[node name="ConquerChapterBtn" type="Button" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox/StrongholdActionsHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Conquer Campaign: Mamre"
 
 [node name="BodyPanel" type="PanelContainer" parent="MarginContainer/VBox"]
 layout_mode = 2
@@ -96,7 +130,7 @@ text = "4. Option D"
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 bbcode_enabled = true
-text = "Select an executive decision or Scripture Covenant Trial above."
+text = "Select an executive decision, Scripture Covenant Trial, or Stronghold action above."
 
 [node name="FooterHBox" type="HBoxContainer" parent="MarginContainer/VBox"]
 layout_mode = 2
