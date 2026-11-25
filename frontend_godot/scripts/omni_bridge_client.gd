@@ -187,6 +187,84 @@ func _ready() -> void:
 			world_node.acquire_or_build_homestead()
 		)
 		hud_hbox.add_child(build_btn)
+		var armory_btn: Button = Button.new()
+		armory_btn.text = "Armory [M]"
+		hud_hbox.add_child(armory_btn)
+
+		# Phase 40: Interactive Traveling Merchant & Armory Modal Panel
+		var armory_panel: PanelContainer = PanelContainer.new()
+		armory_panel.name = "ArmoryShopPanel"
+		armory_panel.visible = false
+		armory_panel.z_index = 18
+		armory_panel.set_anchors_preset(Control.PRESET_CENTER)
+		armory_panel.offset_left = -240.0
+		armory_panel.offset_right = 240.0
+		armory_panel.offset_top = -135.0
+		armory_panel.offset_bottom = 135.0
+
+		var arm_vbox: VBoxContainer = VBoxContainer.new()
+		arm_vbox.add_theme_constant_override("separation", 8)
+
+		var arm_title: Label = Label.new()
+		arm_title.text = "ELIAKIM'S TRAVELING MERCHANT & VILLAGE ARMORY"
+		arm_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		arm_title.add_theme_color_override("font_color", Color(1.0, 0.88, 0.35))
+		arm_vbox.add_child(arm_title)
+
+		var arm_wallet: Label = Label.new()
+		arm_wallet.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		arm_vbox.add_child(arm_wallet)
+
+		var btn_sword: Button = Button.new()
+		var btn_armor: Button = Button.new()
+		var btn_boots: Button = Button.new()
+		var btn_close_arm: Button = Button.new()
+		btn_close_arm.text = "Close Armory [M]"
+
+		var refresh_armory_ui: Callable = func():
+			arm_wallet.text = "Earned Talents Available: %d" % world_node.earned_talents
+			var sc: int = world_node.get_upgrade_cost(world_node.sword_level, 60)
+			btn_sword.text = "Forge Sword of the Spirit (Lv.%d -> Lv.%d | +14 DMG) ? %s" % [world_node.sword_level, mini(5, world_node.sword_level + 1), ("%d Talents" % sc) if sc > 0 else "MAXED"]
+			var ac: int = world_node.get_upgrade_cost(world_node.armor_level, 55)
+			btn_armor.text = "Temper Breastplate Armor (Lv.%d -> Lv.%d | +5 Armor & +15 HP) ? %s" % [world_node.armor_level, mini(5, world_node.armor_level + 1), ("%d Talents" % ac) if ac > 0 else "MAXED"]
+			var bc: int = world_node.get_upgrade_cost(world_node.boots_level, 50)
+			btn_boots.text = "Craft Gospel Speed Boots (Lv.%d -> Lv.%d | +32 Speed) ? %s" % [world_node.boots_level, mini(5, world_node.boots_level + 1), ("%d Talents" % bc) if bc > 0 else "MAXED"]
+
+		btn_sword.pressed.connect(func():
+			world_node.buy_sword_upgrade()
+			refresh_armory_ui.call()
+		)
+		btn_armor.pressed.connect(func():
+			world_node.buy_armor_upgrade()
+			refresh_armory_ui.call()
+		)
+		btn_boots.pressed.connect(func():
+			world_node.buy_boots_upgrade()
+			refresh_armory_ui.call()
+		)
+		btn_close_arm.pressed.connect(func():
+			armory_panel.visible = false
+		)
+
+		arm_vbox.add_child(btn_sword)
+		arm_vbox.add_child(btn_armor)
+		arm_vbox.add_child(btn_boots)
+		arm_vbox.add_child(btn_close_arm)
+		armory_panel.add_child(arm_vbox)
+		add_child(armory_panel)
+
+		var toggle_arm_fn: Callable = func():
+			armory_panel.visible = not armory_panel.visible
+			if armory_panel.visible:
+				refresh_armory_ui.call()
+
+		armory_btn.pressed.connect(toggle_arm_fn)
+		world_node.armory_toggled.connect(toggle_arm_fn)
+		world_node.armory_updated.connect(func(_t: int, _s: int, _a: int, _b: int):
+			if armory_panel.visible:
+				refresh_armory_ui.call()
+		)
+
 
 		var online_lbl: Label = Label.new()
 		online_lbl.text = "Online: 1"
