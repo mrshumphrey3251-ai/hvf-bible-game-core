@@ -8,8 +8,6 @@ signal chest_looted(chest_id: String, loot_summary: String)
 signal battle_won(enemy_name: String, reward_score: int, reward_talents: int)
 signal supplies_traded(talents_gained: int)
 signal trial_requested()
-signal armory_toggled()
-signal armory_updated(talents_left: int, sword_lvl: int, armor_lvl: int, boots_lvl: int)
 
 const ERA_ORDER := [
 	"ERA_TORAH",
@@ -43,14 +41,13 @@ const WORLD_STAGES := {
 		"village_name": "Kadesh Oasis Encampment",
 		"tabernacle_name": "Tabernacle & Trading Post",
 		"tabernacle_pos": Vector2(0.22, 0.48),
-		"merchant_pos": Vector2(0.14, 0.64),
 		"plot_pos": Vector2(0.40, 0.78),
 		"npcs": [
-			{"name": "Moses", "x": 0.31, "y": 0.58, "color": Color(0.88, 0.68, 0.24), "headgear": "prophet", "scenario": "GEN_001", "greeting": "Defeat raiders [F] to unlock Scripture Trivia, visit the Village Armory [M], or build your House [B]!"},
-			{"name": "Caleb", "x": 0.48, "y": 0.65, "color": Color(0.24, 0.68, 0.42), "headgear": "warrior", "scenario": "TOR_005", "greeting": "Spend earned Talents at Eliakim's Traveling Armory [M] to forge stronger blades and armor!"}
+			{"name": "Moses", "x": 0.31, "y": 0.58, "color": Color(0.88, 0.68, 0.24), "headgear": "prophet", "scenario": "GEN_001", "greeting": "Defeat raiders [F] to unlock Scripture Trivia, then buy or earn the Homestead Plot [B] to build your house!"},
+			{"name": "Caleb", "x": 0.48, "y": 0.65, "color": Color(0.24, 0.68, 0.42), "headgear": "warrior", "scenario": "TOR_005", "greeting": "Every stage of building your house requires Timber, Stone, and a Battle Victory or Trivia answer!"}
 		],
 		"chests": [
-			{"id": "CHEST_TOR_1", "x": 0.10, "y": 0.80, "timber": 140, "stone": 120, "oil": 2, "manna": 30, "relic": "Bronze Altar Ember"},
+			{"id": "CHEST_TOR_1", "x": 0.12, "y": 0.78, "timber": 140, "stone": 120, "oil": 2, "manna": 30, "relic": "Bronze Altar Ember"},
 			{"id": "CHEST_TOR_2", "x": 0.87, "y": 0.46, "timber": 160, "stone": 140, "oil": 1, "manna": 40, "relic": "Ark Cedar Plank"}
 		],
 		"enemies": [
@@ -71,14 +68,13 @@ const WORLD_STAGES := {
 		"village_name": "Gilgal & Jerusalem Village",
 		"tabernacle_name": "Shiloh Sanctuary & Supply Post",
 		"tabernacle_pos": Vector2(0.21, 0.48),
-		"merchant_pos": Vector2(0.14, 0.64),
 		"plot_pos": Vector2(0.40, 0.78),
 		"npcs": [
-			{"name": "Joshua", "x": 0.32, "y": 0.60, "color": Color(0.84, 0.36, 0.24), "headgear": "warrior", "scenario": "HIS_001", "greeting": "Upgrade your Sword of the Spirit at the Village Armory [M] to pierce Iron Bulwark armor!"},
+			{"name": "Joshua", "x": 0.32, "y": 0.60, "color": Color(0.84, 0.36, 0.24), "headgear": "warrior", "scenario": "HIS_001", "greeting": "Win battles across the Jordan to unlock Scripture Trivia and earn your land inheritance!"},
 			{"name": "Nehemiah", "x": 0.48, "y": 0.52, "color": Color(0.28, 0.60, 0.88), "headgear": "builder", "scenario": "HIS_005", "greeting": "Walk to the Homestead Plot and press [B] to raise your walls stone by stone!"}
 		],
 		"chests": [
-			{"id": "CHEST_HIS_1", "x": 0.10, "y": 0.80, "timber": 140, "stone": 160, "oil": 2, "manna": 35, "relic": "Gilgal Memorial Stone"},
+			{"id": "CHEST_HIS_1", "x": 0.12, "y": 0.78, "timber": 140, "stone": 160, "oil": 2, "manna": 35, "relic": "Gilgal Memorial Stone"},
 			{"id": "CHEST_HIS_2", "x": 0.87, "y": 0.78, "timber": 180, "stone": 200, "oil": 2, "manna": 45, "relic": "Nehemiah's Trowel"}
 		],
 		"enemies": [
@@ -99,14 +95,13 @@ const WORLD_STAGES := {
 		"village_name": "Mount Zion Royal Quarter",
 		"tabernacle_name": "Golden Temple Sanctuary",
 		"tabernacle_pos": Vector2(0.22, 0.47),
-		"merchant_pos": Vector2(0.14, 0.64),
 		"plot_pos": Vector2(0.40, 0.78),
 		"npcs": [
-			{"name": "King David", "x": 0.33, "y": 0.60, "color": Color(0.92, 0.72, 0.22), "headgear": "crown", "scenario": "WIS_001", "greeting": "Equip Breastplate Armor and Speed Boots at the Armory [M] before challenging the Philistine Champion!"},
-			{"name": "Solomon", "x": 0.49, "y": 0.52, "color": Color(0.68, 0.42, 0.92), "headgear": "crown", "scenario": "WIS_004", "greeting": "Trade cedar timber and hewn stone [T] at the Temple treasury for Talents."}
+			{"name": "King David", "x": 0.33, "y": 0.60, "color": Color(0.92, 0.72, 0.22), "headgear": "crown", "scenario": "WIS_001", "greeting": "By wisdom a house is built! Defeat the Champion [F] and answer Trivia to raise your Zion manor."},
+			{"name": "Solomon", "x": 0.49, "y": 0.52, "color": Color(0.68, 0.42, 0.92), "headgear": "crown", "scenario": "WIS_004", "greeting": "Trade cedar timber and hewn stone [T] or invest them into your Homestead Plot [B]."}
 		],
 		"chests": [
-			{"id": "CHEST_WIS_1", "x": 0.10, "y": 0.79, "timber": 200, "stone": 180, "oil": 3, "manna": 40, "relic": "Davidic Harp String"},
+			{"id": "CHEST_WIS_1", "x": 0.12, "y": 0.77, "timber": 200, "stone": 180, "oil": 3, "manna": 40, "relic": "Davidic Harp String"},
 			{"id": "CHEST_WIS_2", "x": 0.86, "y": 0.47, "timber": 220, "stone": 220, "oil": 2, "manna": 50, "relic": "Seal of Wisdom"}
 		],
 		"enemies": [
@@ -126,14 +121,13 @@ const WORLD_STAGES := {
 		"village_name": "Anathoth Watchman Village",
 		"tabernacle_name": "Altar of Burning Coals",
 		"tabernacle_pos": Vector2(0.21, 0.48),
-		"merchant_pos": Vector2(0.14, 0.64),
 		"plot_pos": Vector2(0.40, 0.78),
 		"npcs": [
-			{"name": "Isaiah", "x": 0.32, "y": 0.58, "color": Color(0.90, 0.54, 0.24), "headgear": "prophet", "scenario": "PRO_001", "greeting": "Watchmen stand upon the walls! Cross the canal bridge to repel the Siege Warden."},
+			{"name": "Isaiah", "x": 0.32, "y": 0.58, "color": Color(0.90, 0.54, 0.24), "headgear": "prophet", "scenario": "PRO_001", "greeting": "They shall build houses and inhabit them! Complete battles and Scripture Trivia to raise your home."},
 			{"name": "Jeremiah", "x": 0.48, "y": 0.65, "color": Color(0.45, 0.70, 0.84), "headgear": "prophet", "scenario": "PRO_004", "greeting": "Buy the field with silver (Talents) and seal the deed!"}
 		],
 		"chests": [
-			{"id": "CHEST_PRO_1", "x": 0.10, "y": 0.80, "timber": 160, "stone": 190, "oil": 3, "manna": 45, "relic": "Prophetic Scroll Cylinder"}
+			{"id": "CHEST_PRO_1", "x": 0.12, "y": 0.78, "timber": 160, "stone": 190, "oil": 3, "manna": 45, "relic": "Prophetic Scroll Cylinder"}
 		],
 		"enemies": [
 			{"name": "Babylonian Siege Warden", "archetype": "sentinel", "ability": "Siege Fire Volley", "x": 0.77, "y": 0.62, "hp": 190, "max_hp": 190, "atk": 23, "spd": 96.0, "armor": 14, "score": 70, "talents": 80}
@@ -152,14 +146,13 @@ const WORLD_STAGES := {
 		"village_name": "Capernaum Harbor Village",
 		"tabernacle_name": "House of Prayer Sanctuary",
 		"tabernacle_pos": Vector2(0.21, 0.48),
-		"merchant_pos": Vector2(0.14, 0.64),
 		"plot_pos": Vector2(0.40, 0.78),
 		"npcs": [
-			{"name": "Peter", "x": 0.33, "y": 0.60, "color": Color(0.28, 0.74, 0.92), "headgear": "pilgrim", "scenario": "GOS_001", "greeting": "Welcome to Capernaum! Upgrade your Boots [M] to outrun Shadow Bolts across the harbor bridge."},
+			{"name": "Peter", "x": 0.33, "y": 0.60, "color": Color(0.28, 0.74, 0.92), "headgear": "pilgrim", "scenario": "GOS_001", "greeting": "Build your house upon the Rock! Defeat the Tempest Spirit and answer Scripture Trivia to lay the foundation."},
 			{"name": "Good Samaritan", "x": 0.49, "y": 0.54, "color": Color(0.36, 0.84, 0.54), "headgear": "pilgrim", "scenario": "GOS_004", "greeting": "Visit the Sanctuary whenever your health bar drops low."}
 		],
 		"chests": [
-			{"id": "CHEST_GOS_1", "x": 0.10, "y": 0.79, "timber": 190, "stone": 150, "oil": 3, "manna": 60, "relic": "Five Loaves Basket"}
+			{"id": "CHEST_GOS_1", "x": 0.12, "y": 0.77, "timber": 190, "stone": 150, "oil": 3, "manna": 60, "relic": "Five Loaves Basket"}
 		],
 		"enemies": [
 			{"name": "Tempest Shadow Spirit", "archetype": "spirit", "ability": "Shadow Bolt & Drain", "x": 0.77, "y": 0.63, "hp": 195, "max_hp": 195, "atk": 25, "spd": 124.0, "armor": 8, "score": 80, "talents": 90}
@@ -178,10 +171,9 @@ const WORLD_STAGES := {
 		"village_name": "Antioch Covenant Quarter",
 		"tabernacle_name": "Upper Room Flame Sanctuary",
 		"tabernacle_pos": Vector2(0.22, 0.48),
-		"merchant_pos": Vector2(0.14, 0.64),
 		"plot_pos": Vector2(0.40, 0.78),
 		"npcs": [
-			{"name": "Apostle Paul", "x": 0.33, "y": 0.58, "color": Color(0.92, 0.74, 0.28), "headgear": "prophet", "scenario": "EPI_001", "greeting": "Put on the full Armor of God at the Armory [M] and stand victorious against Principalities!"},
+			{"name": "Apostle Paul", "x": 0.33, "y": 0.58, "color": Color(0.92, 0.74, 0.28), "headgear": "prophet", "scenario": "EPI_001", "greeting": "Every house is built by someone, but God is the builder of all things! Complete your Covenant Manor [B]."},
 			{"name": "Barnabas", "x": 0.49, "y": 0.65, "color": Color(0.50, 0.82, 0.46), "headgear": "pilgrim", "scenario": "EPI_004", "greeting": "Press [T] to trade chest supplies for Talents."}
 		],
 		"chests": [
@@ -199,6 +191,7 @@ var target_pos: Vector2 = Vector2(340.0, 340.0)
 var has_click_target: bool = false
 var is_walking: bool = false
 var facing_dir: float = 1.0
+var move_speed: float = 240.0
 var anim_time: float = 0.0
 var portal_cooldown: float = 0.0
 
@@ -214,11 +207,7 @@ var opened_chests: Dictionary = {}
 var stage_enemies: Array = []
 var enemy_projectiles: Array = []
 
-# Phase 40: Traveling Merchant & Armory Upgrade Levels (Lv.1 -> Lv.5)
-var sword_level: int = 1
-var armor_level: int = 1
-var boots_level: int = 1
-
+# Land Ownership & 4-Stage On-Screen House Construction + Earned Labor Credits
 var land_deeds: Dictionary = {}
 var house_stages: Dictionary = {}
 var labor_credits: int = 0
@@ -236,10 +225,9 @@ var nearby_npc: Dictionary = {}
 var nearby_chest: Dictionary = {}
 var nearby_enemy_idx: int = -1
 var near_homestead_plot: bool = false
-var near_merchant: bool = false
 var in_tabernacle: bool = false
 
-var banner_text: String = "Visit the Traveling Merchant Armory [M] in the village to upgrade Sword, Armor & Speed Boots!"
+var banner_text: String = "Win Battles [F] to unlock Scripture Trivia, buy/earn Land Deeds, and build your House on screen [B]!"
 var banner_timer: float = 9.0
 var remote_pilgrims: Array = []
 var local_pilgrim_name: String = "Pilgrim"
@@ -261,61 +249,6 @@ func _ready() -> void:
 		})
 	set_stage("ERA_TORAH")
 	set_process(true)
-
-func get_current_move_speed() -> float:
-	return 240.0 + float(boots_level - 1) * 32.0
-
-func get_sword_damage() -> int:
-	return 42 + ((sword_level - 1) * 14) + (relics_found.size() * 8)
-
-func get_player_armor() -> int:
-	return (armor_level - 1) * 5
-
-func get_upgrade_cost(cur_lvl: int, base_cost: int) -> int:
-	if cur_lvl >= 5:
-		return 0
-	return base_cost + (cur_lvl - 1) * 55
-
-func buy_sword_upgrade() -> void:
-	if sword_level >= 5:
-		_announce("SWORD OF THE SPIRIT IS ALREADY MAXED AT LV.5!", 4.0)
-		return
-	var cost: int = get_upgrade_cost(sword_level, 60)
-	if earned_talents >= cost:
-		earned_talents -= cost
-		sword_level += 1
-		_announce("ARMORY UPGRADE: Sword of the Spirit forged to Lv.%d (-%d Talents | %d Base DMG)!" % [sword_level, cost, get_sword_damage()], 6.0)
-		emit_signal("armory_updated", earned_talents, sword_level, armor_level, boots_level)
-	else:
-		_announce("Need %d Earned Talents for Sword Lv.%d (you have %d Talents)." % [cost, sword_level + 1, earned_talents], 4.5)
-
-func buy_armor_upgrade() -> void:
-	if armor_level >= 5:
-		_announce("BREASTPLATE OF RIGHTEOUSNESS IS ALREADY MAXED AT LV.5!", 4.0)
-		return
-	var cost: int = get_upgrade_cost(armor_level, 55)
-	if earned_talents >= cost:
-		earned_talents -= cost
-		armor_level += 1
-		max_spirit_hp += 15
-		spirit_hp = mini(max_spirit_hp, spirit_hp + 15)
-		_announce("ARMORY UPGRADE: Breastplate Armor Lv.%d (-%d Talents | -%d DMG Mitigation & +15 Max HP)!" % [armor_level, cost, get_player_armor()], 6.0)
-		emit_signal("armory_updated", earned_talents, sword_level, armor_level, boots_level)
-	else:
-		_announce("Need %d Earned Talents for Breastplate Lv.%d (you have %d Talents)." % [cost, armor_level + 1, earned_talents], 4.5)
-
-func buy_boots_upgrade() -> void:
-	if boots_level >= 5:
-		_announce("SANDALS OF PEACE ARE ALREADY MAXED AT LV.5!", 4.0)
-		return
-	var cost: int = get_upgrade_cost(boots_level, 50)
-	if earned_talents >= cost:
-		earned_talents -= cost
-		boots_level += 1
-		_announce("ARMORY UPGRADE: Gospel Speed Boots Lv.%d (-%d Talents | Speed %d)!" % [boots_level, cost, int(get_current_move_speed())], 6.0)
-		emit_signal("armory_updated", earned_talents, sword_level, armor_level, boots_level)
-	else:
-		_announce("Need %d Earned Talents for Speed Boots Lv.%d (you have %d Talents)." % [cost, boots_level + 1, earned_talents], 4.5)
 
 func set_stage(era_id: String) -> void:
 	if WORLD_STAGES.has(era_id):
@@ -359,7 +292,6 @@ func add_trivia_talents(amount: int, source_label: String) -> void:
 	trivia_wins += 1
 	labor_credits += 1
 	pending_victory_trivia = false
-	emit_signal("armory_updated", earned_talents, sword_level, armor_level, boots_level)
 	_announce("TRIVIA MASTERED! +%d Talents & +1 Builder Task Credit earned! (Credits: %d | Talents: %d)" % [amount, labor_credits, earned_talents], 6.5)
 
 func show_coop_blessing(text: String) -> void:
@@ -384,14 +316,6 @@ func _gui_input(event: InputEvent) -> void:
 			return
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			var st: Dictionary = WORLD_STAGES.get(current_stage, WORLD_STAGES["ERA_TORAH"])
-			var m_norm: Vector2 = st.get("merchant_pos", Vector2(0.14, 0.64))
-			var merch_screen: Vector2 = _norm_to_screen(m_norm.x, m_norm.y)
-			if click_p.distance_to(merch_screen) <= 56.0:
-				target_pos = merch_screen + Vector2(36, 12)
-				has_click_target = true
-				emit_signal("armory_toggled")
-				accept_event()
-				return
 			var p_norm: Vector2 = st.get("plot_pos", Vector2(0.40, 0.78))
 			var plot_screen: Vector2 = _norm_to_screen(p_norm.x, p_norm.y)
 			if click_p.distance_to(plot_screen) <= 58.0:
@@ -431,17 +355,12 @@ func _gui_input(event: InputEvent) -> void:
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_E:
-			if near_merchant:
-				emit_signal("armory_toggled")
-			elif not nearby_chest.is_empty():
+			if not nearby_chest.is_empty():
 				_open_secret_chest(nearby_chest)
 			elif not nearby_npc.is_empty():
 				_interact_with_npc(nearby_npc)
 			elif in_tabernacle:
 				_use_tabernacle_sanctuary()
-			accept_event()
-		elif event.keycode == KEY_M:
-			emit_signal("armory_toggled")
 			accept_event()
 		elif event.keycode == KEY_B:
 			acquire_or_build_homestead()
@@ -466,11 +385,11 @@ func acquire_or_build_homestead() -> void:
 	var has_deed: bool = bool(land_deeds.get(current_stage, false))
 	var cur_lvl: int = int(house_stages.get(current_stage, 0))
 
+	# Step 1: Must buy the land OR work for it (1 Battle Win + 1 Trivia Win) before building!
 	if not has_deed:
 		if earned_talents >= 120:
 			earned_talents -= 120
 			land_deeds[current_stage] = true
-			emit_signal("armory_updated", earned_talents, sword_level, armor_level, boots_level)
 			_announce("LAND DEED PURCHASED (-120 Talents)! Now gather Timber/Stone & win Battles/Trivia to build Stage 1 [B]!", 6.5)
 		elif battle_wins_count >= 1 and trivia_wins >= 1:
 			land_deeds[current_stage] = true
@@ -479,6 +398,7 @@ func acquire_or_build_homestead() -> void:
 			_announce("LAND LOCKED: Buy Deed (120 Talents, you have %d) OR earn it via 1 Battle Win (%d/1) + 1 Trivia Win (%d/1)!" % [earned_talents, battle_wins_count, trivia_wins], 6.5)
 		return
 
+	# Step 2: 4-Stage On-Screen House Construction (each stage requires materials + 1 Labor Credit from Battle/Trivia)
 	if cur_lvl >= 4:
 		_announce("COVENANT MANOR COMPLETE (4/4)! Your consecrated homestead grants +25 Max Health & Sanctuary Rest!", 5.5)
 		return
@@ -522,20 +442,18 @@ func acquire_or_build_homestead() -> void:
 			house_stages[current_stage] = 4
 			max_spirit_hp += 25
 			spirit_hp = max_spirit_hp
-			emit_signal("armory_updated", earned_talents, sword_level, armor_level, boots_level)
 			_announce("HOUSE STAGE 4/4 COMPLETE: CONSECRATED COVENANT MANOR! (+25 Max Health & Full Heal!)", 7.5)
 		else:
 			_announce("Need 100 Timber, 100 Stone & 50 Talents for Stage 4 Covenant Manor!", 5.0)
 
 func _apply_damage_to_player(raw_dmg: int, attacker_label: String, tab_pos: Vector2) -> void:
-	var armor_mitigated: int = maxi(3, raw_dmg - get_player_armor())
-	var final_dmg: int = maxi(2, int(armor_mitigated * 0.22)) if shield_active else armor_mitigated
+	var final_dmg: int = maxi(2, int(raw_dmg * 0.22)) if shield_active else raw_dmg
 	spirit_hp = maxi(0, spirit_hp - final_dmg)
 	player_hit_flash = 0.25
 	if shield_active:
 		_announce("SHIELD OF FAITH DEFLECTED %s! (-%d HP)" % [attacker_label, final_dmg], 2.5)
 	else:
-		_announce("%s hit you for -%d HP (Armor -%d)! Raise Shield [Q] or retreat to Tabernacle!" % [attacker_label, final_dmg, get_player_armor()], 3.2)
+		_announce("%s hit you for -%d HP! Raise Shield [Q], eat Manna [R], or retreat to Tabernacle!" % [attacker_label, final_dmg], 3.2)
 	if spirit_hp <= 0:
 		spirit_hp = 55
 		player_pos = tab_pos + Vector2(0, 42)
@@ -680,20 +598,19 @@ func _process(delta: float) -> void:
 	if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
 		input_vec.x += 1.0
 
-	var cur_spd: float = get_current_move_speed()
 	is_walking = false
 	if input_vec.length() > 0.01:
 		has_click_target = false
 		if absf(input_vec.x) > 0.05:
 			facing_dir = 1.0 if input_vec.x > 0.0 else -1.0
-		player_pos = _clamp_walk_pos(player_pos + input_vec.normalized() * cur_spd * delta)
+		player_pos = _clamp_walk_pos(player_pos + input_vec.normalized() * move_speed * delta)
 		is_walking = true
 	elif has_click_target:
 		var diff: Vector2 = target_pos - player_pos
 		if diff.length() > 5.0:
 			if absf(diff.x) > 1.0:
 				facing_dir = 1.0 if diff.x > 0.0 else -1.0
-			player_pos = _clamp_walk_pos(player_pos + diff.normalized() * cur_spd * delta)
+			player_pos = _clamp_walk_pos(player_pos + diff.normalized() * move_speed * delta)
 			is_walking = true
 		else:
 			has_click_target = false
@@ -708,9 +625,6 @@ func _process(delta: float) -> void:
 	var st: Dictionary = WORLD_STAGES.get(current_stage, WORLD_STAGES["ERA_TORAH"])
 	var p_norm: Vector2 = st.get("plot_pos", Vector2(0.40, 0.78))
 	near_homestead_plot = player_pos.distance_to(_norm_to_screen(p_norm.x, p_norm.y)) <= 68.0
-
-	var m_norm: Vector2 = st.get("merchant_pos", Vector2(0.14, 0.64))
-	near_merchant = player_pos.distance_to(_norm_to_screen(m_norm.x, m_norm.y)) <= 62.0
 
 	var tab_norm: Vector2 = st.get("tabernacle_pos", Vector2(0.22, 0.48))
 	var tab_pos: Vector2 = _norm_to_screen(tab_norm.x, tab_norm.y)
@@ -765,7 +679,6 @@ func trade_gathered_supplies() -> void:
 		timber_stock -= 100
 		stone_stock -= 100
 		earned_talents += 25
-		emit_signal("armory_updated", earned_talents, sword_level, armor_level, boots_level)
 		_announce("SUPPLY TRADE COMPLETED: -100 Timber & -100 Stone -> +25 Talents! (Total: %d Talents)" % earned_talents, 5.5)
 		emit_signal("supplies_traded", 25)
 	else:
@@ -825,7 +738,7 @@ func _perform_sword_strike() -> void:
 	var idx: int = _find_enemy_near(player_pos, 102.0)
 	if idx != -1:
 		var ed: Dictionary = stage_enemies[idx]
-		var base_dmg: int = get_sword_damage()
+		var base_dmg: int = 42 + (relics_found.size() * 8)
 		var enemy_armor: int = int(ed.get("armor", 0))
 		var dmg: int = maxi(14, base_dmg - enemy_armor)
 		var new_hp: int = maxi(0, int(ed.get("hp", 100)) - dmg)
@@ -843,14 +756,13 @@ func _perform_sword_strike() -> void:
 			battle_wins_count += 1
 			labor_credits += 1
 			pending_victory_trivia = true
-			emit_signal("armory_updated", earned_talents, sword_level, armor_level, boots_level)
 			_announce("BATTLE VICTORY! Defeated %s (+%d Talents, +1 Builder Credit) -> SCRIPTURE TRIVIA UNLOCKED!" % [str(ed["name"]), t_won], 7.5)
 			emit_signal("battle_won", str(ed["name"]), sc, t_won)
 			emit_signal("trial_requested")
 		else:
-			_announce("SWORD LV.%d! Struck %s for %d DMG (Armor -%d | %d/%d HP left)" % [sword_level, str(ed["name"]), dmg, enemy_armor, new_hp, int(ed["max_hp"])], 2.5)
+			_announce("SWORD OF THE SPIRIT! Struck %s for %d DMG (Armor -%d | %d/%d HP left)" % [str(ed["name"]), dmg, enemy_armor, new_hp, int(ed["max_hp"])], 2.5)
 	else:
-		_announce("Sword of the Spirit (Lv.%d) drawn! Approach an adversary to strike." % sword_level, 2.0)
+		_announce("Sword of the Spirit drawn! Approach an adversary to strike.", 2.0)
 
 func _interact_with_npc(npc: Dictionary) -> void:
 	var n_name: String = str(npc.get("name", "Guide"))
@@ -876,30 +788,6 @@ func _check_portals() -> void:
 		set_stage(prev_era)
 		emit_signal("stage_portal_entered", prev_era)
 
-func _draw_traveling_merchant(st: Dictionary) -> void:
-	var m_norm: Vector2 = st.get("merchant_pos", Vector2(0.14, 0.64))
-	var mp: Vector2 = _norm_to_screen(m_norm.x, m_norm.y)
-	var accent_col: Color = st.get("accent", Color.GOLD)
-	var font: Font = ThemeDB.fallback_font
-
-	# Merchant Caravan Canopy & Wooden Wagon
-	draw_rect(Rect2(mp.x - 38.0, mp.y - 12.0, 76.0, 26.0), Color(0.46, 0.28, 0.14))
-	draw_circle(mp + Vector2(-24.0, 16.0), 9.0, Color(0.24, 0.16, 0.10))
-	draw_circle(mp + Vector2(24.0, 16.0), 9.0, Color(0.24, 0.16, 0.10))
-	# Striped Royal Canopy
-	var canopy: PackedVector2Array = PackedVector2Array([
-		Vector2(mp.x - 44.0, mp.y - 12.0),
-		Vector2(mp.x - 32.0, mp.y - 34.0),
-		Vector2(mp.x + 32.0, mp.y - 34.0),
-		Vector2(mp.x + 44.0, mp.y - 12.0)
-	])
-	draw_colored_polygon(canopy, Color(0.68, 0.20, 0.24))
-	draw_line(Vector2(mp.x - 44.0, mp.y - 12.0), Vector2(mp.x + 44.0, mp.y - 12.0), accent_col, 3.0)
-	# Merchant Armorer figure beside caravan
-	_draw_humanoid_figure(mp + Vector2(46.0, 2.0), Color(0.78, 0.56, 0.18), Color(0.86, 0.70, 0.54), "pilgrim", -1.0, 0.0, false, 0.0, false, false, 0.92)
-	if font != null:
-		draw_string(font, mp + Vector2(-85.0, -44.0), "ARMORY MERCHANT [M]", HORIZONTAL_ALIGNMENT_CENTER, 170, 11, Color(1.0, 0.92, 0.45))
-
 func _draw_player_homestead_onscreen(w: float, h: float, st: Dictionary) -> void:
 	var p_norm: Vector2 = st.get("plot_pos", Vector2(0.40, 0.78))
 	var hp: Vector2 = _norm_to_screen(p_norm.x, p_norm.y)
@@ -908,27 +796,32 @@ func _draw_player_homestead_onscreen(w: float, h: float, st: Dictionary) -> void
 	var accent_col: Color = st.get("accent", Color.GOLD)
 	var font: Font = ThemeDB.fallback_font
 
+	# Surveyed Land Plot Perimeter
 	var plot_rect: Rect2 = Rect2(hp.x - 46.0, hp.y - 30.0, 92.0, 52.0)
 	var border_col: Color = accent_col if has_deed else Color(0.65, 0.58, 0.44, 0.75)
 	draw_rect(plot_rect, Color(0.16, 0.14, 0.10, 0.35))
 	draw_rect(plot_rect, border_col, false, 2.0)
 
+	# Corner survey stakes
 	for sx in [plot_rect.position.x, plot_rect.position.x + plot_rect.size.x]:
 		for sy in [plot_rect.position.y, plot_rect.position.y + plot_rect.size.y]:
 			draw_circle(Vector2(sx, sy), 3.5, border_col)
 
 	if lvl == 0:
+		# Wooden Land Deed Signpost
 		draw_line(hp + Vector2(0.0, 10.0), hp + Vector2(0.0, -14.0), Color(0.54, 0.36, 0.18), 3.5)
 		draw_rect(Rect2(hp.x - 16.0, hp.y - 18.0, 32.0, 14.0), Color(0.68, 0.50, 0.24))
 		if font != null:
 			var sign_txt: String = "YOUR LAND: BUILD FOUNDATION [B]" if has_deed else "LAND FOR SALE (120T) OR EARN [B]"
 			draw_string(font, hp + Vector2(-95.0, -24.0), sign_txt, HORIZONTAL_ALIGNMENT_CENTER, 190, 10, accent_col if has_deed else Color(0.95, 0.88, 0.70))
 	elif lvl == 1:
+		# Stage 1: Hewn Stone Foundation
 		draw_rect(Rect2(hp.x - 36.0, hp.y - 8.0, 72.0, 22.0), Color(0.52, 0.50, 0.46))
 		draw_rect(Rect2(hp.x - 36.0, hp.y - 8.0, 72.0, 22.0), Color(0.75, 0.72, 0.66), false, 2.0)
 		if font != null:
 			draw_string(font, hp + Vector2(-95.0, -18.0), "STAGE 1/4: FOUNDATION [B] BUILD WALLS", HORIZONTAL_ALIGNMENT_CENTER, 190, 10, accent_col)
 	elif lvl == 2:
+		# Stage 2: Stone Foundation + Cedar Timber Framing & Limestone Walls
 		draw_rect(Rect2(hp.x - 36.0, hp.y - 24.0, 72.0, 38.0), Color(0.82, 0.74, 0.58))
 		draw_line(Vector2(hp.x - 36.0, hp.y - 24.0), Vector2(hp.x - 36.0, hp.y + 14.0), Color(0.45, 0.28, 0.12), 4.0)
 		draw_line(Vector2(hp.x + 36.0, hp.y - 24.0), Vector2(hp.x + 36.0, hp.y + 14.0), Color(0.45, 0.28, 0.12), 4.0)
@@ -936,6 +829,7 @@ func _draw_player_homestead_onscreen(w: float, h: float, st: Dictionary) -> void
 		if font != null:
 			draw_string(font, hp + Vector2(-95.0, -32.0), "STAGE 2/4: WALLS UP [B] BUILD ROOF", HORIZONTAL_ALIGNMENT_CENTER, 190, 10, accent_col)
 	elif lvl == 3:
+		# Stage 3: Roof Beams, Glowing Lantern & Courtyard
 		draw_rect(Rect2(hp.x - 38.0, hp.y - 26.0, 76.0, 40.0), Color(0.84, 0.76, 0.60))
 		var roof_p: PackedVector2Array = PackedVector2Array([Vector2(hp.x - 44.0, hp.y - 26.0), Vector2(hp.x, hp.y - 48.0), Vector2(hp.x + 44.0, hp.y - 26.0)])
 		draw_colored_polygon(roof_p, Color(0.58, 0.28, 0.16))
@@ -944,6 +838,7 @@ func _draw_player_homestead_onscreen(w: float, h: float, st: Dictionary) -> void
 		if font != null:
 			draw_string(font, hp + Vector2(-95.0, -56.0), "STAGE 3/4: ROOF & LANTERN [B] CONSECRATE", HORIZONTAL_ALIGNMENT_CENTER, 190, 10, accent_col)
 	else:
+		# Stage 4: Consecrated Covenant Manor (Complete!)
 		draw_rect(Rect2(hp.x - 42.0, hp.y - 32.0, 84.0, 46.0), Color(0.88, 0.80, 0.64))
 		var manor_roof: PackedVector2Array = PackedVector2Array([Vector2(hp.x - 48.0, hp.y - 32.0), Vector2(hp.x, hp.y - 58.0), Vector2(hp.x + 48.0, hp.y - 32.0)])
 		draw_colored_polygon(manor_roof, accent_col)
@@ -1004,7 +899,8 @@ func _draw_world_environment(w: float, h: float, horizon: float, st: Dictionary)
 
 	var houses: Array = [
 		Vector2(w * 0.10, h * 0.45),
-		Vector2(w * 0.38, h * 0.43)
+		Vector2(w * 0.38, h * 0.43),
+		Vector2(w * 0.12, h * 0.64)
 	]
 	for h_pos in houses:
 		var hp: Vector2 = h_pos
@@ -1027,7 +923,7 @@ func _draw_world_environment(w: float, h: float, horizon: float, st: Dictionary)
 		draw_circle(tp + Vector2(-9.0, -14.0), 11.0, Color(0.22, 0.48, 0.24))
 		draw_circle(tp + Vector2(9.0, -14.0), 11.0, Color(0.22, 0.48, 0.24))
 
-	_draw_traveling_merchant(st)
+	# Render the player's earned Homestead Plot & 4-stage house construction live on screen!
 	_draw_player_homestead_onscreen(w, h, st)
 
 func _draw_overhead_health_bar(center_top: Vector2, cur_hp: int, max_hp: int, bar_w: float, is_player: bool) -> void:
@@ -1087,9 +983,8 @@ func _draw_humanoid_figure(base_pos: Vector2, tunic_col: Color, skin_col: Color,
 	if has_sword:
 		var sw_angle: float = -0.9 + (1.8 * (1.0 - swing_t / 0.32)) if swing_t > 0.0 else -0.35
 		var hilt: Vector2 = base_pos + Vector2(dir_x * 12.0 * scale_f, -2.0 * scale_f)
-		var blade_len: float = (28.0 + float(sword_level - 1) * 3.0) if not is_enemy else 28.0
-		var tip: Vector2 = hilt + Vector2(dir_x * cos(sw_angle) * blade_len * scale_f, sin(sw_angle) * blade_len * scale_f)
-		var blade_col: Color = Color(0.98, 0.35, 0.28) if is_enemy else (Color(1.0, 0.90, 0.42) if sword_level >= 3 else Color(0.92, 0.96, 1.0))
+		var tip: Vector2 = hilt + Vector2(dir_x * cos(sw_angle) * 28.0 * scale_f, sin(sw_angle) * 28.0 * scale_f)
+		var blade_col: Color = Color(0.98, 0.35, 0.28) if is_enemy else Color(0.92, 0.96, 1.0)
 		draw_line(hilt, tip, blade_col, 3.4 * scale_f)
 		draw_line(hilt + Vector2(-3.0 * scale_f, 0.0), hilt + Vector2(3.0 * scale_f, 0.0), Color(0.98, 0.80, 0.24), 3.0 * scale_f)
 	else:
@@ -1230,7 +1125,7 @@ func _draw() -> void:
 		if font != null:
 			draw_string(font, npos + Vector2(-52.0, -49.0), "%s [E]" % str(npc.get("name", "")), HORIZONTAL_ALIGNMENT_CENTER, 104, 12, Color(1.0, 0.96, 0.84))
 
-	# 5. REMOTE MULTIPLAYER PILGRIMS
+	# 5. REMOTE MULTIPLAYER PILGRIMS WITH OVERHEAD HEALTH BARS
 	for rp_item in remote_pilgrims:
 		var rp: Dictionary = rp_item
 		if str(rp.get("stage", "")) == current_stage:
@@ -1257,11 +1152,11 @@ func _draw() -> void:
 	draw_circle(right_p, 26.0, Color(accent_col.r, accent_col.g, accent_col.b, 0.26 * tab_pulse))
 	draw_arc(right_p, 26.0, 0.0, TAU, 28, accent_col, 2.5)
 
-	# 8. DIEGETIC TOP HUD (SHOWING TALENTS, GEAR TIERS, RESOURCES & HOUSE STAGE)
+	# 8. DIEGETIC TOP HUD
 	if font != null:
 		draw_rect(Rect2(12.0, 10.0, w - 24.0, 52.0), Color(0.05, 0.05, 0.08, 0.86))
-		draw_string(font, Vector2(22.0, 30.0), "%s  |  TALENTS: %d  |  HP: %d/%d  |  GEAR: Sword Lv.%d / Armor Lv.%d / Boots Lv.%d  |  HOUSE: %d/4" % [str(st["title"]), earned_talents, spirit_hp, max_spirit_hp, sword_level, armor_level, boots_level, int(house_stages.get(current_stage, 0))], HORIZONTAL_ALIGNMENT_LEFT, int(w - 44.0), 13, accent_col)
-		draw_string(font, Vector2(22.0, 50.0), "[M] Village Armory Shop  |  [F] Battle (Unlocks Trivia)  |  [Y] Trivia  |  [B] Land & House  |  [T] Trade (%dT/%dS)  |  [Q] Shield" % [timber_stock, stone_stock], HORIZONTAL_ALIGNMENT_LEFT, int(w - 44.0), 11, Color(0.88, 0.90, 0.95))
+		draw_string(font, Vector2(22.0, 30.0), "%s   |   TALENTS: %d   |   HP: %d/%d   |   TIMBER: %d   |   STONE: %d   |   BUILDER CREDITS: %d   |   HOUSE: %d/4" % [str(st["title"]), earned_talents, spirit_hp, max_spirit_hp, timber_stock, stone_stock, labor_credits, int(house_stages.get(current_stage, 0))], HORIZONTAL_ALIGNMENT_LEFT, int(w - 44.0), 13, accent_col)
+		draw_string(font, Vector2(22.0, 50.0), "Actions: [F] Battle (Unlocks Trivia)  |  [Y] Scripture Trivia  |  [B] Buy Land / Build House On-Screen  |  [T] Trade  |  [Q] Shield  |  [R] Manna", HORIZONTAL_ALIGNMENT_LEFT, int(w - 44.0), 11, Color(0.88, 0.90, 0.95))
 
 		draw_string(font, player_pos + Vector2(-54.0, -50.0), local_pilgrim_name, HORIZONTAL_ALIGNMENT_CENTER, 108, 12, Color.WHITE)
 		draw_string(font, Vector2(14.0, h * 0.56 + 40.0), "< PREV ERA", HORIZONTAL_ALIGNMENT_LEFT, 96, 11, accent_col)
