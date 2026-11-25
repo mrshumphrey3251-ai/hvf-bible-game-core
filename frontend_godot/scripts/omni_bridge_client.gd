@@ -17,6 +17,7 @@ signal bridge_error(message: String)
 @onready var status_label: Label = $MarginContainer/VBox/HeaderPanel/HeaderVBox/StatusLabel
 @onready var telemetry_label: Label = $MarginContainer/VBox/HeaderPanel/HeaderVBox/TelemetryLabel
 @onready var bloodline_label: Label = $MarginContainer/VBox/HeaderPanel/HeaderVBox/BloodlineLabel
+@onready var citadel_canvas = $MarginContainer/VBox/StrongholdPanel/StrongholdVBox/CitadelCanvas
 @onready var stronghold_header_label: Label = $MarginContainer/VBox/StrongholdPanel/StrongholdVBox/StrongholdHeaderLabel
 @onready var resources_label: Label = $MarginContainer/VBox/StrongholdPanel/StrongholdVBox/ResourcesLabel
 @onready var commanders_label: Label = $MarginContainer/VBox/StrongholdPanel/StrongholdVBox/CommandersLabel
@@ -66,6 +67,8 @@ var active_trial_token: String = ""
 var trial_mode: bool = false
 var cached_total_score: int = 0
 var cached_current_era: String = "ERA_TORAH"
+var last_stronghold_snapshot: Dictionary = {}
+var last_generals_snapshot: Dictionary = {}
 var era_scenario_cursor: int = 0
 var cached_cmd_bonus: int = 0
 var next_campaign_id: String = "CH_01_MAMRE"
@@ -73,7 +76,28 @@ const OfflineMirrorScript = preload("res://scripts/sovereign_offline_mirror.gd")
 var offline_mirror = OfflineMirrorScript.new()
 var using_offline_mirror: bool = false
 
+
+func _apply_royal_theme() -> void:
+	var panel_style := StyleBoxFlat.new()
+	panel_style.bg_color = Color(0.09, 0.08, 0.11, 0.96)
+	panel_style.border_color = Color(0.84, 0.68, 0.28, 0.85)
+	panel_style.set_border_width_all(2)
+	panel_style.set_corner_radius_all(6)
+	panel_style.set_content_margin_all(10)
+	var btn_style := StyleBoxFlat.new()
+	btn_style.bg_color = Color(0.18, 0.14, 0.10, 1.0)
+	btn_style.border_color = Color(0.84, 0.68, 0.28, 0.9)
+	btn_style.set_border_width_all(1)
+	btn_style.set_corner_radius_all(4)
+	btn_style.set_content_margin_all(6)
+	var t := Theme.new()
+	t.set_stylebox("panel", "PanelContainer", panel_style)
+	t.set_stylebox("normal", "Button", btn_style)
+	ThemeDB.fallback_base_scale = 1.0
+	self.theme = t
+
 func _ready() -> void:
+	_apply_royal_theme()
 	connect_btn.pressed.connect(_on_connect_pressed)
 	next_scenario_btn.pressed.connect(_on_next_scenario_pressed)
 	trial_btn.pressed.connect(_on_toggle_trial_mode)
@@ -470,6 +494,7 @@ func _update_telemetry(state: Dictionary) -> void:
 	]
 
 func _update_generals_telemetry(gen: Dictionary) -> void:
+	last_generals_snapshot = gen.duplicate(true)
 	cached_cmd_bonus = int(gen.get("total_command_power_bonus", 0))
 	var assigns: Dictionary = gen.get("assignments", {})
 	var posts_label := "NONE"
@@ -483,6 +508,9 @@ func _update_generals_telemetry(gen: Dictionary) -> void:
 	]
 
 func _update_stronghold_telemetry(sh: Dictionary) -> void:
+	last_stronghold_snapshot = sh.duplicate(true)
+	if citadel_canvas and citadel_canvas.has_method("update_citadel"):
+		citadel_canvas.update_citadel(last_stronghold_snapshot, last_generals_snapshot, cached_current_era)
 	var sh_name: String = str(sh.get("stronghold_name", "Covenant Citadel of Zion"))
 	var base_power: int = int(sh.get("dynasty_power", 1000))
 	var cmd_bonus: int = int(sh.get("commander_power_bonus", cached_cmd_bonus))

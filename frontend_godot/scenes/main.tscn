@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/omni_bridge_client.gd" id="1_bridge"]
+[ext_resource type="Script" path="res://scripts/sovereign_citadel_canvas.gd" id="2_citadel"]
 
 [node name="SovereignMain" type="Control"]
 layout_mode = 3
@@ -36,7 +37,7 @@ theme_override_constants/separation = 5
 
 [node name="TitleLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
 layout_mode = 2
-text = "HVF SOVEREIGN BIBLE GAME ENGINE ? MULTI-DEVICE GODOT 4 CLIENT (PHASE 25)"
+text = "HVF SOVEREIGN BIBLE GAME ENGINE ? MULTI-DEVICE GODOT 4 CLIENT (PHASE 27)"
 
 [node name="StatusLabel" type="Label" parent="MarginContainer/VBox/HeaderPanel/HeaderVBox"]
 layout_mode = 2
@@ -56,6 +57,11 @@ layout_mode = 2
 [node name="StrongholdVBox" type="VBoxContainer" parent="MarginContainer/VBox/StrongholdPanel"]
 layout_mode = 2
 theme_override_constants/separation = 7
+
+[node name="CitadelCanvas" type="Control" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox"]
+custom_minimum_size = Vector2(0, 132)
+layout_mode = 2
+script = ExtResource("2_citadel")
 
 [node name="StrongholdHeaderLabel" type="Label" parent="MarginContainer/VBox/StrongholdPanel/StrongholdVBox"]
 layout_mode = 2
