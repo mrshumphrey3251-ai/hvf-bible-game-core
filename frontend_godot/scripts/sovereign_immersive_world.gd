@@ -29,129 +29,159 @@ const ROBE_PALETTE := {
 
 const WORLD_STAGES := {
 	"ERA_TORAH": {
-		"title": "I. WILDERNESS OF SINAI & TABERNACLE",
-		"sky_top": Color(0.05, 0.04, 0.08),
-		"sky_bot": Color(0.18, 0.12, 0.07),
-		"ground": Color(0.26, 0.18, 0.10),
+		"title": "I. SINAI ENCAMPMENT, OASIS RIVER & WILDERNESS TABERNACLE",
+		"sky_top": Color(0.06, 0.05, 0.11),
+		"sky_bot": Color(0.22, 0.14, 0.08),
+		"ground": Color(0.29, 0.21, 0.12),
+		"grass": Color(0.22, 0.28, 0.14),
+		"river": Color(0.14, 0.46, 0.68),
+		"wall": Color(0.44, 0.36, 0.26),
 		"accent": Color(0.96, 0.78, 0.28),
+		"river_x": 0.58,
+		"village_name": "Kadesh Oasis Encampment",
 		"tabernacle_name": "Tabernacle & Trading Post",
 		"tabernacle_pos": Vector2(0.22, 0.48),
 		"npcs": [
-			{"name": "Moses", "x": 0.31, "y": 0.58, "color": Color(0.88, 0.68, 0.24), "headgear": "prophet", "scenario": "GEN_001", "greeting": "Gather Timber & Stone from Secret Chests to trade [T] for Talents, or press [E] for Covenant Trivia!"},
-			{"name": "Caleb", "x": 0.50, "y": 0.68, "color": Color(0.24, 0.68, 0.42), "headgear": "warrior", "scenario": "TOR_005", "greeting": "Watch the Anakite Giant's red shockwave ring?raise your Shield of Faith [Q] before he slams!"}
+			{"name": "Moses", "x": 0.31, "y": 0.58, "color": Color(0.88, 0.68, 0.24), "headgear": "prophet", "scenario": "GEN_001", "greeting": "Cross the stone bridge over the oasis stream to face the raiders, or press [E] for Covenant Trivia!"},
+			{"name": "Caleb", "x": 0.48, "y": 0.68, "color": Color(0.24, 0.68, 0.42), "headgear": "warrior", "scenario": "TOR_005", "greeting": "Watch your overhead health bar and raise Shield of Faith [Q] when the Giant charges!"}
 		],
 		"chests": [
-			{"id": "CHEST_TOR_1", "x": 0.14, "y": 0.76, "timber": 120, "stone": 100, "oil": 2, "manna": 30, "relic": "Bronze Altar Ember"},
-			{"id": "CHEST_TOR_2", "x": 0.86, "y": 0.46, "timber": 150, "stone": 120, "oil": 1, "manna": 40, "relic": "Ark Cedar Plank"}
+			{"id": "CHEST_TOR_1", "x": 0.12, "y": 0.78, "timber": 120, "stone": 100, "oil": 2, "manna": 30, "relic": "Bronze Altar Ember"},
+			{"id": "CHEST_TOR_2", "x": 0.87, "y": 0.46, "timber": 150, "stone": 120, "oil": 1, "manna": 40, "relic": "Ark Cedar Plank"}
 		],
 		"enemies": [
-			{"name": "Amalekite Raider", "archetype": "raider", "ability": "Swift Ambush", "x": 0.70, "y": 0.58, "hp": 95, "max_hp": 95, "atk": 13, "spd": 135.0, "armor": 0, "score": 35, "talents": 30},
-			{"name": "Anakite Giant", "archetype": "giant", "ability": "Earthshaker Slam", "x": 0.82, "y": 0.72, "hp": 155, "max_hp": 155, "atk": 22, "spd": 78.0, "armor": 6, "score": 55, "talents": 50}
+			{"name": "Amalekite Raider", "archetype": "raider", "ability": "Swift Ambush", "x": 0.72, "y": 0.56, "hp": 95, "max_hp": 95, "atk": 13, "spd": 135.0, "armor": 0, "score": 35, "talents": 30},
+			{"name": "Anakite Giant", "archetype": "giant", "ability": "Earthshaker Slam", "x": 0.83, "y": 0.72, "hp": 155, "max_hp": 155, "atk": 22, "spd": 78.0, "armor": 6, "score": 55, "talents": 50}
 		]
 	},
 	"ERA_HISTORY": {
-		"title": "II. JERUSALEM WALLS & JORDAN CROSSING",
-		"sky_top": Color(0.04, 0.07, 0.12),
-		"sky_bot": Color(0.12, 0.18, 0.22),
-		"ground": Color(0.17, 0.22, 0.16),
+		"title": "II. FORTIFIED WALLS OF JERUSALEM & JORDAN RIVER",
+		"sky_top": Color(0.04, 0.08, 0.14),
+		"sky_bot": Color(0.14, 0.22, 0.26),
+		"ground": Color(0.20, 0.25, 0.17),
+		"grass": Color(0.16, 0.30, 0.16),
+		"river": Color(0.12, 0.48, 0.72),
+		"wall": Color(0.50, 0.46, 0.38),
 		"accent": Color(0.45, 0.86, 0.58),
+		"river_x": 0.56,
+		"village_name": "Gilgal & Jerusalem Village",
 		"tabernacle_name": "Shiloh Sanctuary & Supply Post",
 		"tabernacle_pos": Vector2(0.21, 0.48),
 		"npcs": [
-			{"name": "Joshua", "x": 0.32, "y": 0.60, "color": Color(0.84, 0.36, 0.24), "headgear": "warrior", "scenario": "HIS_001", "greeting": "Armored Sentinels reduce frontal damage?collect relics or strike relentlessly [F] to shatter their guard!"},
-			{"name": "Nehemiah", "x": 0.52, "y": 0.52, "color": Color(0.28, 0.60, 0.88), "headgear": "builder", "scenario": "HIS_005", "greeting": "Trade excess Timber & Stone [T] to fund Jerusalem's restoration!"}
+			{"name": "Joshua", "x": 0.32, "y": 0.60, "color": Color(0.84, 0.36, 0.24), "headgear": "warrior", "scenario": "HIS_001", "greeting": "Cross the Jordan bridge and breach the garrison beyond the fortified walls!"},
+			{"name": "Nehemiah", "x": 0.48, "y": 0.52, "color": Color(0.28, 0.60, 0.88), "headgear": "builder", "scenario": "HIS_005", "greeting": "Trade Timber & Stone [T] from secret caches to strengthen our city walls!"}
 		],
 		"chests": [
-			{"id": "CHEST_HIS_1", "x": 0.15, "y": 0.77, "timber": 140, "stone": 160, "oil": 2, "manna": 35, "relic": "Gilgal Memorial Stone"},
-			{"id": "CHEST_HIS_2", "x": 0.86, "y": 0.77, "timber": 180, "stone": 200, "oil": 2, "manna": 45, "relic": "Nehemiah's Trowel"}
+			{"id": "CHEST_HIS_1", "x": 0.12, "y": 0.78, "timber": 140, "stone": 160, "oil": 2, "manna": 35, "relic": "Gilgal Memorial Stone"},
+			{"id": "CHEST_HIS_2", "x": 0.87, "y": 0.78, "timber": 180, "stone": 200, "oil": 2, "manna": 45, "relic": "Nehemiah's Trowel"}
 		],
 		"enemies": [
-			{"name": "Jericho Sentinel", "archetype": "sentinel", "ability": "Iron Bulwark", "x": 0.73, "y": 0.58, "hp": 140, "max_hp": 140, "atk": 17, "spd": 92.0, "armor": 10, "score": 45, "talents": 40},
-			{"name": "Sanballat Raider", "archetype": "raider", "ability": "Flanking Dash", "x": 0.81, "y": 0.72, "hp": 115, "max_hp": 115, "atk": 18, "spd": 142.0, "armor": 2, "score": 55, "talents": 50}
+			{"name": "Jericho Sentinel", "archetype": "sentinel", "ability": "Iron Bulwark", "x": 0.73, "y": 0.56, "hp": 140, "max_hp": 140, "atk": 17, "spd": 92.0, "armor": 10, "score": 45, "talents": 40},
+			{"name": "Sanballat Raider", "archetype": "raider", "ability": "Flanking Dash", "x": 0.82, "y": 0.72, "hp": 115, "max_hp": 115, "atk": 18, "spd": 142.0, "armor": 2, "score": 55, "talents": 50}
 		]
 	},
 	"ERA_WISDOM": {
-		"title": "III. MOUNT ZION & SOLOMON'S TEMPLE COURTS",
-		"sky_top": Color(0.08, 0.05, 0.14),
-		"sky_bot": Color(0.20, 0.12, 0.26),
-		"ground": Color(0.22, 0.16, 0.24),
+		"title": "III. CITY OF DAVID, KIDRON STREAM & TEMPLE WALLS",
+		"sky_top": Color(0.08, 0.05, 0.15),
+		"sky_bot": Color(0.22, 0.14, 0.28),
+		"ground": Color(0.24, 0.18, 0.25),
+		"grass": Color(0.20, 0.26, 0.18),
+		"river": Color(0.16, 0.44, 0.70),
+		"wall": Color(0.56, 0.50, 0.40),
 		"accent": Color(0.98, 0.84, 0.36),
+		"river_x": 0.57,
+		"village_name": "Mount Zion Royal Quarter",
 		"tabernacle_name": "Golden Temple Sanctuary",
 		"tabernacle_pos": Vector2(0.22, 0.47),
 		"npcs": [
-			{"name": "King David", "x": 0.33, "y": 0.60, "color": Color(0.92, 0.72, 0.22), "headgear": "crown", "scenario": "WIS_001", "greeting": "The Philistine Champion unleashes heavy cleave slams?block with [Q] and counter-strike [F]!"},
-			{"name": "Solomon", "x": 0.53, "y": 0.52, "color": Color(0.68, 0.42, 0.92), "headgear": "crown", "scenario": "WIS_004", "greeting": "Trade cedar timber and hewn stone [T] at the Temple treasury for Talents."}
+			{"name": "King David", "x": 0.33, "y": 0.60, "color": Color(0.92, 0.72, 0.22), "headgear": "crown", "scenario": "WIS_001", "greeting": "From the walls of Zion we defend the covenant! Cross the Kidron bridge to challenge the Philistine Champion."},
+			{"name": "Solomon", "x": 0.49, "y": 0.52, "color": Color(0.68, 0.42, 0.92), "headgear": "crown", "scenario": "WIS_004", "greeting": "Trade cedar timber and hewn stone [T] at the Temple treasury for Talents."}
 		],
 		"chests": [
-			{"id": "CHEST_WIS_1", "x": 0.14, "y": 0.76, "timber": 200, "stone": 180, "oil": 3, "manna": 40, "relic": "Davidic Harp String"},
-			{"id": "CHEST_WIS_2", "x": 0.85, "y": 0.47, "timber": 220, "stone": 220, "oil": 2, "manna": 50, "relic": "Seal of Wisdom"}
+			{"id": "CHEST_WIS_1", "x": 0.12, "y": 0.77, "timber": 200, "stone": 180, "oil": 3, "manna": 40, "relic": "Davidic Harp String"},
+			{"id": "CHEST_WIS_2", "x": 0.86, "y": 0.47, "timber": 220, "stone": 220, "oil": 2, "manna": 50, "relic": "Seal of Wisdom"}
 		],
 		"enemies": [
-			{"name": "Philistine Champion", "archetype": "giant", "ability": "Goliath Cleave", "x": 0.76, "y": 0.63, "hp": 185, "max_hp": 185, "atk": 24, "spd": 88.0, "armor": 12, "score": 65, "talents": 70}
+			{"name": "Philistine Champion", "archetype": "giant", "ability": "Goliath Cleave", "x": 0.77, "y": 0.63, "hp": 185, "max_hp": 185, "atk": 24, "spd": 88.0, "armor": 12, "score": 65, "talents": 70}
 		]
 	},
 	"ERA_PROPHETS": {
-		"title": "IV. PROPHETIC WATCHTOWER & SCROLL HALL",
+		"title": "IV. WATCHTOWER CITADEL, EUPHRATES CANAL & VILLAGE",
 		"sky_top": Color(0.10, 0.04, 0.06),
 		"sky_bot": Color(0.24, 0.10, 0.10),
-		"ground": Color(0.22, 0.13, 0.13),
+		"ground": Color(0.24, 0.15, 0.14),
+		"grass": Color(0.22, 0.24, 0.15),
+		"river": Color(0.14, 0.42, 0.64),
+		"wall": Color(0.48, 0.38, 0.32),
 		"accent": Color(0.98, 0.56, 0.32),
+		"river_x": 0.57,
+		"village_name": "Anathoth Watchman Village",
 		"tabernacle_name": "Altar of Burning Coals",
 		"tabernacle_pos": Vector2(0.21, 0.48),
 		"npcs": [
-			{"name": "Isaiah", "x": 0.32, "y": 0.58, "color": Color(0.90, 0.54, 0.24), "headgear": "prophet", "scenario": "PRO_001", "greeting": "No weapon formed against you shall prosper! Quench fiery bolts with Shield of Faith [Q]."},
-			{"name": "Jeremiah", "x": 0.52, "y": 0.66, "color": Color(0.45, 0.70, 0.84), "headgear": "prophet", "scenario": "PRO_004", "greeting": "Test your knowledge of the Prophets [E] to earn covenant rewards!"}
+			{"name": "Isaiah", "x": 0.32, "y": 0.58, "color": Color(0.90, 0.54, 0.24), "headgear": "prophet", "scenario": "PRO_001", "greeting": "Watchmen stand upon the walls! Cross the canal bridge to repel the Siege Warden."},
+			{"name": "Jeremiah", "x": 0.48, "y": 0.66, "color": Color(0.45, 0.70, 0.84), "headgear": "prophet", "scenario": "PRO_004", "greeting": "Test your knowledge of the Prophets [E] to earn covenant rewards!"}
 		],
 		"chests": [
-			{"id": "CHEST_PRO_1", "x": 0.15, "y": 0.77, "timber": 160, "stone": 190, "oil": 3, "manna": 45, "relic": "Prophetic Scroll Cylinder"}
+			{"id": "CHEST_PRO_1", "x": 0.12, "y": 0.78, "timber": 160, "stone": 190, "oil": 3, "manna": 45, "relic": "Prophetic Scroll Cylinder"}
 		],
 		"enemies": [
-			{"name": "Babylonian Siege Warden", "archetype": "sentinel", "ability": "Siege Fire Volley", "x": 0.76, "y": 0.62, "hp": 190, "max_hp": 190, "atk": 23, "spd": 96.0, "armor": 14, "score": 70, "talents": 75}
+			{"name": "Babylonian Siege Warden", "archetype": "sentinel", "ability": "Siege Fire Volley", "x": 0.77, "y": 0.62, "hp": 190, "max_hp": 190, "atk": 23, "spd": 96.0, "armor": 14, "score": 70, "talents": 75}
 		]
 	},
 	"ERA_GOSPELS": {
-		"title": "V. SEA OF GALILEE & MOUNT OF OLIVES",
-		"sky_top": Color(0.04, 0.09, 0.15),
-		"sky_bot": Color(0.08, 0.22, 0.28),
-		"ground": Color(0.12, 0.24, 0.20),
+		"title": "V. CAPERNAUM FISHING VILLAGE, SEA OF GALILEE & STONE HARBOR",
+		"sky_top": Color(0.04, 0.09, 0.16),
+		"sky_bot": Color(0.09, 0.24, 0.30),
+		"ground": Color(0.15, 0.27, 0.20),
+		"grass": Color(0.14, 0.32, 0.18),
+		"river": Color(0.10, 0.52, 0.76),
+		"wall": Color(0.46, 0.44, 0.40),
 		"accent": Color(0.42, 0.90, 0.96),
+		"river_x": 0.57,
+		"village_name": "Capernaum Harbor Village",
 		"tabernacle_name": "House of Prayer Sanctuary",
 		"tabernacle_pos": Vector2(0.21, 0.48),
 		"npcs": [
-			{"name": "Peter", "x": 0.33, "y": 0.60, "color": Color(0.28, 0.74, 0.92), "headgear": "pilgrim", "scenario": "GOS_001", "greeting": "Tempest Spirits cast shadow bolts from afar?advance with your Shield [Q] raised!"},
-			{"name": "Good Samaritan", "x": 0.53, "y": 0.54, "color": Color(0.36, 0.84, 0.54), "headgear": "pilgrim", "scenario": "GOS_004", "greeting": "Visit the Sanctuary whenever your Spirit runs low."}
+			{"name": "Peter", "x": 0.33, "y": 0.60, "color": Color(0.28, 0.74, 0.92), "headgear": "pilgrim", "scenario": "GOS_001", "greeting": "Welcome to Capernaum! Cross the harbor bridge and calm the Tempest Spirit with Shield [Q] and Sword [F]."},
+			{"name": "Good Samaritan", "x": 0.49, "y": 0.54, "color": Color(0.36, 0.84, 0.54), "headgear": "pilgrim", "scenario": "GOS_004", "greeting": "Visit the Sanctuary whenever your health bar drops low."}
 		],
 		"chests": [
-			{"id": "CHEST_GOS_1", "x": 0.14, "y": 0.76, "timber": 190, "stone": 150, "oil": 3, "manna": 60, "relic": "Five Loaves Basket"}
+			{"id": "CHEST_GOS_1", "x": 0.12, "y": 0.77, "timber": 190, "stone": 150, "oil": 3, "manna": 60, "relic": "Five Loaves Basket"}
 		],
 		"enemies": [
-			{"name": "Tempest Shadow Spirit", "archetype": "spirit", "ability": "Shadow Bolt & Drain", "x": 0.76, "y": 0.63, "hp": 195, "max_hp": 195, "atk": 25, "spd": 124.0, "armor": 8, "score": 80, "talents": 85}
+			{"name": "Tempest Shadow Spirit", "archetype": "spirit", "ability": "Shadow Bolt & Drain", "x": 0.77, "y": 0.63, "hp": 195, "max_hp": 195, "atk": 25, "spd": 124.0, "armor": 8, "score": 80, "talents": 85}
 		]
 	},
 	"ERA_EPISTLES": {
-		"title": "VI. APOSTOLIC UPPER ROOM & ROMAN ROAD",
+		"title": "VI. ANTIOCH WALLED CITY, RIVER ORONTES & UPPER ROOM",
 		"sky_top": Color(0.07, 0.06, 0.14),
 		"sky_bot": Color(0.16, 0.12, 0.26),
-		"ground": Color(0.18, 0.17, 0.25),
+		"ground": Color(0.20, 0.19, 0.26),
+		"grass": Color(0.18, 0.26, 0.20),
+		"river": Color(0.14, 0.46, 0.72),
+		"wall": Color(0.52, 0.48, 0.44),
 		"accent": Color(0.98, 0.84, 0.42),
+		"river_x": 0.57,
+		"village_name": "Antioch Covenant Quarter",
 		"tabernacle_name": "Upper Room Flame Sanctuary",
 		"tabernacle_pos": Vector2(0.22, 0.48),
 		"npcs": [
-			{"name": "Apostle Paul", "x": 0.33, "y": 0.58, "color": Color(0.92, 0.74, 0.28), "headgear": "prophet", "scenario": "EPI_001", "greeting": "Take up the whole Armor of God! Principalities Vanguard uses both Shockwave and Shadow Bolts!"},
-			{"name": "Barnabas", "x": 0.54, "y": 0.66, "color": Color(0.50, 0.82, 0.46), "headgear": "pilgrim", "scenario": "EPI_004", "greeting": "Press [T] to trade chest supplies for Talents."}
+			{"name": "Apostle Paul", "x": 0.33, "y": 0.58, "color": Color(0.92, 0.74, 0.28), "headgear": "prophet", "scenario": "EPI_001", "greeting": "Cross the Orontes stone bridge in the full Armor of God to defeat Principalities Vanguard!"},
+			{"name": "Barnabas", "x": 0.49, "y": 0.66, "color": Color(0.50, 0.82, 0.46), "headgear": "pilgrim", "scenario": "EPI_004", "greeting": "Press [T] to trade chest supplies for Talents."}
 		],
 		"chests": [
-			{"id": "CHEST_EPI_1", "x": 0.85, "y": 0.76, "timber": 250, "stone": 250, "oil": 4, "manna": 75, "relic": "Full Armor of God Seal"}
+			{"id": "CHEST_EPI_1", "x": 0.86, "y": 0.77, "timber": 250, "stone": 250, "oil": 4, "manna": 75, "relic": "Full Armor of God Seal"}
 		],
 		"enemies": [
-			{"name": "Principalities Vanguard", "archetype": "spirit", "ability": "Fiery Dart & Nova", "x": 0.76, "y": 0.62, "hp": 230, "max_hp": 230, "atk": 28, "spd": 128.0, "armor": 14, "score": 110, "talents": 120}
+			{"name": "Principalities Vanguard", "archetype": "spirit", "ability": "Fiery Dart & Nova", "x": 0.77, "y": 0.62, "hp": 230, "max_hp": 230, "atk": 28, "spd": 128.0, "armor": 14, "score": 110, "talents": 120}
 		]
 	}
 }
 
 var current_stage: String = "ERA_TORAH"
-var player_pos: Vector2 = Vector2(360.0, 340.0)
-var target_pos: Vector2 = Vector2(360.0, 340.0)
+var player_pos: Vector2 = Vector2(340.0, 340.0)
+var target_pos: Vector2 = Vector2(340.0, 340.0)
 var has_click_target: bool = false
 var is_walking: bool = false
 var facing_dir: float = 1.0
@@ -182,7 +212,7 @@ var nearby_chest: Dictionary = {}
 var nearby_enemy_idx: int = -1
 var in_tabernacle: bool = false
 
-var banner_text: String = "Enemies actively pursue & use special abilities! Watch telegraphs, raise Shield [Q], and strike [F]!"
+var banner_text: String = "Explore the Village, cross the River Bridge, loot Secret Chests [E], and battle Sentinels [F]!"
 var banner_timer: float = 8.5
 var remote_pilgrims: Array = []
 var local_pilgrim_name: String = "Pilgrim"
@@ -323,16 +353,16 @@ func _apply_damage_to_player(raw_dmg: int, attacker_label: String, tab_pos: Vect
 	spirit_hp = maxi(0, spirit_hp - final_dmg)
 	player_hit_flash = 0.25
 	if shield_active:
-		_announce("SHIELD OF FAITH DEFLECTED %s! (-%d Spirit)" % [attacker_label, final_dmg], 2.5)
+		_announce("SHIELD OF FAITH DEFLECTED %s! (-%d HP)" % [attacker_label, final_dmg], 2.5)
 	else:
-		_announce("%s hit you for -%d Spirit! Raise Shield [Q], eat Manna [R], or retreat to Tabernacle!" % [attacker_label, final_dmg], 3.2)
+		_announce("%s hit you for -%d HP! Raise Shield [Q], eat Manna [R], or retreat across the bridge to Tabernacle!" % [attacker_label, final_dmg], 3.2)
 	if spirit_hp <= 0:
 		spirit_hp = 55
 		player_pos = tab_pos + Vector2(0, 42)
 		target_pos = player_pos
 		has_click_target = false
 		enemy_projectiles.clear()
-		_announce("RETREATED TO TABERNACLE SANCTUARY ? Spirit Restored to 55/100!", 5.0)
+		_announce("RETREATED TO TABERNACLE SANCTUARY ? Health Restored to 55/100!", 5.0)
 
 func _update_enemies_ai(delta: float, tab_pos: Vector2) -> void:
 	var w: float = maxf(size.x, 800.0)
@@ -357,7 +387,6 @@ func _update_enemies_ai(delta: float, tab_pos: Vector2) -> void:
 		var dist_to_tab: float = player_pos.distance_to(tab_pos)
 		var aggro_range: float = 340.0 if arch == "spirit" else 295.0
 
-		# Safe Sanctuary Zone: enemies stop pursuing if player enters the sacred Tabernacle circle
 		if dist_to_tab <= 78.0:
 			var to_home: Vector2 = home - epos
 			if to_home.length() > 6.0:
@@ -368,33 +397,27 @@ func _update_enemies_ai(delta: float, tab_pos: Vector2) -> void:
 			stage_enemies[i] = ed
 			continue
 
-		# Active Pursuit & Special Ability Execution
 		if dist_to_player <= aggro_range:
 			var to_p: Vector2 = player_pos - epos
 			if absf(to_p.x) > 2.0:
 				ed["dir_x"] = 1.0 if to_p.x > 0.0 else -1.0
 
-			# Telegraph wind-up countdown for special abilities
 			var tele_t: float = float(ed.get("telegraph_timer", 0.0))
 			if tele_t > 0.0:
 				tele_t -= delta
 				ed["telegraph_timer"] = tele_t
 				if tele_t <= 0.0:
-					# Execute telegraphed Special Ability!
 					ed["swing_timer"] = 0.35
 					if arch == "giant":
-						# Earthshaker AoE Slam within 118px
 						if epos.distance_to(player_pos) <= 118.0:
 							_apply_damage_to_player(int(raw_atk * 1.45), "%s [%s]" % [e_name, abil_name], tab_pos)
 						else:
 							_announce("EVADED %s's %s shockwave!" % [e_name, abil_name], 2.5)
 					elif arch == "raider":
-						# Swift Ambush Dash toward player
 						epos = _clamp_walk_pos(epos + to_p.normalized() * 88.0)
 						if epos.distance_to(player_pos) <= 78.0:
 							_apply_damage_to_player(int(raw_atk * 1.25), "%s [%s]" % [e_name, abil_name], tab_pos)
 					elif arch == "spirit":
-						# Fire Ranged Shadow Bolt Projectile
 						enemy_projectiles.append({
 							"pos": epos,
 							"vel": to_p.normalized() * 265.0,
@@ -403,16 +426,13 @@ func _update_enemies_ai(delta: float, tab_pos: Vector2) -> void:
 							"life": 2.4
 						})
 					else:
-						# Sentinel Iron Bulwark Counter-Slam
 						if epos.distance_to(player_pos) <= 88.0:
 							_apply_damage_to_player(int(raw_atk * 1.30), "%s [%s]" % [e_name, abil_name], tab_pos)
 			else:
-				# Move toward melee range (48px) or ranged standoff (160px for spirit)
 				var desired_range: float = 155.0 if arch == "spirit" else 48.0
 				if dist_to_player > desired_range:
 					epos = _clamp_walk_pos(epos + to_p.normalized() * spd * delta)
 
-				# Standard Melee Attack Timer
 				var atk_t: float = float(ed.get("atk_timer", 1.2)) - delta
 				if atk_t <= 0.0 and dist_to_player <= 68.0:
 					atk_t = 1.45
@@ -420,7 +440,6 @@ func _update_enemies_ai(delta: float, tab_pos: Vector2) -> void:
 					_apply_damage_to_player(raw_atk, e_name, tab_pos)
 				ed["atk_timer"] = atk_t
 
-				# Special Ability Cooldown Trigger (starts visible telegraph!)
 				var ab_t: float = float(ed.get("ability_timer", 3.0)) - delta
 				if ab_t <= 0.0:
 					ab_t = 4.2
@@ -428,7 +447,6 @@ func _update_enemies_ai(delta: float, tab_pos: Vector2) -> void:
 					_announce("WARNING: %s is charging %s! Raise Shield [Q] or dodge!" % [e_name, abil_name], 2.2)
 				ed["ability_timer"] = ab_t
 		else:
-			# Return gently to patrol post when player is out of aggro range
 			var back: Vector2 = home - epos
 			if back.length() > 6.0:
 				epos += back.normalized() * spd * 0.5 * delta
@@ -436,7 +454,6 @@ func _update_enemies_ai(delta: float, tab_pos: Vector2) -> void:
 		ed["pos"] = Vector2(clampf(epos.x, 40.0, w - 40.0), clampf(epos.y, h * 0.35, h - 78.0))
 		stage_enemies[i] = ed
 
-	# Update Ranged Shadow Bolt Projectiles
 	var alive_proj: Array = []
 	for p_obj in enemy_projectiles:
 		var pr: Dictionary = p_obj
@@ -527,7 +544,7 @@ func _norm_to_screen(nx: float, ny: float) -> Vector2:
 func _clamp_walk_pos(p: Vector2) -> Vector2:
 	var w: float = maxf(size.x, 800.0)
 	var h: float = maxf(size.y, 540.0)
-	return Vector2(clampf(p.x, 34.0, w - 34.0), clampf(p.y, h * 0.35, h - 78.0))
+	return Vector2(clampf(p.x, 34.0, w - 34.0), clampf(p.y, h * 0.36, h - 78.0))
 
 func _find_npc_near(origin: Vector2, radius: float) -> Dictionary:
 	var st: Dictionary = WORLD_STAGES.get(current_stage, WORLD_STAGES["ERA_TORAH"])
@@ -595,15 +612,15 @@ func _use_tabernacle_sanctuary() -> void:
 		anointing_oil -= 1
 		shield_active = true
 		shield_timer = 12.0
-		_announce("%s: Spirit 100/100 & Sacred Oil Anointing Active (12s Shield)!" % t_name, 5.5)
+		_announce("%s: Health 100/100 & Sacred Oil Anointing Active (12s Shield)!" % t_name, 5.5)
 	else:
-		_announce("%s: Spirit Fully Restored to 100/100 (Safe Sanctuary Zone)!" % t_name, 4.5)
+		_announce("%s: Health Fully Restored to 100/100 (Safe Sanctuary Zone)!" % t_name, 4.5)
 
 func _consume_manna_ration() -> void:
 	if manna_rations >= 15 and spirit_hp < max_spirit_hp:
 		manna_rations -= 15
 		spirit_hp = mini(max_spirit_hp, spirit_hp + 35)
-		_announce("Ate Manna Rations (-15 Manna) -> Spirit Restored to %d/%d!" % [spirit_hp, max_spirit_hp], 3.5)
+		_announce("Ate Manna Rations (-15 Manna) -> Health Restored to %d/%d!" % [spirit_hp, max_spirit_hp], 3.5)
 	else:
 		_announce("Visit the Tabernacle or open Secret Chests for more Manna Rations!", 3.0)
 
@@ -625,7 +642,6 @@ func _perform_sword_strike() -> void:
 		var dmg: int = maxi(14, base_dmg - enemy_armor)
 		var new_hp: int = maxi(0, int(ed.get("hp", 100)) - dmg)
 		ed["hp"] = new_hp
-		# Knockback enemy slightly on hit
 		var epos: Vector2 = ed.get("pos", _norm_to_screen(float(ed["x"]), float(ed["y"])))
 		var push: Vector2 = (epos - player_pos).normalized() * 18.0
 		ed["pos"] = _clamp_walk_pos(epos + push)
@@ -666,6 +682,108 @@ func _check_portals() -> void:
 		var prev_era: String = ERA_ORDER[(idx - 1 + ERA_ORDER.size()) % ERA_ORDER.size()]
 		set_stage(prev_era)
 		emit_signal("stage_portal_entered", prev_era)
+
+func _draw_world_environment(w: float, h: float, horizon: float, st: Dictionary) -> void:
+	var grass_col: Color = st.get("grass", Color(0.18, 0.28, 0.14))
+	var river_col: Color = st.get("river", Color(0.12, 0.48, 0.72))
+	var wall_col: Color = st.get("wall", Color(0.48, 0.44, 0.36))
+	var accent_col: Color = st.get("accent", Color.GOLD)
+
+	# Fertile meadow patches on left & right banks
+	draw_rect(Rect2(0.0, horizon, w * 0.52, h - horizon), Color(grass_col.r, grass_col.g, grass_col.b, 0.45))
+
+	# Fortified Stone City Wall along the northern perimeter with Battlements & Watchtowers
+	var wall_y: float = horizon - 14.0
+	draw_rect(Rect2(60.0, wall_y, w - 120.0, 22.0), wall_col)
+	draw_line(Vector2(60.0, wall_y + 11.0), Vector2(w - 60.0, wall_y + 11.0), wall_col.darkened(0.28), 1.5)
+	var crenel_x: float = 64.0
+	while crenel_x < w - 72.0:
+		draw_rect(Rect2(crenel_x, wall_y - 7.0, 12.0, 7.0), wall_col.lightened(0.08))
+		crenel_x += 24.0
+
+	# Left & Right Stone Watchtowers
+	for tx in [76.0, w - 108.0]:
+		draw_rect(Rect2(tx, wall_y - 34.0, 32.0, 56.0), wall_col.lightened(0.05))
+		draw_rect(Rect2(tx - 4.0, wall_y - 40.0, 40.0, 7.0), accent_col)
+		draw_circle(Vector2(tx + 16.0, wall_y - 46.0), 5.0 + 1.5 * sin(anim_time * 9.0), Color(1.0, 0.62, 0.16))
+
+	# Winding River Flowing From Horizon to Bottom
+	var rx_norm: float = float(st.get("river_x", 0.57))
+	var river_top_x: float = w * rx_norm
+	var river_bot_x: float = w * (rx_norm + 0.04)
+	var river_w: float = 58.0
+	var river_poly: PackedVector2Array = PackedVector2Array([
+		Vector2(river_top_x - river_w * 0.42, horizon),
+		Vector2(river_top_x + river_w * 0.42, horizon),
+		Vector2(river_bot_x + river_w * 0.65, h),
+		Vector2(river_bot_x - river_w * 0.65, h)
+	])
+	draw_colored_polygon(river_poly, river_col)
+	# Riverbanks & Animated Water Ripples
+	draw_line(Vector2(river_top_x - river_w * 0.42, horizon), Vector2(river_bot_x - river_w * 0.65, h), Color(0.76, 0.68, 0.48), 3.0)
+	draw_line(Vector2(river_top_x + river_w * 0.42, horizon), Vector2(river_bot_x + river_w * 0.65, h), Color(0.76, 0.68, 0.48), 3.0)
+	for rip_i in range(6):
+		var t_rip: float = fmod((float(rip_i) / 6.0) + anim_time * 0.18, 1.0)
+		var ry: float = lerpf(horizon + 12.0, h - 82.0, t_rip)
+		var rx_c: float = lerpf(river_top_x, river_bot_x, t_rip)
+		draw_line(Vector2(rx_c - 16.0, ry), Vector2(rx_c + 16.0, ry), Color(0.75, 0.94, 1.0, 0.55), 2.0)
+
+	# Arched Cobblestone Bridge Crossing the River
+	var bridge_y: float = h * 0.60
+	var bridge_x: float = lerpf(river_top_x, river_bot_x, 0.42)
+	draw_rect(Rect2(bridge_x - 48.0, bridge_y - 18.0, 96.0, 36.0), Color(0.58, 0.52, 0.42))
+	draw_rect(Rect2(bridge_x - 48.0, bridge_y - 22.0, 96.0, 5.0), wall_col.lightened(0.15))
+	draw_rect(Rect2(bridge_x - 48.0, bridge_y + 17.0, 96.0, 5.0), wall_col.lightened(0.15))
+
+	# Cobblestone Village Road Leading From Village -> Tabernacle -> Stone Bridge
+	draw_line(Vector2(w * 0.14, h * 0.56), Vector2(bridge_x - 48.0, bridge_y), Color(0.54, 0.46, 0.34, 0.65), 16.0)
+	draw_line(Vector2(bridge_x + 48.0, bridge_y), Vector2(w * 0.84, h * 0.62), Color(0.54, 0.46, 0.34, 0.55), 14.0)
+
+	# Biblical Village Houses & Market Stalls (Left Settlement Quarter)
+	var houses: Array = [
+		Vector2(w * 0.10, h * 0.45),
+		Vector2(w * 0.38, h * 0.43),
+		Vector2(w * 0.12, h * 0.64),
+		Vector2(w * 0.40, h * 0.75)
+	]
+	for h_pos in houses:
+		var hp: Vector2 = h_pos
+		# Mud-brick / limestone dwelling
+		draw_rect(Rect2(hp.x - 28.0, hp.y - 22.0, 56.0, 34.0), Color(0.76, 0.68, 0.54))
+		draw_rect(Rect2(hp.x - 31.0, hp.y - 26.0, 62.0, 6.0), Color(0.60, 0.50, 0.38))
+		# Arched doorway & window
+		draw_rect(Rect2(hp.x - 6.0, hp.y - 4.0, 12.0, 16.0), Color(0.22, 0.15, 0.10))
+		draw_rect(Rect2(hp.x + 11.0, hp.y - 12.0, 9.0, 8.0), Color(0.95, 0.78, 0.32, 0.75))
+
+	# Palm & Olive Trees Across Both Banks
+	var trees: Array = [
+		Vector2(w * 0.06, h * 0.52),
+		Vector2(w * 0.33, h * 0.41),
+		Vector2(w * 0.46, h * 0.44),
+		Vector2(w * 0.68, h * 0.43),
+		Vector2(w * 0.91, h * 0.58)
+	]
+	for t_pos in trees:
+		var tp: Vector2 = t_pos
+		draw_line(tp + Vector2(0.0, 14.0), tp + Vector2(0.0, -14.0), Color(0.42, 0.28, 0.15), 4.5)
+		draw_circle(tp + Vector2(0.0, -18.0), 15.0, Color(0.18, 0.42, 0.20))
+		draw_circle(tp + Vector2(-9.0, -14.0), 11.0, Color(0.22, 0.48, 0.24))
+		draw_circle(tp + Vector2(9.0, -14.0), 11.0, Color(0.22, 0.48, 0.24))
+
+func _draw_overhead_health_bar(center_top: Vector2, cur_hp: int, max_hp: int, bar_w: float, is_player: bool) -> void:
+	var pct: float = clampf(float(cur_hp) / float(maxi(1, max_hp)), 0.0, 1.0)
+	var bg_rect: Rect2 = Rect2(center_top.x - bar_w * 0.5, center_top.y, bar_w, 7.0)
+	draw_rect(bg_rect, Color(0.08, 0.06, 0.08, 0.90))
+	var fill_col: Color = Color(0.92, 0.24, 0.22)
+	if is_player:
+		if pct > 0.55:
+			fill_col = Color(0.24, 0.86, 0.46)
+		elif pct > 0.28:
+			fill_col = Color(0.96, 0.76, 0.22)
+	draw_rect(Rect2(bg_rect.position.x + 1.0, bg_rect.position.y + 1.0, (bar_w - 2.0) * pct, 5.0), fill_col)
+	var font: Font = ThemeDB.fallback_font
+	if font != null:
+		draw_string(font, Vector2(center_top.x - 36.0, center_top.y - 2.0), "%d/%d" % [cur_hp, max_hp], HORIZONTAL_ALIGNMENT_CENTER, 72, 9, Color.WHITE)
 
 func _draw_humanoid_figure(base_pos: Vector2, tunic_col: Color, skin_col: Color, headgear: String, dir_x: float, stride_phase: float, has_sword: bool, swing_t: float, has_shield: bool, is_enemy: bool, scale_f: float = 1.0) -> void:
 	draw_circle(base_pos + Vector2(0.0, 22.0 * scale_f), 15.0 * scale_f, Color(0.0, 0.0, 0.0, 0.48))
@@ -737,9 +855,8 @@ func _draw() -> void:
 	draw_rect(Rect2(0.0, 0.0, w, horizon * 0.55), sky_top)
 	draw_rect(Rect2(0.0, horizon * 0.55, w, horizon * 0.45), sky_bot)
 	draw_rect(Rect2(0.0, horizon, w, h - horizon), ground_col)
-	draw_line(Vector2(0.0, horizon), Vector2(w, horizon), accent_col, 2.5)
 
-	var sun_pos: Vector2 = Vector2(w * 0.78, horizon * 0.45)
+	var sun_pos: Vector2 = Vector2(w * 0.82, horizon * 0.42)
 	draw_circle(sun_pos, 46.0, Color(accent_col.r, accent_col.g, accent_col.b, 0.14))
 	draw_circle(sun_pos, 22.0, Color(accent_col.r, accent_col.g, accent_col.b, 0.32))
 
@@ -752,11 +869,8 @@ func _draw() -> void:
 		])
 		draw_colored_polygon(ridge, Color(sky_bot.r * 0.85, sky_bot.g * 0.85, sky_bot.b * 0.85))
 
-	var step_x: float = 96.0
-	var gx: float = step_x
-	while gx < w:
-		draw_line(Vector2(gx, horizon), Vector2(gx, h), Color(1.0, 1.0, 1.0, 0.04), 1.0)
-		gx += step_x
+	# Draw Villages, Fortified City Walls, Watchtowers, Winding River & Stone Bridge!
+	_draw_world_environment(w, h, horizon, st)
 
 	for p_item in particles:
 		var pt: Dictionary = p_item
@@ -800,7 +914,7 @@ func _draw() -> void:
 			var c_lbl: String = "OPENED" if is_open else "SECRET CHEST [E]"
 			draw_string(font, cpos + Vector2(-60.0, -16.0), c_lbl, HORIZONTAL_ALIGNMENT_CENTER, 120, 10, Color(1.0, 0.92, 0.48) if not is_open else Color(0.65, 0.65, 0.68))
 
-	# 3. ACTIVE ENEMIES WITH ARCHETYPE SCALES, SPECIAL TELEGRAPHS & PROJECTILES
+	# 3. ACTIVE ENEMIES WITH OVERHEAD HEALTH BARS
 	for e_item in stage_enemies:
 		var ed: Dictionary = e_item
 		var ehp: int = int(ed.get("hp", 0))
@@ -826,7 +940,6 @@ func _draw() -> void:
 				e_col = Color(0.32, 0.10, 0.46)
 				e_scale = 1.08
 
-			# Special Ability Telegraph Ring!
 			if tele_t > 0.0:
 				var warn_r: float = 118.0 if arch == "giant" else 64.0
 				draw_circle(epos, warn_r, Color(1.0, 0.22, 0.14, 0.22))
@@ -834,22 +947,18 @@ func _draw() -> void:
 
 			_draw_humanoid_figure(epos, e_col, Color(0.62, 0.48, 0.42), "enemy", e_dir, anim_time * 6.0, true, e_sw, e_shield, true, e_scale)
 
-			var bar_w: float = 64.0
-			var pct: float = float(ehp) / float(emax)
-			var y_off: float = 38.0 * e_scale
-			draw_rect(Rect2(epos.x - bar_w * 0.5, epos.y - y_off, bar_w, 6.0), Color(0.15, 0.05, 0.05))
-			draw_rect(Rect2(epos.x - bar_w * 0.5, epos.y - y_off, bar_w * pct, 6.0), Color(0.95, 0.28, 0.24))
+			var y_off: float = 40.0 * e_scale
+			_draw_overhead_health_bar(epos + Vector2(0.0, -y_off), ehp, emax, 66.0, false)
 			if font != null:
-				draw_string(font, epos + Vector2(-80.0, -y_off - 6.0), "%s (%s)" % [str(ed.get("name", "Sentinel")), str(ed.get("ability", ""))], HORIZONTAL_ALIGNMENT_CENTER, 160, 10, Color(1.0, 0.78, 0.72))
+				draw_string(font, epos + Vector2(-80.0, -y_off - 14.0), "%s (%s)" % [str(ed.get("name", "Sentinel")), str(ed.get("ability", ""))], HORIZONTAL_ALIGNMENT_CENTER, 160, 10, Color(1.0, 0.78, 0.72))
 
-	# Draw Enemy Ranged Shadow Bolts
 	for p_obj in enemy_projectiles:
 		var pr: Dictionary = p_obj
 		var p_pos: Vector2 = pr["pos"]
 		draw_circle(p_pos, 9.0, Color(0.85, 0.22, 0.95, 0.45))
 		draw_circle(p_pos, 5.0, Color(1.0, 0.45, 0.30))
 
-	# 4. BIBLICAL NPCs
+	# 4. BIBLICAL NPCs WITH FRIENDLY COVENANT HEALTH BARS
 	var npcs: Array = st.get("npcs", [])
 	for n_item in npcs:
 		var npc: Dictionary = n_item
@@ -857,10 +966,11 @@ func _draw() -> void:
 		var ncol: Color = npc.get("color", Color.GOLD)
 		var hgear: String = str(npc.get("headgear", "prophet"))
 		_draw_humanoid_figure(npos, ncol, Color(0.86, 0.70, 0.54), hgear, 1.0, 0.0, false, 0.0, false, false, 1.0)
+		_draw_overhead_health_bar(npos + Vector2(0.0, -36.0), 100, 100, 52.0, true)
 		if font != null:
-			draw_string(font, npos + Vector2(-52.0, -34.0), "%s [E]" % str(npc.get("name", "")), HORIZONTAL_ALIGNMENT_CENTER, 104, 12, Color(1.0, 0.96, 0.84))
+			draw_string(font, npos + Vector2(-52.0, -49.0), "%s [E]" % str(npc.get("name", "")), HORIZONTAL_ALIGNMENT_CENTER, 104, 12, Color(1.0, 0.96, 0.84))
 
-	# 5. REMOTE MULTIPLAYER PILGRIMS
+	# 5. REMOTE MULTIPLAYER PILGRIMS WITH OVERHEAD HEALTH BARS
 	for rp_item in remote_pilgrims:
 		var rp: Dictionary = rp_item
 		if str(rp.get("stage", "")) == current_stage:
@@ -868,14 +978,16 @@ func _draw() -> void:
 			var r_robe_key: String = str(rp.get("robe", "Galilee Cyan"))
 			var r_col: Color = ROBE_PALETTE.get(r_robe_key, Color(0.35, 0.85, 1.0))
 			_draw_humanoid_figure(rpos, r_col, Color(0.88, 0.72, 0.56), "pilgrim", 1.0, anim_time * 4.0, false, 0.0, false, false, 1.0)
+			_draw_overhead_health_bar(rpos + Vector2(0.0, -36.0), 100, 100, 56.0, true)
 			if font != null:
-				draw_string(font, rpos + Vector2(-54.0, -34.0), str(rp.get("name", "Pilgrim")), HORIZONTAL_ALIGNMENT_CENTER, 108, 12, Color(0.78, 0.96, 1.0))
+				draw_string(font, rpos + Vector2(-54.0, -49.0), str(rp.get("name", "Pilgrim")), HORIZONTAL_ALIGNMENT_CENTER, 108, 12, Color(0.78, 0.96, 1.0))
 
-	# 6. LOCAL PLAYER AVATAR
+	# 6. LOCAL PLAYER AVATAR WITH OVERHEAD HEALTH BAR & SHIELD INDICATOR
 	var stride: float = anim_time * 12.0 if is_walking else 0.0
 	var my_robe: Color = Color(1.0, 0.30, 0.30) if player_hit_flash > 0.0 else ROBE_PALETTE.get(local_robe_name, Color(0.18, 0.48, 0.92))
 	var in_combat: bool = (nearby_enemy_idx != -1 or attack_swing_timer > 0.0)
 	_draw_humanoid_figure(player_pos, my_robe, Color(0.90, 0.74, 0.58), "pilgrim", facing_dir, stride, in_combat, attack_swing_timer, shield_active, false, 1.0)
+	_draw_overhead_health_bar(player_pos + Vector2(0.0, -36.0), spirit_hp, max_spirit_hp, 64.0, true)
 
 	# 7. LEFT & RIGHT STAGE PORTALS
 	var left_p: Vector2 = Vector2(44.0, h * 0.56)
@@ -888,10 +1000,10 @@ func _draw() -> void:
 	# 8. DIEGETIC TOP HUD
 	if font != null:
 		draw_rect(Rect2(12.0, 10.0, w - 24.0, 52.0), Color(0.05, 0.05, 0.08, 0.86))
-		draw_string(font, Vector2(22.0, 30.0), "%s   |   TALENTS: %d   |   SPIRIT: %d/%d   |   MANNA: %d [R]   |   OIL: %d   |   TIMBER: %d   |   STONE: %d" % [str(st["title"]), earned_talents, spirit_hp, max_spirit_hp, manna_rations, anointing_oil, timber_stock, stone_stock], HORIZONTAL_ALIGNMENT_LEFT, int(w - 44.0), 13, accent_col)
-		draw_string(font, Vector2(22.0, 50.0), "Combat: [F / Right-Click] Sword Strike  |  [Q] Shield of Faith (Blocks Abilities)  |  [R] Eat Manna  |  [T] Trade Supplies  |  [E] Chest / NPC", HORIZONTAL_ALIGNMENT_LEFT, int(w - 44.0), 11, Color(0.88, 0.90, 0.95))
+		draw_string(font, Vector2(22.0, 30.0), "%s   |   TALENTS: %d   |   HEALTH: %d/%d   |   MANNA: %d [R]   |   OIL: %d   |   TIMBER: %d   |   STONE: %d" % [str(st["title"]), earned_talents, spirit_hp, max_spirit_hp, manna_rations, anointing_oil, timber_stock, stone_stock], HORIZONTAL_ALIGNMENT_LEFT, int(w - 44.0), 13, accent_col)
+		draw_string(font, Vector2(22.0, 50.0), "Village: %s  |  [F / Right-Click] Sword  |  [Q] Shield of Faith  |  [R] Eat Manna  |  [T] Trade Supplies  |  [E] Chest / NPC" % str(st.get("village_name", "")), HORIZONTAL_ALIGNMENT_LEFT, int(w - 44.0), 11, Color(0.88, 0.90, 0.95))
 
-		draw_string(font, player_pos + Vector2(-54.0, -34.0), local_pilgrim_name, HORIZONTAL_ALIGNMENT_CENTER, 108, 12, Color.WHITE)
+		draw_string(font, player_pos + Vector2(-54.0, -50.0), local_pilgrim_name, HORIZONTAL_ALIGNMENT_CENTER, 108, 12, Color.WHITE)
 		draw_string(font, Vector2(14.0, h * 0.56 + 40.0), "< PREV ERA", HORIZONTAL_ALIGNMENT_LEFT, 96, 11, accent_col)
 		draw_string(font, Vector2(w - 96.0, h * 0.56 + 40.0), "NEXT ERA >", HORIZONTAL_ALIGNMENT_RIGHT, 84, 11, accent_col)
 
