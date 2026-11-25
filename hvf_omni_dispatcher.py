@@ -217,3 +217,13 @@ class OmniClientDispatcher(OmniBridge):
 if __name__ == "__main__":
     dispatcher = OmniClientDispatcher()
     dispatcher.serve_forever()
+# --- Phase 15 Additive Stronghold Binding (Zero-Rewrite Extension) ---
+try:
+    from hvf_dynasty_stronghold import attach_stronghold_to_dispatcher as _hvf_attach_stronghold
+    _orig_omni_init = OmniClientDispatcher.__init__
+    def _phase15_omni_init(self, *args, **kwargs):
+        _orig_omni_init(self, *args, **kwargs)
+        _hvf_attach_stronghold(self)
+    OmniClientDispatcher.__init__ = _phase15_omni_init
+except Exception as _p15_err:
+    print(f"[HVF WARNING] Phase 15 Stronghold hook skipped: {_p15_err}")
