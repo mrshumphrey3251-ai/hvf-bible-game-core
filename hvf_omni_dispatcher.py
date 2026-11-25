@@ -178,6 +178,8 @@ class OmniClientDispatcher(OmniBridge):
             action = str(payload.get("action", "HANDSHAKE")).upper()
             handler = self.action_handlers.get(action)
             if not handler:
+                if str(payload.get("action", "")).upper().startswith("MULTIPLAYER_"):
+                    return handle_multiplayer_packet(payload)
                 return json.dumps({"status": "ERROR", "error": f"Unknown action: {action}"})
             return json.dumps(handler(payload))
         except Exception as exc:
@@ -326,8 +328,6 @@ _MP_CHAT_LOG = []
 
 def handle_multiplayer_packet(payload: dict) -> dict:
     action = str(payload.get("action", "")).upper()
-    if action.startswith("MULTIPLAYER_"):
-        return handle_multiplayer_packet(payload)
     now = _mp_time.time()
     pid = str(payload.get("player_id", "")).strip() or "PILGRIM_ANON"
     pname = str(payload.get("name", "Pilgrim")).strip()[:24] or "Pilgrim"
