@@ -6,7 +6,7 @@ signal scenario_loaded(scenario_data: Dictionary)
 signal decision_resolved(outcome_data: Dictionary, state_data: Dictionary)
 signal bloodline_updated(bloodline_data: Dictionary)
 signal alpha_omega_looped(bloodline_data: Dictionary)
-signal covenant_trial_resolved(trial_result: Dictionary)
+signal perpetual_trial_resolved(trial_result: Dictionary)
 signal bridge_error(message: String)
 
 @export var host: String = "127.0.0.1"
@@ -38,8 +38,8 @@ const ERA_SCENARIO_MAP := {
 
 var current_scenario: Dictionary = {}
 var current_trial: Dictionary = {}
+var active_trial_token: String = ""
 var trial_mode: bool = false
-var trial_cursor: int = 0
 
 func _ready() -> void:
 connect_btn.pressed.connect(_on_connect_pressed)
@@ -103,7 +103,7 @@ handshake_verified.emit(state)
 _refresh_bloodline()
 var era_name: String = str(state.get("current_era", "ERA_TORAH"))
 trial_mode = false
-trial_btn.text = "Scripture Covenant Trial"
+trial_btn.text = "Perpetual Scripture Trial"
 _load_active_scenario(ERA_SCENARIO_MAP.get(era_name, "GEN_001"))
 
 func _refresh_bloodline() -> void:
@@ -117,20 +117,22 @@ func _on_toggle_trial_mode() -> void:
 trial_mode = not trial_mode
 if trial_mode:
 trial_btn.text = "Return to Executive Scenario"
-_load_covenant_trial()
+_load_perpetual_trial()
 else:
-trial_btn.text = "Scripture Covenant Trial"
+trial_btn.text = "Perpetual Scripture Trial"
 var era_id: String = str(current_scenario.get("id", "GEN_001"))
 _load_active_scenario(era_id)
 
-func _load_covenant_trial() -> void:
-var resp := _send_command({"client_type": "GODOT_4", "action": "GET_COVENANT_TRIAL", "index": trial_cursor})
+func _load_perpetual_trial() -> void:
+var resp := _send_command({"client_type": "GODOT_4", "action": "GET_PERPETUAL_TRIAL"})
 if resp.get("status") != "OK":
-context_label.text = "[b]Covenant Trial Error:[/b] %s" % str(resp.get("error", "Unknown"))
+context_label.text = "[b]Perpetual Trial Error:[/b] %s" % str(resp.get("error", "Unknown"))
 return
+active_trial_token = str(resp.get("trial_token", ""))
 current_trial = resp.get("trial", {})
 var opts: Array = current_trial.get("options", [])
-context_label.text = "[b][COVENANT TRIAL | %s | %s][/b]\n\n[i]%s[/i]" % [
+context_label.text = "[b][%s | %s | %s][/b]\n\n[i]%s[/i]" % [
+str(current_trial.get("tier_label", "TIER_1")),
 str(current_trial.get("era", "")),
 str(current_trial.get("reference", "")),
 str(current_trial.get("prompt", ""))
@@ -169,38 +171,36 @@ scenario_loaded.emit(current_scenario)
 
 func _handle_option_press(option_index: int) -> void:
 if trial_mode:
-_submit_covenant_trial(option_index)
+_submit_perpetual_trial(option_index)
 else:
 _submit_decision(option_index)
 
-func _submit_covenant_trial(answer_index: int) -> void:
+func _submit_perpetual_trial(answer_index: int) -> void:
 var resp := _send_command({
 "client_type": "GODOT_4",
-"action": "SUBMIT_COVENANT_TRIAL",
-"index": trial_cursor,
+"action": "SUBMIT_PERPETUAL_TRIAL",
+"trial_token": active_trial_token,
 "answer_index": answer_index
 })
 if resp.get("status") != "OK":
 outcome_label.text = "[b]Trial Error:[/b] %s" % str(resp.get("error", "Unknown"))
 return
 var state: Dictionary = resp.get("state", {})
-var bl: Dictionary = resp.get("bloodline", {})
 _update_telemetry(state)
-if not bl.is_empty():
-_update_bloodline_telemetry(bl)
 if resp.get("correct", false):
-outcome_label.text = "[b][COVENANT SEAL GRANTED: %s][/b] (%s)\n%s" % [
-str(resp.get("seal_granted", "")),
+outcome_label.text = "[b][MASTERY VERIFIED: %s -> ESCALATED TO %s][/b]\n%s" % [
 str(resp.get("reference", "")),
+str(resp.get("next_tier_label", "")),
 str(resp.get("explanation", ""))
 ]
 else:
-outcome_label.text = "[b][TRIAL INCOMPLETE — STUDY & RETRY][/b] (%s)\n%s" % [
+outcome_label.text = "[b][SPACED REPETITION REINFORCEMENT: %s][/b]\n%s" % [
 str(resp.get("reference", "")),
 str(resp.get("explanation", ""))
 ]
-trial_cursor += 1
-covenant_trial_resolved.emit(resp)
+perpetual_trial_resolved.emit(resp)
+# Immediately load the next mutated perpetual challenge so the player never repeats a static slot
+_load_perpetual_trial()
 
 func _submit_decision(option_index: int) -> void:
 var resp := _send_command({
@@ -252,7 +252,7 @@ _update_telemetry(state)
 _update_bloodline_telemetry(bl)
 var next_era: String = str(bl.get("current_era", "ERA_TORAH"))
 trial_mode = false
-trial_btn.text = "Scripture Covenant Trial"
+trial_btn.text = "Perpetual Scripture Trial"
 if resp.get("alpha_omega_loop_triggered", false):
 outcome_label.text = "[b][ALPHA-OMEGA LOOP EXECUTED: REVELATION -> GENESIS][/b] Epoch %s Initiated | Mastery & Covenant Seals Preserved!" % str(bl.get("epoch_number", 1))
 alpha_omega_looped.emit(bl)

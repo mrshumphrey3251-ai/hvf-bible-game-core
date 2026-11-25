@@ -52,20 +52,34 @@ class OmniClientDispatcher(OmniBridge):
 
     def _build_snapshot(self):
         sorted_flags = sorted(list(self.narrative.player_flags))
+        bl_engine = getattr(self, "bloodline_engine", None)
+        cov_engine = getattr(self, "covenant_trials", None)
+        ped_engine = getattr(self, "perpetual_pedagogy", None)
+
+        bloodline_data = bl_engine.snapshot() if bl_engine else {}
+        seals_data = list(cov_engine.covenant_seals) if cov_engine else []
+        mastery_data = dict(ped_engine.mastery_ledger) if ped_engine else {}
+
+        seal_payload = {
+            "era": self.current_era,
+            "score": self.engine_state.total_score,
+            "flags": sorted_flags,
+            "epoch": bloodline_data.get("epoch_number", 1),
+            "generation": bloodline_data.get("generation_number", 1),
+            "leader": bloodline_data.get("current_leader", "Adam_Line_01"),
+            "seals": seals_data,
+            "mastery": mastery_data,
+        }
         return {
             "current_era": self.current_era,
             "total_score": self.engine_state.total_score,
             "era_mastery": self.engine_state.era_mastery,
             "active_flags": sorted_flags,
+            "bloodline": bloodline_data,
+            "covenant_seals": seals_data,
+            "mastery_ledger": mastery_data,
             "sha256_seal": self.state_manager.generate_signature(
-                json.dumps(
-                    {
-                        "era": self.current_era,
-                        "score": self.engine_state.total_score,
-                        "flags": sorted_flags,
-                    },
-                    sort_keys=True,
-                )
+                json.dumps(seal_payload, sort_keys=True)
             ),
         }
 
