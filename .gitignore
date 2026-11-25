@@ -2,3 +2,6 @@ __pycache__/
 *.py[cod]
 player_state.json
 .godot/
+# Compiled multi-platform game exports
+frontend_godot/builds/
+

@@ -291,6 +291,19 @@ except Exception as _p21_err:
     print(f"[HVF WARNING] Phase 21 bank merge skipped: {_p21_err}")
 
 
+
+# --- Phase 23 Direct Institutional EdTech Exporter Binding (Active Before __main__) ---
+try:
+    from hvf_edtech_exporter import attach_edtech_exporter_to_dispatcher as _hvf_attach_edtech
+    _hvf_p21_omni_init = OmniClientDispatcher.__init__
+    def _hvf_phase23_omni_init(self, *args, **kwargs):
+        _hvf_p21_omni_init(self, *args, **kwargs)
+        _hvf_attach_edtech(self)
+    OmniClientDispatcher.__init__ = _hvf_phase23_omni_init
+except Exception as _p23_err:
+    print(f"[HVF WARNING] Phase 23 EdTech exporter bind skipped: {_p23_err}")
+
+
 if __name__ == "__main__":
     dispatcher = OmniClientDispatcher()
     dispatcher.serve_forever()
