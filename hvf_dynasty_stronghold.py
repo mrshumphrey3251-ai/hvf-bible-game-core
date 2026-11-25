@@ -295,3 +295,54 @@ def attach_stronghold_to_dispatcher(dispatcher: Any) -> DynastyStrongholdEngine:
 if __name__ == "__main__":
     eng = DynastyStrongholdEngine()
     print(json.dumps(eng.get_snapshot(), indent=2))
+
+
+# --- Phase 16 Additive Persistence & Multi-Device State Envelope ---
+def bind_stronghold_persistence(dispatcher: Any) -> None:
+    """Injects stronghold snapshot into GET_STATE/SAVE_STATE and hydrates from loaded SHA-256 state."""
+    if not hasattr(dispatcher, "stronghold_engine"):
+        return
+
+    engine: DynastyStrongholdEngine = dispatcher.stronghold_engine
+    orig_dispatch = dispatcher.dispatch_message
+
+    def _persisted_dispatch(raw_msg: str) -> str:
+        try:
+            req = json.loads(raw_msg) if isinstance(raw_msg, str) else dict(raw_msg)
+        except Exception:
+            return orig_dispatch(raw_msg)
+
+        action = str(req.get("action", "")).upper()
+
+        # Hydrate stronghold from incoming state payload if provided
+        if action == "LOAD_STRONGHOLD_STATE" and isinstance(req.get("stronghold"), dict):
+            engine.state = DynastyStrongholdState.from_dict(req["stronghold"])
+            return json.dumps({"status": "OK", "stronghold": engine.get_snapshot()})
+
+        # Before SAVE_STATE executes, attach serialized stronghold state into payload
+        if action == "SAVE_STATE":
+            state_obj = getattr(dispatcher, "game_state", None) or getattr(dispatcher, "engine_state", None)
+            if state_obj is not None and hasattr(state_obj, "__dict__"):
+                setattr(state_obj, "dynasty_stronghold", engine.state.to_dict())
+
+        resp_raw = orig_dispatch(raw_msg)
+
+        # Inject stronghold snapshot into GET_STATE, HANDSHAKE, and SAVE_STATE responses
+        if action in {"GET_STATE", "HANDSHAKE", "SAVE_STATE"}:
+            try:
+                resp_obj = json.loads(resp_raw)
+                if isinstance(resp_obj, dict):
+                    resp_obj["stronghold"] = engine.get_snapshot()
+                    if isinstance(resp_obj.get("state"), dict):
+                        resp_obj["state"]["dynasty_stronghold"] = engine.state.to_dict()
+                    return json.dumps(resp_obj)
+            except Exception:
+                pass
+        return resp_raw
+
+    dispatcher.dispatch_message = _persisted_dispatch
+    if hasattr(dispatcher, "register_action"):
+        dispatcher.register_action(
+            "LOAD_STRONGHOLD_STATE",
+            lambda p: {"status": "OK", "stronghold": engine.get_snapshot()},
+        )

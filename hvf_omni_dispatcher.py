@@ -227,3 +227,14 @@ try:
     OmniClientDispatcher.__init__ = _phase15_omni_init
 except Exception as _p15_err:
     print(f"[HVF WARNING] Phase 15 Stronghold hook skipped: {_p15_err}")
+
+# --- Phase 16 Additive Stronghold SHA-256 Persistence Hook ---
+try:
+    from hvf_dynasty_stronghold import bind_stronghold_persistence as _hvf_bind_sh_persist
+    _orig_p15_init = OmniClientDispatcher.__init__
+    def _phase16_omni_init(self, *args, **kwargs):
+        _orig_p15_init(self, *args, **kwargs)
+        _hvf_bind_sh_persist(self)
+    OmniClientDispatcher.__init__ = _phase16_omni_init
+except Exception as _p16_err:
+    print(f"[HVF WARNING] Phase 16 Stronghold persistence hook skipped: {_p16_err}")
