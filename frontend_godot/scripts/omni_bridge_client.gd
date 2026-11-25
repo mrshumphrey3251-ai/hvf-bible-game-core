@@ -123,133 +123,142 @@ func _ready() -> void:
 	_set_options_enabled(false)
 	_on_connect_pressed()
 
-	# Phase 32: Mount Interactive 6-Stage Walkable World & NPC Dialogue Stage
+
+	# Phase 35.2: Mount 6-Stage Walkable World & Multiplayer Fellowship Bar into MarginContainer/ScrollContainer/VBox
+	var main_vbox: VBoxContainer = get_node_or_null("MarginContainer/ScrollContainer/VBox")
 	var world_script = load("res://scripts/sovereign_world_stage.gd")
-	if world_script != null:
+	var mp_script = load("res://scripts/sovereign_multiplayer_client.gd")
+	if main_vbox != null and world_script != null:
+		if citadel_canvas != null:
+			citadel_canvas.visible = false
+
+		var world_panel: PanelContainer = PanelContainer.new()
+		world_panel.name = "WalkableWorldPanel"
+		world_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+		var world_vbox: VBoxContainer = VBoxContainer.new()
+		world_vbox.name = "WalkableWorldVBox"
+		world_vbox.add_theme_constant_override("separation", 6)
+
 		var world_stage = world_script.new()
 		world_stage.name = "WalkableWorldStage"
-		var root_vbox = _find_main_vbox()
-		if root_vbox != null:
-			root_vbox.add_child(world_stage)
-			root_vbox.move_child(world_stage, 1)
-			world_stage.set_stage("ERA_TORAH")
-			world_stage.npc_dialogue_triggered.connect(func(npc_name: String, era_id: String, scenario_id: String, greeting: String):
-				if audio_synth != null and audio_synth.has_method("play_covenant_chime"):
-					audio_synth.play_covenant_chime()
-				var feed = find_child("ChronicleFeed", true, false)
-				if feed != null:
-					feed.text = "[b][color=#f5d061]%s[/color][/b]\n%s\n\n[i]Loading Canonical Trial (%s)...[/i]" % [npc_name, greeting, scenario_id]
-				if has_method("_request_scenario"):
-					call("_request_scenario", scenario_id)
-			)
-			world_stage.stage_portal_entered.connect(func(target_era_id: String):
-				if audio_synth != null and audio_synth.has_method("play_covenant_chime"):
-					audio_synth.play_covenant_chime()
-				var feed = find_child("ChronicleFeed", true, false)
-				if feed != null:
-					feed.text = "[b][color=#7de2d1]PORTAL TRANSITION:[/color][/b] Entered [b]%s[/b]. Walk to a Biblical NPC and press [E] to converse!" % target_era_id
-			)
+		world_stage.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		world_vbox.add_child(world_stage)
 
-	# Phase 33: Attach Real-Time Multiplayer Pilgrim Sync & Fellowship Chat
-	var mp_script = load("res://scripts/sovereign_multiplayer_client.gd")
-	if mp_script != null:
-		var mp_client = mp_script.new()
-		mp_client.name = "MultiplayerRelayClient"
-		add_child(mp_client)
-		var w_node = find_child("WalkableWorldStage", true, false)
-		if w_node != null:
-			w_node.player_moved.connect(func(stage_id: String, px: float, py: float):
-				mp_client.update_local_state(stage_id, px, py)
-			)
-			w_node.stage_portal_entered.connect(func(target_era_id: String):
-				mp_client.update_local_state(target_era_id, 410.0, 148.0)
-			)
-			mp_client.peers_updated.connect(func(peers: Array, online_cnt: int, chat_log: Array):
-				w_node.set_remote_pilgrims(peers)
-			)
-		# Phase 34: Interactive Pilgrim Name, Online Counter & Fellowship Chat Bar
-		var root_vbox_mp = _find_main_vbox()
-		if root_vbox_mp != null:
-			var mp_bar: HBoxContainer = HBoxContainer.new()
-			mp_bar.name = "FellowshipBar"
-			mp_bar.add_theme_constant_override("separation", 6)
+		var mp_bar: HBoxContainer = HBoxContainer.new()
+		mp_bar.name = "FellowshipBar"
+		mp_bar.add_theme_constant_override("separation", 6)
 
-			var online_lbl: Label = Label.new()
-			online_lbl.name = "OnlinePilgrimsLabel"
-			online_lbl.text = "Online: 1"
-			online_lbl.add_theme_color_override("font_color", Color(0.45, 0.92, 0.65))
-			mp_bar.add_child(online_lbl)
+		var online_lbl: Label = Label.new()
+		online_lbl.name = "OnlinePilgrimsLabel"
+		online_lbl.text = "Online: 1"
+		online_lbl.add_theme_color_override("font_color", Color(0.45, 0.92, 0.65))
+		mp_bar.add_child(online_lbl)
 
-			var name_edit: LineEdit = LineEdit.new()
-			name_edit.name = "PilgrimNameInput"
-			name_edit.placeholder_text = "Your Pilgrim Name..."
+		var name_edit: LineEdit = LineEdit.new()
+		name_edit.name = "PilgrimNameInput"
+		name_edit.placeholder_text = "Pilgrim Name..."
+		name_edit.custom_minimum_size = Vector2(130, 0)
+		mp_bar.add_child(name_edit)
+
+		var robe_picker: OptionButton = OptionButton.new()
+		robe_picker.name = "RobeColorPicker"
+		for r_opt in ["Sapphire", "Judah Gold", "Emerald", "Tyrian Purple", "Crimson", "Galilee Cyan"]:
+			robe_picker.add_item(r_opt)
+		mp_bar.add_child(robe_picker)
+
+		var chat_edit: LineEdit = LineEdit.new()
+		chat_edit.name = "FellowshipChatInput"
+		chat_edit.placeholder_text = "Speak peace to fellow pilgrims across stages..."
+		chat_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		mp_bar.add_child(chat_edit)
+
+		var send_btn: Button = Button.new()
+		send_btn.text = "Send Peace"
+		mp_bar.add_child(send_btn)
+
+		world_vbox.add_child(mp_bar)
+
+		var chat_feed_lbl: Label = Label.new()
+		chat_feed_lbl.name = "FellowshipLiveFeed"
+		chat_feed_lbl.text = "MULTIPLAYER WORLD ACTIVE ? Walk with [WASD / Arrows / Click], enter side portals to switch stages, or press [E] near an NPC!"
+		chat_feed_lbl.add_theme_color_override("font_color", Color(0.95, 0.86, 0.48))
+		world_vbox.add_child(chat_feed_lbl)
+
+		world_panel.add_child(world_vbox)
+		main_vbox.add_child(world_panel)
+		main_vbox.move_child(world_panel, 1)
+		world_stage.set_stage("ERA_TORAH")
+
+		world_stage.npc_dialogue_triggered.connect(func(npc_name: String, era_id: String, scenario_id: String, greeting: String):
+			if audio_synth != null and audio_synth.has_method("play_covenant_chime"):
+				audio_synth.play_covenant_chime()
+			if outcome_label != null:
+				outcome_label.text = "[b][color=#f5d061]%s (%s)[/color][/b]: %s" % [npc_name, era_id, greeting]
+			if has_method("_request_scenario"):
+				call("_request_scenario", scenario_id)
+		)
+
+		world_stage.stage_portal_entered.connect(func(target_era_id: String):
+			if audio_synth != null and audio_synth.has_method("play_covenant_chime"):
+				audio_synth.play_covenant_chime()
+			if outcome_label != null:
+				outcome_label.text = "[b][color=#7de2d1]STAGE PORTAL:[/color][/b] Traveled to [b]%s[/b]. Walk up to any NPC and press [E] to speak!" % target_era_id
+		)
+
+		if mp_script != null:
+			var mp_client = mp_script.new()
+			mp_client.name = "MultiplayerRelayClient"
+			add_child(mp_client)
 			name_edit.text = mp_client.player_name
-			name_edit.custom_minimum_size = Vector2(130, 0)
+			world_stage.set_local_pilgrim_name(mp_client.player_name)
+
 			name_edit.text_submitted.connect(func(new_name: String):
 				var clean_n: String = new_name.strip_edges()
 				if clean_n != "":
 					mp_client.player_name = clean_n
 					mp_client.dirty_pos = true
-					w_node.set_local_pilgrim_name(clean_n)
+					world_stage.set_local_pilgrim_name(clean_n)
 			)
-			mp_bar.add_child(name_edit)
-			var robe_picker: OptionButton = OptionButton.new()
-			robe_picker.name = "RobeColorPicker"
-			for r_opt in ["Sapphire", "Judah Gold", "Emerald", "Tyrian Purple", "Crimson", "Galilee Cyan"]:
-				robe_picker.add_item(r_opt)
+
 			robe_picker.item_selected.connect(func(idx: int):
 				var chosen: String = robe_picker.get_item_text(idx)
 				mp_client.robe_name = chosen
 				mp_client.dirty_pos = true
-				w_node.set_local_robe_color(chosen)
+				world_stage.set_local_robe_color(chosen)
 			)
-			mp_bar.add_child(robe_picker)
 
-
-			var chat_edit: LineEdit = LineEdit.new()
-			chat_edit.name = "FellowshipChatInput"
-			chat_edit.placeholder_text = "Speak peace to fellow pilgrims across stages..."
-			chat_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			var send_chat_fn: Callable = func(txt: String):
 				var msg_clean: String = txt.strip_edges()
 				if msg_clean != "":
 					var cur_name: String = name_edit.text.strip_edges()
 					if cur_name != "":
 						mp_client.player_name = cur_name
-						w_node.set_local_pilgrim_name(cur_name)
+						world_stage.set_local_pilgrim_name(cur_name)
 					mp_client.send_fellowship_chat(msg_clean)
 					chat_edit.text = ""
-			chat_edit.text_submitted.connect(send_chat_fn)
-			mp_bar.add_child(chat_edit)
 
-			var send_btn: Button = Button.new()
-			send_btn.text = "Send Peace"
+			chat_edit.text_submitted.connect(send_chat_fn)
 			send_btn.pressed.connect(func():
 				send_chat_fn.call(chat_edit.text)
 			)
-			mp_bar.add_child(send_btn)
 
-			var chat_feed_lbl: Label = Label.new()
-			chat_feed_lbl.name = "FellowshipLiveFeed"
-			chat_feed_lbl.text = "Room Ready ? Move with WASD/Click or speak with Biblical NPCs!"
-			chat_feed_lbl.add_theme_color_override("font_color", Color(0.86, 0.92, 0.98))
-
-			root_vbox_mp.add_child(mp_bar)
-			root_vbox_mp.move_child(mp_bar, 2)
-			root_vbox_mp.add_child(chat_feed_lbl)
-			root_vbox_mp.move_child(chat_feed_lbl, 3)
-
-			w_node.set_local_pilgrim_name(mp_client.player_name)
+			world_stage.player_moved.connect(func(stage_id: String, px: float, py: float):
+				mp_client.update_local_state(stage_id, px, py)
+			)
+			world_stage.stage_portal_entered.connect(func(target_era_id: String):
+				mp_client.update_local_state(target_era_id, 410.0, 185.0)
+			)
 			mp_client.peers_updated.connect(func(peers: Array, online_cnt: int, chat_log: Array):
+				world_stage.set_remote_pilgrims(peers)
 				online_lbl.text = "Online: %d" % online_cnt
 				if chat_log.size() > 0:
 					var last_msg: Dictionary = chat_log[chat_log.size() - 1]
 					var l_txt: String = str(last_msg.get("message", ""))
 					chat_feed_lbl.text = "[%s @ %s]: %s" % [str(last_msg.get("sender", "Pilgrim")), str(last_msg.get("stage", "ERA_TORAH")), l_txt]
 					if l_txt.begins_with("COVENANT BLESSING:"):
-						w_node.show_coop_blessing(l_txt)
+						world_stage.show_coop_blessing(l_txt)
 			)
-
 
 func _send_command(payload: Dictionary) -> Dictionary:
 	var peer := StreamPeerTCP.new()
@@ -710,21 +719,3 @@ func _set_options_enabled(enabled: bool) -> void:
 	option_b_btn.disabled = not enabled
 	option_c_btn.disabled = not enabled
 	option_d_btn.disabled = not enabled
-
-
-func _find_main_vbox() -> VBoxContainer:
-	var direct = get_node_or_null("ScrollContainer/VBoxContainer")
-	if direct is VBoxContainer:
-		return direct
-	var alt = _find_main_vbox()
-	if alt is VBoxContainer:
-		return alt
-	var found = find_child("VBoxContainer", true, false)
-	if found is VBoxContainer:
-		return found
-	for child in get_children():
-		if child is ScrollContainer:
-			for sub in child.get_children():
-				if sub is VBoxContainer:
-					return sub
-	return null

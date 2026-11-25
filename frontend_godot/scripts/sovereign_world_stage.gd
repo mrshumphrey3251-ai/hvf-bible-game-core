@@ -110,7 +110,7 @@ var blessing_banner: String = ""
 var blessing_timer: float = 0.0
 
 func _ready() -> void:
-	custom_minimum_size = Vector2(0, 250)
+	custom_minimum_size = Vector2(0, 320)
 	focus_mode = Control.FOCUS_ALL
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_process(true)
@@ -120,7 +120,7 @@ func set_stage(era_id: String) -> void:
 		current_stage = era_id
 		var sz: Vector2 = size
 		if sz.x < 100.0:
-			sz = Vector2(820.0, 250.0)
+			sz = Vector2(820.0, 320.0)
 		player_pos = Vector2(sz.x * 0.5, sz.y * 0.64)
 		target_pos = player_pos
 		has_click_target = false
