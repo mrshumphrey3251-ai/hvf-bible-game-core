@@ -16,7 +16,13 @@ const OFFLINE_SCENARIO_TITLES := {
 	"GOS_001": "Sermon on the Mount & Kingdom Beatitudes",
 	"GOS_002": "House Built on the Rock vs. Shifting Sand (Matthew 7:24-27)",
 	"EPI_001": "Apostolic Council & Unity of the Church",
-	"EPI_002": "The Berean Standard of Daily Scripture Verification (Acts 17:11)"
+	"TOR_004": "Bezalel & Oholiab ? Spirit-Filled Tabernacle Craftsmanship (Exodus 31)",
+	"HIS_004": "Esther's Royal Petition Before King Ahasuerus (Esther 4-5)",
+	"WIS_003": "Job's Unshakable Integrity Under Severe Trial (Job 1-2 & 42)",
+	"PRO_003": "Daniel & the Three Hebrews in Babylon (Daniel 1 & 3)",
+	"GOS_003": "The Great Commission & Galilean Sending (Matthew 28:18-20)",
+	"EPI_002": "The Berean Standard of Daily Scripture Verification (Acts 17:11)",
+	"EPI_003": "Overcoming by the Blood of the Lamb & Word of Testimony (Revelation 12:11)"
 }
 
 const ERAS := [

@@ -1,0 +1,314 @@
+{
+  "pack_id": "HVF_CANON_66_EXPANSION_PACK_02",
+  "version": "1.0.0",
+  "scenarios": {
+    "TOR_004": {
+      "id": "TOR_004",
+      "era": "ERA_TORAH",
+      "title": "Bezalel & Oholiab ? Spirit-Filled Tabernacle Craftsmanship (Exodus 31)",
+      "context": "Gold, silver, bronze, acacia wood, and fine linen arrive at Sinai for the Sanctuary of the Lord.",
+      "prompt": "How do you commission the artisans and manage the freewill offerings of the congregation?",
+      "options": [
+        {
+          "text": "Appoint Spirit-filled master craftsmen (Bezalel & Oholiab) and halt collections once supplies overflow",
+          "outcomes": [
+            {
+              "weight": 0.9,
+              "score_delta": 40,
+              "flag": "TABERNACLE_ARCHITECT",
+              "text": "Exodus 36:6 fulfilled: generous stewardship overflows and the Tabernacle rises in exact divine pattern (+40 Score)."
+            },
+            {
+              "weight": 0.1,
+              "score_delta": 25,
+              "flag": "SANCTUARY_ORDER",
+              "text": "Every tribe contributes skilled artisans in unified worship (+25 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Impose forced labor quotas instead of Spirit-led freewill offerings",
+          "outcomes": [
+            {
+              "weight": 1.0,
+              "score_delta": -15,
+              "flag": "FORCED_QUOTA",
+              "text": "Camp morale drops when freewill worship is replaced by compulsion (-15 Score)."
+            }
+          ]
+        }
+      ]
+    },
+    "HIS_004": {
+      "id": "HIS_004",
+      "era": "ERA_HISTORY",
+      "title": "Esther's Royal Petition Before King Ahasuerus (Esther 4?5)",
+      "context": "Haman's decree threatens the entire covenant people across 127 provinces from India to Ethiopia.",
+      "prompt": "Mordecai reminds you: 'Who knows whether you have not come to the kingdom for such a time as this?' What is your move?",
+      "options": [
+        {
+          "text": "Call a three-day fast across Susa, then enter the inner throne room in royal courage",
+          "outcomes": [
+            {
+              "weight": 0.92,
+              "score_delta": 45,
+              "flag": "SUCH_A_TIME_AS_THIS",
+              "text": "Esther 5:2: the golden scepter is extended, Haman's plot is overturned, and the covenant line is preserved (+45 Score)."
+            },
+            {
+              "weight": 0.08,
+              "score_delta": 30,
+              "flag": "PURIM_DELIVERANCE",
+              "text": "Courageous intercession turns mourning into nationwide deliverance (+30 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Remain silent in the palace to protect personal comfort",
+          "outcomes": [
+            {
+              "weight": 1.0,
+              "score_delta": -20,
+              "flag": "SILENT_PALACE",
+              "text": "Deliverance rises from another place while royal stewardship is forfeited (-20 Score)."
+            }
+          ]
+        }
+      ]
+    },
+    "WIS_003": {
+      "id": "WIS_003",
+      "era": "ERA_WISDOM",
+      "title": "Job's Unshakable Integrity Under Severe Trial (Job 1?2 & 42)",
+      "context": "Sudden calamities test your household, estate, and health while friends urge you to compromise.",
+      "prompt": "How do you anchor your soul when prosperity is stripped away?",
+      "options": [
+        {
+          "text": "Worship the Lord in integrity, refuse to curse God, and pray for your friends",
+          "outcomes": [
+            {
+              "weight": 0.92,
+              "score_delta": 45,
+              "flag": "JOB_INTEGRITY",
+              "text": "Job 42:10: the Lord restores your fortunes twofold as you intercede for others (+45 Score)."
+            },
+            {
+              "weight": 0.08,
+              "score_delta": 30,
+              "flag": "REFINED_GOLD",
+              "text": "Tested faith emerges purer than refined gold (+30 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Abandon covenant trust and surrender to bitterness",
+          "outcomes": [
+            {
+              "weight": 1.0,
+              "score_delta": -15,
+              "flag": "BITTER_SPIRIT",
+              "text": "Despair clouds spiritual discernment (-15 Score)."
+            }
+          ]
+        }
+      ]
+    },
+    "PRO_003": {
+      "id": "PRO_003",
+      "era": "ERA_PROPHETS",
+      "title": "Daniel & the Three Hebrews in Babylon (Daniel 1 & 3)",
+      "context": "Imperial officials command you to defile your covenant vows and bow before a golden image on the plain of Dura.",
+      "prompt": "How do you stand when royal promotion or the fiery furnace hangs in the balance?",
+      "options": [
+        {
+          "text": "Hold fast to covenant faithfulness?even if not delivered, we will not bow to idols",
+          "outcomes": [
+            {
+              "weight": 0.95,
+              "score_delta": 50,
+              "flag": "FOURTH_MAN_IN_FIRE",
+              "text": "Daniel 3:25: not a hair is singed, and the empire glorifies the Most High God (+50 Score)."
+            },
+            {
+              "weight": 0.05,
+              "score_delta": 35,
+              "flag": "DANIEL_EXCELLENCE",
+              "text": "Ten times wiser than all magicians and enchanters in the realm (+35 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Bow outwardly to preserve court rank",
+          "outcomes": [
+            {
+              "weight": 1.0,
+              "score_delta": -20,
+              "flag": "COMPROMISED_ALTAR",
+              "text": "Prophetic witness is lost through assimilation (-20 Score)."
+            }
+          ]
+        }
+      ]
+    },
+    "GOS_003": {
+      "id": "GOS_003",
+      "era": "ERA_GOSPELS",
+      "title": "The Great Commission & Galilean Sending (Matthew 28:18?20)",
+      "context": "The risen Lord gathers His disciples on the mountain in Galilee with all authority in heaven and on earth.",
+      "prompt": "What strategic mandate defines your mission to the nations?",
+      "options": [
+        {
+          "text": "Go and make disciples of all nations, baptizing and teaching them to obey all Christ commanded",
+          "outcomes": [
+            {
+              "weight": 0.95,
+              "score_delta": 50,
+              "flag": "GREAT_COMMISSION",
+              "text": "Matthew 28:20: empowered by Christ's abiding presence to the end of the age (+50 Score)."
+            },
+            {
+              "weight": 0.05,
+              "score_delta": 35,
+              "flag": "NATIONS_DISCIPLE",
+              "text": "Gospel witness multiplies across cities and households (+35 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Keep the message insular and avoid cross-cultural outreach",
+          "outcomes": [
+            {
+              "weight": 1.0,
+              "score_delta": -15,
+              "flag": "INSULAR_CAMP",
+              "text": "Kingdom expansion stalls inside regional borders (-15 Score)."
+            }
+          ]
+        }
+      ]
+    },
+    "EPI_003": {
+      "id": "EPI_003",
+      "era": "ERA_EPISTLES",
+      "title": "Overcoming by the Blood of the Lamb & Word of Testimony (Revelation 12:11 & 21)",
+      "context": "Seven assemblies across Asia Minor face persecution, false teachers, and cultural pressure as the Alpha-Omega vision unfolds.",
+      "prompt": "How do you equip the churches to endure and inherit the New Jerusalem?",
+      "options": [
+        {
+          "text": "Hold fast first love, conquer by the Blood of the Lamb and word of testimony, and keep the prophetic scroll",
+          "outcomes": [
+            {
+              "weight": 0.96,
+              "score_delta": 55,
+              "flag": "OVERCOMER_CROWN",
+              "text": "Revelation 21:7: the one who conquers inherits all things in the Alpha-Omega Kingdom (+55 Score)."
+            },
+            {
+              "weight": 0.04,
+              "score_delta": 40,
+              "flag": "LAMPSTAND_FAITHFUL",
+              "text": "All seven lampstands burn bright in steadfast endurance (+40 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Grow lukewarm like Laodicea, relying on material wealth alone",
+          "outcomes": [
+            {
+              "weight": 1.0,
+              "score_delta": -20,
+              "flag": "LUKEWARM_DRIFT",
+              "text": "Spiritual blindness requires urgent repentance and gold refined by fire (-20 Score)."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "scripture_trials": [
+    {
+      "id": "TRIAL_CANON66_01",
+      "era": "ERA_TORAH",
+      "reference": "Genesis 12:2?3",
+      "prompt": "What dual purpose defines God's covenant blessing to Abraham in Genesis 12:2?3?",
+      "options": [
+        "God blesses Abraham so that he will be a blessing, and in him all families of the earth shall be blessed",
+        "Blessing is restricted permanently to a single isolated valley",
+        "Abraham is commanded never to build altars in Canaan",
+        "Covenant promises depend entirely on Egyptian chariots"
+      ],
+      "correct_index": 0,
+      "explanation": "Blessed to be a blessing?Genesis 12:2?3 establishes global covenant mission from the beginning."
+    },
+    {
+      "id": "TRIAL_CANON66_02",
+      "era": "ERA_HISTORY",
+      "reference": "2 Chronicles 7:14",
+      "prompt": "In 2 Chronicles 7:14, what four actions precede God hearing from heaven, forgiving sin, and healing the land?",
+      "options": [
+        "Humble themselves, pray, seek God's face, and turn from their wicked ways",
+        "Double silver taxes, expand cavalry, build monuments, and close the gates",
+        "Wait passively without prayer or repentance",
+        "Seek alliances with surrounding empires"
+      ],
+      "correct_index": 0,
+      "explanation": "2 Chronicles 7:14 anchors national healing in humble prayer, seeking God, and genuine repentance."
+    },
+    {
+      "id": "TRIAL_CANON66_03",
+      "era": "ERA_WISDOM",
+      "reference": "Psalm 1:1?3",
+      "prompt": "To what is the person compared who delights in the law of the Lord and meditates on it day and night?",
+      "options": [
+        "A tree planted by streams of water that yields its fruit in season and whose leaf does not wither",
+        "Chaff that the wind drives away",
+        "A reed shaken in the wilderness",
+        "A cistern that holds no water"
+      ],
+      "correct_index": 0,
+      "explanation": "Psalm 1:3 contrasts rooted, fruit-bearing stability with rootless chaff."
+    },
+    {
+      "id": "TRIAL_CANON66_04",
+      "era": "ERA_PROPHETS",
+      "reference": "Isaiah 40:31",
+      "prompt": "What is promised to those who wait for (hope in) the Lord according to Isaiah 40:31?",
+      "options": [
+        "They shall renew their strength, mount up with wings like eagles, run and not be weary, walk and not faint",
+        "They will be exempt from every journey",
+        "They will never need fellow believers",
+        "Strength comes from relying on horses and chariots"
+      ],
+      "correct_index": 0,
+      "explanation": "Isaiah 40:31 promises supernatural endurance for leaders who trust the Lord."
+    },
+    {
+      "id": "TRIAL_CANON66_05",
+      "era": "ERA_GOSPELS",
+      "reference": "John 15:5",
+      "prompt": "In John 15:5, what does Jesus teach about bearing lasting spiritual fruit?",
+      "options": [
+        "Whoever abides in Christ and Christ in him bears much fruit, for apart from Him we can do nothing",
+        "Branches bear fruit independently once detached from the vine",
+        "Fruitfulness comes from outward appearance alone",
+        "Only temple scribes can bear fruit"
+      ],
+      "correct_index": 0,
+      "explanation": "John 15:5 centers all enduring kingdom fruitfulness in vital union with Christ."
+    },
+    {
+      "id": "TRIAL_CANON66_06",
+      "era": "ERA_EPISTLES",
+      "reference": "Revelation 22:13",
+      "prompt": "How does Jesus declare His eternal sovereignty at the close of Scripture in Revelation 22:13?",
+      "options": [
+        "I am the Alpha and the Omega, the first and the last, the beginning and the end",
+        "History is an endless random cycle with no author",
+        "Only the first era matters",
+        "The prophetic word is sealed forever without fulfillment"
+      ],
+      "correct_index": 0,
+      "explanation": "Revelation 22:13 completes the Alpha-Omega arc uniting Genesis and Revelation."
+    }
+  ]
+}

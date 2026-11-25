@@ -55,12 +55,12 @@ const ERA_SCENARIO_MAP := {
 }
 
 const ERA_SCENARIO_ROSTER := {
-	"ERA_TORAH": ["GEN_001", "TOR_002", "TOR_003"],
-	"ERA_HISTORY": ["HIS_001", "HIS_002", "HIS_003"],
-	"ERA_WISDOM": ["WIS_001", "WIS_002"],
-	"ERA_PROPHETS": ["PRO_001", "PRO_002"],
-	"ERA_GOSPELS": ["GOS_001", "GOS_002"],
-	"ERA_EPISTLES": ["EPI_001", "EPI_002"]
+	"ERA_TORAH": ["GEN_001", "TOR_002", "TOR_003", "TOR_004"],
+	"ERA_HISTORY": ["HIS_001", "HIS_002", "HIS_003", "HIS_004"],
+	"ERA_WISDOM": ["WIS_001", "WIS_002", "WIS_003"],
+	"ERA_PROPHETS": ["PRO_001", "PRO_002", "PRO_003"],
+	"ERA_GOSPELS": ["GOS_001", "GOS_002", "GOS_003"],
+	"ERA_EPISTLES": ["EPI_001", "EPI_002", "EPI_003"]
 }
 
 var current_scenario: Dictionary = {}

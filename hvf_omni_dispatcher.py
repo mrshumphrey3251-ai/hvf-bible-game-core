@@ -248,11 +248,19 @@ except Exception as _gen_bind_err:
 # --- Phase 21 Adaptive 6-Era Content Pack Merger (Active Before __main__) ---
 try:
     def _hvf_merge_phase21_banks(disp_instance):
-        pack_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "banks", "era_expansion_pack_01.json")
-        if not os.path.exists(pack_path):
-            return
-        with open(pack_path, "r", encoding="utf-8") as _pf:
-            pack = json.load(_pf)
+        banks_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "banks")
+        pack_files = [
+            os.path.join(banks_dir, fn)
+            for fn in sorted(os.listdir(banks_dir))
+            if fn.endswith(".json") and "expansion_pack" in fn
+        ] if os.path.isdir(banks_dir) else []
+        for pack_path in pack_files:
+            with open(pack_path, "r", encoding="utf-8") as _pf:
+                pack = json.load(_pf)
+            _hvf_apply_single_pack(disp_instance, pack)
+        return
+
+    def _hvf_apply_single_pack(disp_instance, pack):
 
         # Merge scenarios into whatever scenario dictionary attribute the engine/dispatcher holds
         new_scenarios = pack.get("scenarios", {})
