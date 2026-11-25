@@ -181,6 +181,13 @@ func _ready() -> void:
 		)
 		hud_hbox.add_child(trade_btn)
 
+		var build_btn: Button = Button.new()
+		build_btn.text = "Build [B]"
+		build_btn.pressed.connect(func():
+			world_node.acquire_or_build_homestead()
+		)
+		hud_hbox.add_child(build_btn)
+
 		var online_lbl: Label = Label.new()
 		online_lbl.text = "Online: 1"
 		online_lbl.add_theme_color_override("font_color", Color(0.45, 0.94, 0.65))
@@ -230,6 +237,13 @@ func _ready() -> void:
 		world_node.battle_won.connect(func(enemy_name: String, reward_score: int, reward_talents: int):
 			if audio_synth != null and audio_synth.has_method("play_covenant_chime"):
 				audio_synth.play_covenant_chime()
+		)
+
+		world_node.trial_requested.connect(func():
+			if margin_ui != null:
+				margin_ui.visible = true
+			if has_method("_on_trial_pressed"):
+				call("_on_trial_pressed")
 		)
 
 		if mp_script != null:
