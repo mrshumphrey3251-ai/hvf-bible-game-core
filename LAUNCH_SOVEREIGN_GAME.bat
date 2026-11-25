@@ -10,7 +10,11 @@ start "HVF Omni-Client Dispatcher (127.0.0.1:65432)" cmd /k "python hvf_omni_dis
 timeout /t 2 /nobreak >nul
 
 if exist "C:\hvf_c2\tools\godot\Godot_v4.exe" (
-    start "" "C:\hvf_c2\tools\godot\Godot_v4.exe" --path "%~dp0frontend_godot"
+    "C:\hvf_c2\tools\godot\Godot_v4.exe" --path "%~dp0frontend_godot" --rendering-driver opengl3
+    if errorlevel 1 (
+        echo [!] Godot 4 exited with an error. Press any key to close...
+        pause
+    )
 ) else (
     echo [!] Godot_v4.exe not found at C:\hvf_c2\tools\godot\Godot_v4.exe
     pause
