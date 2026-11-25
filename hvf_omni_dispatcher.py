@@ -244,6 +244,53 @@ except Exception as _gen_bind_err:
     print(f"[HVF WARNING] Generals bind error: {_gen_bind_err}")
 
 
+
+# --- Phase 21 Adaptive 6-Era Content Pack Merger (Active Before __main__) ---
+try:
+    def _hvf_merge_phase21_banks(disp_instance):
+        pack_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "banks", "era_expansion_pack_01.json")
+        if not os.path.exists(pack_path):
+            return
+        with open(pack_path, "r", encoding="utf-8") as _pf:
+            pack = json.load(_pf)
+
+        # Merge scenarios into whatever scenario dictionary attribute the engine/dispatcher holds
+        new_scenarios = pack.get("scenarios", {})
+        for holder in [disp_instance, getattr(disp_instance, "engine", None), getattr(disp_instance, "game_engine", None)]:
+            if holder is None:
+                continue
+            for attr_name in ["decision_bank", "scenarios", "scenario_bank"]:
+                target = getattr(holder, attr_name, None)
+                if isinstance(target, dict):
+                    if "scenarios" in target and isinstance(target["scenarios"], dict):
+                        target["scenarios"].update(new_scenarios)
+                    else:
+                        target.update(new_scenarios)
+
+        # Merge scripture trials into unified_challenges (supports both list and dict pools)
+        ct = getattr(disp_instance, "covenant_trials", None)
+        if ct is not None:
+            pool = getattr(ct, "unified_challenges", None)
+            new_trials = pack.get("scripture_trials", [])
+            if isinstance(pool, list):
+                existing_ids = {item.get("id") for item in pool if isinstance(item, dict)}
+                for tr in new_trials:
+                    if tr.get("id") not in existing_ids:
+                        pool.append(tr)
+            elif isinstance(pool, dict):
+                for tr in new_trials:
+                    if tr.get("id") not in pool:
+                        pool[tr["id"]] = tr
+
+    _hvf_p18_omni_init = OmniClientDispatcher.__init__
+    def _hvf_phase21_omni_init(self, *args, **kwargs):
+        _hvf_p18_omni_init(self, *args, **kwargs)
+        _hvf_merge_phase21_banks(self)
+    OmniClientDispatcher.__init__ = _hvf_phase21_omni_init
+except Exception as _p21_err:
+    print(f"[HVF WARNING] Phase 21 bank merge skipped: {_p21_err}")
+
+
 if __name__ == "__main__":
     dispatcher = OmniClientDispatcher()
     dispatcher.serve_forever()

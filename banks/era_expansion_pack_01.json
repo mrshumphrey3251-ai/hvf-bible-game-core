@@ -1,0 +1,394 @@
+{
+  "pack_id": "HVF_EXPANSION_PACK_01_SIX_ERAS",
+  "version": "1.0.0",
+  "scenarios": {
+    "TOR_002": {
+      "id": "TOR_002",
+      "era": "ERA_TORAH",
+      "title": "Jethro's Counsel at Mount Sinai (Exodus 18)",
+      "context": "Thousands of Israelites wait from morning until evening for you to judge every dispute personally.",
+      "prompt": "How do you structure covenant governance so neither you nor the people wear out?",
+      "options": [
+        {
+          "text": "Appoint capable, God-fearing leaders over thousands, hundreds, fifties, and tens",
+          "outcomes": [
+            {
+              "weight": 0.85,
+              "score_delta": 35,
+              "flag": "DELEGATED_WISDOM",
+              "text": "Exodus 18:21 honored: justice flows swiftly across every tribe (+35 Wisdom Score)."
+            },
+            {
+              "weight": 0.15,
+              "score_delta": 20,
+              "flag": "TRIBAL_ORDER",
+              "text": "Elders trained in Torah statutes; minor appeals still reach your tent (+20 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Refuse delegation and judge every case alone to retain total control",
+          "outcomes": [
+            {
+              "weight": 0.8,
+              "score_delta": -10,
+              "flag": "EXHAUSTED_JUDGE",
+              "text": "Exhaustion stalls camp logistics and delays tabernacle assembly (-10 Score)."
+            },
+            {
+              "weight": 0.2,
+              "score_delta": 5,
+              "flag": "IRON_ENDURANCE",
+              "text": "You endure the workload temporarily, though elders remain untrained (+5 Score)."
+            }
+          ]
+        }
+      ]
+    },
+    "TOR_003": {
+      "id": "TOR_003",
+      "era": "ERA_TORAH",
+      "title": "The Year of Jubilee & Land Restoration (Leviticus 25)",
+      "context": "The 50th year trumpet sounds across the Promised Land while debt-burdened families await ancestral restoration.",
+      "prompt": "What royal decree do you proclaim across the gates of Israel?",
+      "options": [
+        {
+          "text": "Proclaim liberty throughout the land and return every family to its inheritance",
+          "outcomes": [
+            {
+              "weight": 0.9,
+              "score_delta": 40,
+              "flag": "JUBILEE_KEEPER",
+              "text": "Leviticus 25:10 fulfilled: generational poverty broken and sixth-year harvest overflows (+40 Score)."
+            },
+            {
+              "weight": 0.1,
+              "score_delta": 25,
+              "flag": "COVENANT_MERCY",
+              "text": "Merchants grumble briefly, then prosper under divine blessing (+25 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Delay Jubilee land returns to maximize royal tax revenue",
+          "outcomes": [
+            {
+              "weight": 1.0,
+              "score_delta": -15,
+              "flag": "HOARDED_ESTATES",
+              "text": "Covenant breach weakens tribal unity and triggers drought warnings (-15 Score)."
+            }
+          ]
+        }
+      ]
+    },
+    "HIS_002": {
+      "id": "HIS_002",
+      "era": "ERA_HISTORY",
+      "title": "Gideon's 300 at the Spring of Harod (Judges 7)",
+      "context": "Midianite forces fill the valley like locusts while 32,000 Israelite warriors assemble behind you.",
+      "prompt": "The Lord warns that too many troops will boast in their own strength. How do you proceed?",
+      "options": [
+        {
+          "text": "Test the army at the water and march at night with 300 men bearing trumpets and torches",
+          "outcomes": [
+            {
+              "weight": 0.9,
+              "score_delta": 45,
+              "flag": "GIDEON_VANGUARD",
+              "text": "Judges 7:20 victory: Midian panics at the shattered jars and blaring trumpets (+45 Score)."
+            },
+            {
+              "weight": 0.1,
+              "score_delta": 25,
+              "flag": "FAITH_OVER_NUMBERS",
+              "text": "The 300 hold the ridge in total discipline as enemy ranks scatter (+25 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Keep all 32,000 troops for a conventional frontal assault",
+          "outcomes": [
+            {
+              "weight": 1.0,
+              "score_delta": -15,
+              "flag": "FLESHLY_PRIDE",
+              "text": "Divided ranks falter without divine mandate (-15 Score)."
+            }
+          ]
+        }
+      ]
+    },
+    "HIS_003": {
+      "id": "HIS_003",
+      "era": "ERA_HISTORY",
+      "title": "Nehemiah's Wall Builders with Trowel & Sword (Nehemiah 4)",
+      "context": "Sanballat and Tobiah threaten a surprise raid while Jerusalem's walls are only half-built.",
+      "prompt": "How do you defend the builders without halting restoration of the city?",
+      "options": [
+        {
+          "text": "Post family guards by the breaches and arm every builder with one hand on the work and one on a weapon",
+          "outcomes": [
+            {
+              "weight": 0.9,
+              "score_delta": 40,
+              "flag": "NEHEMIAH_WALL",
+              "text": "Nehemiah 4:17 triumph: the wall is completed in 52 days while enemies stand down (+40 Score)."
+            },
+            {
+              "weight": 0.1,
+              "score_delta": 25,
+              "flag": "WATCHFUL_STEWARD",
+              "text": "Trumpet rally drills deter every night ambush (+25 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Suspend wall construction indefinitely to negotiate with Sanballat on the plain of Ono",
+          "outcomes": [
+            {
+              "weight": 1.0,
+              "score_delta": -15,
+              "flag": "STALLED_GATES",
+              "text": "Four distraction summits waste precious weeks while gates remain unhung (-15 Score)."
+            }
+          ]
+        }
+      ]
+    },
+    "WIS_002": {
+      "id": "WIS_002",
+      "era": "ERA_WISDOM",
+      "title": "Storehouse Preparation of the Ant (Proverbs 6 & 30)",
+      "context": "Seven years of bumper grain harvests fill your granaries while court advisors urge lavish spending.",
+      "prompt": "What treasury policy do you enact before winter and lean seasons arrive?",
+      "options": [
+        {
+          "text": "Seal 20% of every harvest in fortified granaries and diversify fields (Ecclesiastes 11:2)",
+          "outcomes": [
+            {
+              "weight": 0.9,
+              "score_delta": 35,
+              "flag": "PRUDENT_STOREHOUSE",
+              "text": "Proverbs 6:8 wisdom: surrounding nations buy grain from your full storehouses (+35 Score)."
+            },
+            {
+              "weight": 0.1,
+              "score_delta": 20,
+              "flag": "STEADY_TREASURY",
+              "text": "Zero famine casualties across your entire dynasty (+20 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Liquidated grain reserves for luxury monuments",
+          "outcomes": [
+            {
+              "weight": 1.0,
+              "score_delta": -15,
+              "flag": "EMPTY_GRANARY",
+              "text": "Early frost leaves the city dependent on foreign imports (-15 Score)."
+            }
+          ]
+        }
+      ]
+    },
+    "PRO_002": {
+      "id": "PRO_002",
+      "era": "ERA_PROPHETS",
+      "title": "King Josiah & the Discovered Book of the Law (2 Kings 22)",
+      "context": "High Priest Hilkiah brings you the long-lost Book of the Law discovered during Temple repairs.",
+      "prompt": "As Shaphan reads the covenant warnings aloud, how do you lead the nation?",
+      "options": [
+        {
+          "text": "Tear your robes in repentance, gather all elders and citizens, and renew the Covenant publicly",
+          "outcomes": [
+            {
+              "weight": 0.95,
+              "score_delta": 45,
+              "flag": "JOSIAH_REFORMATION",
+              "text": "2 Kings 23:3 revival: idolatry purged and the greatest Passover since the Judges celebrated (+45 Score)."
+            },
+            {
+              "weight": 0.05,
+              "score_delta": 30,
+              "flag": "SCRIPTURE_REFORMER",
+              "text": "Temple scrolls copied and distributed to every Levite teacher (+30 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Archive the scroll quietly in the royal library without public reform",
+          "outcomes": [
+            {
+              "weight": 1.0,
+              "score_delta": -20,
+              "flag": "BURIED_SCROLL",
+              "text": "Unrepented corruption accelerates national decline (-20 Score)."
+            }
+          ]
+        }
+      ]
+    },
+    "GOS_002": {
+      "id": "GOS_002",
+      "era": "ERA_GOSPELS",
+      "title": "House Built on the Rock vs. Shifting Sand (Matthew 7:24?27)",
+      "context": "Two master builders prepare foundations before the winter rains, rising floods, and mountain winds strike.",
+      "prompt": "Which blueprint governs your dynasty's laws, households, and leadership?",
+      "options": [
+        {
+          "text": "Dig deep and anchor every decree on hearing and practicing Christ's words",
+          "outcomes": [
+            {
+              "weight": 0.95,
+              "score_delta": 45,
+              "flag": "ROCK_FOUNDATION",
+              "text": "Matthew 7:25: the storm beats fiercely against the house, yet it stands unshaken (+45 Score)."
+            },
+            {
+              "weight": 0.05,
+              "score_delta": 30,
+              "flag": "OBEDIENT_BUILDER",
+              "text": "Enduring generational stability anchored in truth (+30 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Build rapidly on surface popularity without obedience",
+          "outcomes": [
+            {
+              "weight": 1.0,
+              "score_delta": -20,
+              "flag": "SAND_COLLAPSE",
+              "text": "The first crisis washes away hollow structures (-20 Score)."
+            }
+          ]
+        }
+      ]
+    },
+    "EPI_002": {
+      "id": "EPI_002",
+      "era": "ERA_EPISTLES",
+      "title": "The Berean Standard of Daily Scripture Verification (Acts 17:11)",
+      "context": "New teachers arrive in your assembly proclaiming bold doctrines that stir debate among the elders.",
+      "prompt": "How does your leadership verify every message before adopting it?",
+      "options": [
+        {
+          "text": "Receive the word with eagerness while examining the Scriptures daily to verify if these things are so",
+          "outcomes": [
+            {
+              "weight": 0.95,
+              "score_delta": 45,
+              "flag": "BEREAN_NOBILITY",
+              "text": "Acts 17:11: false doctrine exposed immediately and the assembly grows in grounded faith (+45 Score)."
+            },
+            {
+              "weight": 0.05,
+              "score_delta": 30,
+              "flag": "WORD_VERIFIED",
+              "text": "Elders united around verified apostolic teaching (+30 Score)."
+            }
+          ]
+        },
+        {
+          "text": "Accept persuasive rhetoric without checking Scripture",
+          "outcomes": [
+            {
+              "weight": 1.0,
+              "score_delta": -15,
+              "flag": "UNVERIFIED_DRIFT",
+              "text": "Conflicting factions splinter the assembly (-15 Score)."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "scripture_trials": [
+    {
+      "id": "TRIAL_TOR_EXP_01",
+      "era": "ERA_TORAH",
+      "reference": "Deuteronomy 6:6?7",
+      "prompt": "How does Deuteronomy 6 command parents and leaders to pass covenant truth to the next generation?",
+      "options": [
+        "Teach them diligently to your children when sitting, walking, lying down, and rising",
+        "Restrict all reading of the Law to once every ten years",
+        "Keep the commandments hidden inside sealed vaults",
+        "Rely solely on oral rumors without written record"
+      ],
+      "correct_index": 0,
+      "explanation": "Deuteronomy 6:7 embeds Scripture into daily household rhythm across generations."
+    },
+    {
+      "id": "TRIAL_HIS_EXP_01",
+      "era": "ERA_HISTORY",
+      "reference": "1 Samuel 16:7",
+      "prompt": "When Samuel anoints David in Bethlehem, what standard distinguishes God's evaluation from human judgment?",
+      "options": [
+        "Man looks on the outward appearance, but the Lord looks on the heart",
+        "Height and armor weight determine royal authority",
+        "The eldest brother always inherits the throne",
+        "Wealth of flocks outweighs faithfulness"
+      ],
+      "correct_index": 0,
+      "explanation": "1 Samuel 16:7 establishes heart-level integrity as the foundation of true kingship."
+    },
+    {
+      "id": "TRIAL_WIS_EXP_01",
+      "era": "ERA_WISDOM",
+      "reference": "Proverbs 9:10",
+      "prompt": "According to Proverbs 9:10, what is the true beginning of wisdom?",
+      "options": [
+        "The fear of the Lord is the beginning of wisdom, and knowledge of the Holy One is insight",
+        "Accumulating gold and diplomatic treaties",
+        "Winning debates in the city gate",
+        "Mastering astronomy alone"
+      ],
+      "correct_index": 0,
+      "explanation": "Reverent awe and obedience toward God is the root of all biblical wisdom."
+    },
+    {
+      "id": "TRIAL_PRO_EXP_01",
+      "era": "ERA_PROPHETS",
+      "reference": "Micah 6:8",
+      "prompt": "What three covenant requirements does Micah 6:8 declare the Lord requires of every ruler and citizen?",
+      "options": [
+        "To do justice, to love kindness, and to walk humbly with your God",
+        "To offer ten thousand rivers of oil",
+        "To conquer neighboring empires by force",
+        "To build taller palaces of cedar"
+      ],
+      "correct_index": 0,
+      "explanation": "Micah 6:8 summarizes prophetic ethics: justice, covenant mercy (hesed), and humble obedience."
+    },
+    {
+      "id": "TRIAL_GOS_EXP_01",
+      "era": "ERA_GOSPELS",
+      "reference": "Matthew 25:21",
+      "prompt": "In the Parable of the Talents, what commends the faithful steward to greater responsibility?",
+      "options": [
+        "Well done, good and faithful servant. You have been faithful over a little; I will set you over much",
+        "Burying the talent safely in the ground to avoid all risk",
+        "Spending the master's silver on personal feasts",
+        "Delegating all stewardship to strangers"
+      ],
+      "correct_index": 0,
+      "explanation": "Faithful multiplication of entrusted gifts unlocks greater kingdom authority."
+    },
+    {
+      "id": "TRIAL_EPI_EXP_01",
+      "era": "ERA_EPISTLES",
+      "reference": "Ephesians 6:14?17",
+      "prompt": "In the Armor of God, what are the Shield of Faith and the Sword of the Spirit?",
+      "options": [
+        "Faith extinguishes all flaming darts of the evil one, and the Sword of the Spirit is the Word of God",
+        "Physical bronze shields forged in Ephesus",
+        "Political alliances with Roman governors",
+        "Philosophical rhetoric from Athens"
+      ],
+      "correct_index": 0,
+      "explanation": "Ephesians 6:16?17 equips believers with active faith and the spoken/written Word of God."
+    }
+  ]
+}
