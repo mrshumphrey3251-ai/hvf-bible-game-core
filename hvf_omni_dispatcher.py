@@ -179,7 +179,7 @@ class OmniClientDispatcher(OmniBridge):
             handler = self.action_handlers.get(action)
             if not handler:
                 if str(payload.get("action", "")).upper().startswith("MULTIPLAYER_"):
-                    return handle_multiplayer_packet(payload)
+                    return json.dumps(handle_multiplayer_packet(payload))
                 return json.dumps({"status": "ERROR", "error": f"Unknown action: {action}"})
             return json.dumps(handler(payload))
         except Exception as exc:
