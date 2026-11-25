@@ -174,6 +174,13 @@ func _ready() -> void:
 		)
 		hud_hbox.add_child(shield_btn)
 
+		var trade_btn: Button = Button.new()
+		trade_btn.text = "Trade [T]"
+		trade_btn.pressed.connect(func():
+			world_node.trade_gathered_supplies()
+		)
+		hud_hbox.add_child(trade_btn)
+
 		var online_lbl: Label = Label.new()
 		online_lbl.text = "Online: 1"
 		online_lbl.add_theme_color_override("font_color", Color(0.45, 0.94, 0.65))
@@ -215,7 +222,12 @@ func _ready() -> void:
 				audio_synth.play_covenant_chime()
 		)
 
-		world_node.battle_won.connect(func(enemy_name: String, reward_score: int):
+		perpetual_trial_resolved.connect(func(trial_res: Dictionary):
+			if bool(trial_res.get("correct", false)):
+				world_node.add_trivia_talents(30, "Scripture Trial")
+		)
+
+		world_node.battle_won.connect(func(enemy_name: String, reward_score: int, reward_talents: int):
 			if audio_synth != null and audio_synth.has_method("play_covenant_chime"):
 				audio_synth.play_covenant_chime()
 		)
@@ -263,7 +275,7 @@ func _ready() -> void:
 			world_node.stage_portal_entered.connect(func(target_era_id: String):
 				mp_client.update_local_state(target_era_id, 420.0, 340.0)
 			)
-			world_node.battle_won.connect(func(enemy_name: String, reward_score: int):
+			world_node.battle_won.connect(func(enemy_name: String, reward_score: int, reward_talents: int):
 				mp_client.broadcast_covenant_blessing("Defeated %s" % enemy_name, reward_score)
 			)
 			mp_client.peers_updated.connect(func(peers: Array, online_cnt: int, chat_log: Array):
@@ -384,7 +396,7 @@ func _on_appoint_general_pressed(general_id: String, slot: String) -> void:
 func _on_collect_tribute_pressed() -> void:
 	var resp := _send_command({
 		"client_type": "GODOT_4",
-		"action": "COLLECT_TRIBUTE",
+		"action": "TRADE_SUPPLIES",
 		"total_score": cached_total_score
 	})
 	if resp.get("status") == "OK":

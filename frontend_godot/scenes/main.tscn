@@ -105,7 +105,7 @@ theme_override_constants/separation = 8
 layout_mode = 2
 size_flags_horizontal = 3
 clip_text = true
-text = "Collect Covenant Tribute"
+text = "Trade Chest Supplies (+25 Talents)"
 
 [node name="UpgradeKeepBtn" type="Button" parent="MarginContainer/ScrollContainer/VBox/StrongholdPanel/StrongholdVBox/StrongholdActionsHBox"]
 layout_mode = 2
