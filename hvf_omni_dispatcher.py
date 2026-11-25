@@ -214,27 +214,23 @@ class OmniClientDispatcher(OmniBridge):
                         handled += 1
 
 
+
+# --- Phase 15/16 Direct Stronghold Binding (Active Before __main__) ---
+try:
+    from hvf_dynasty_stronghold import (
+        attach_stronghold_to_dispatcher as _hvf_attach_stronghold,
+        bind_stronghold_persistence as _hvf_bind_sh_persist,
+    )
+    _hvf_base_omni_init = OmniClientDispatcher.__init__
+    def _hvf_stronghold_omni_init(self, *args, **kwargs):
+        _hvf_base_omni_init(self, *args, **kwargs)
+        _hvf_attach_stronghold(self)
+        _hvf_bind_sh_persist(self)
+    OmniClientDispatcher.__init__ = _hvf_stronghold_omni_init
+except Exception as _sh_bind_err:
+    print(f"[HVF WARNING] Stronghold bind error: {_sh_bind_err}")
+
+
 if __name__ == "__main__":
     dispatcher = OmniClientDispatcher()
     dispatcher.serve_forever()
-# --- Phase 15 Additive Stronghold Binding (Zero-Rewrite Extension) ---
-try:
-    from hvf_dynasty_stronghold import attach_stronghold_to_dispatcher as _hvf_attach_stronghold
-    _orig_omni_init = OmniClientDispatcher.__init__
-    def _phase15_omni_init(self, *args, **kwargs):
-        _orig_omni_init(self, *args, **kwargs)
-        _hvf_attach_stronghold(self)
-    OmniClientDispatcher.__init__ = _phase15_omni_init
-except Exception as _p15_err:
-    print(f"[HVF WARNING] Phase 15 Stronghold hook skipped: {_p15_err}")
-
-# --- Phase 16 Additive Stronghold SHA-256 Persistence Hook ---
-try:
-    from hvf_dynasty_stronghold import bind_stronghold_persistence as _hvf_bind_sh_persist
-    _orig_p15_init = OmniClientDispatcher.__init__
-    def _phase16_omni_init(self, *args, **kwargs):
-        _orig_p15_init(self, *args, **kwargs)
-        _hvf_bind_sh_persist(self)
-    OmniClientDispatcher.__init__ = _phase16_omni_init
-except Exception as _p16_err:
-    print(f"[HVF WARNING] Phase 16 Stronghold persistence hook skipped: {_p16_err}")
