@@ -199,6 +199,45 @@ func _make_pbr_material(col: Color, rough: float = 0.82, metal: float = 0.05, uv
 		mat.emission_energy_multiplier = 0.85
 	return mat
 
+
+func _load_pbr_asset_or_fallback(prefix: String, fallback_col: Color, rough: float = 0.85, metal: float = 0.04, uv_tile: float = 8.0) -> StandardMaterial3D:
+	var albedo_jpg: String = "res://assets/textures/%s_albedo.jpg" % prefix
+	var albedo_png: String = "res://assets/textures/%s_albedo.png" % prefix
+	var chosen_albedo: String = albedo_jpg if ResourceLoader.exists(albedo_jpg) else (albedo_png if ResourceLoader.exists(albedo_png) else "")
+	if chosen_albedo != "":
+		var mat: StandardMaterial3D = StandardMaterial3D.new()
+		mat.albedo_texture = load(chosen_albedo)
+		var norm_p: String = "res://assets/textures/%s_normal.jpg" % prefix
+		if not ResourceLoader.exists(norm_p):
+			norm_p = "res://assets/textures/%s_normal.png" % prefix
+		if ResourceLoader.exists(norm_p):
+			mat.normal_enabled = true
+			mat.normal_texture = load(norm_p)
+		var rough_p: String = "res://assets/textures/%s_roughness.jpg" % prefix
+		if not ResourceLoader.exists(rough_p):
+			rough_p = "res://assets/textures/%s_roughness.png" % prefix
+		if ResourceLoader.exists(rough_p):
+			mat.roughness_texture = load(rough_p)
+		mat.uv1_scale = Vector3(uv_tile, uv_tile, uv_tile)
+		mat.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+		return mat
+	return _make_pbr_material(fallback_col, rough, metal, uv_tile)
+
+func _try_spawn_glb_asset(parent: Node3D, glb_path: String, pos: Vector3, scale_f: float = 1.0, rot_y_deg: float = 0.0) -> Node3D:
+	if ResourceLoader.exists(glb_path):
+		var packed: PackedScene = load(glb_path)
+		if packed != null:
+			var inst: Node3D = packed.instantiate()
+			inst.position = pos
+			inst.rotation_degrees = Vector3(0.0, rot_y_deg, 0.0)
+			inst.scale = Vector3.ONE * scale_f
+			parent.add_child(inst)
+			var anim: AnimationPlayer = inst.find_child("AnimationPlayer", true, false)
+			if anim != null and anim.has_animation("Idle"):
+				anim.play("Idle")
+			return inst
+	return null
+
 func _build_3d_viewport() -> void:
 	viewport_container = SubViewportContainer.new()
 	viewport_container.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -328,6 +367,18 @@ func _add_mesh(parent: Node3D, m: Mesh, pos: Vector3, rot_deg: Vector3, mat: Sta
 	return mi
 
 func _make_sculpted_character_3d(parent: Node3D, pos: Vector3, tunic_col: Color, label_txt: String, scale_f: float = 1.0, is_enemy: bool = false) -> Node3D:
+	var custom_glb: String = "res://assets/models/sentinel_enemy.glb" if is_enemy else "res://assets/models/pilgrim_hero.glb"
+	var glb_actor: Node3D = _try_spawn_glb_asset(parent, custom_glb, pos, scale_f, 0.0)
+	if glb_actor != null:
+		var lbl_g: Label3D = Label3D.new()
+		lbl_g.text = label_txt
+		lbl_g.position = Vector3(0.0, 2.28 * scale_f, 0.0)
+		lbl_g.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		lbl_g.font_size = 36
+		lbl_g.outline_size = 8
+		lbl_g.modulate = Color(1.0, 0.76, 0.70) if is_enemy else Color(1.0, 0.96, 0.84)
+		glb_actor.add_child(lbl_g)
+		return glb_actor
 	var root: Node3D = Node3D.new()
 	root.position = pos
 	parent.add_child(root)
@@ -415,13 +466,13 @@ func _rebuild_3d_stage_scene() -> void:
 	if world_env != null and world_env.environment != null:
 		world_env.environment.fog_light_color = st["sky_hor"]
 
-	var ground_mat: StandardMaterial3D = _make_pbr_material(st["ground"], 0.92, 0.0, 18.0)
+	var ground_mat: StandardMaterial3D = _load_pbr_asset_or_fallback("sand" if current_stage == "ERA_TORAH" else "grass", st["ground"], 0.92, 0.0, 18.0)
 	var river_mat: StandardMaterial3D = _make_pbr_material(st["river"], 0.12, 0.35, 10.0, true)
 	river_mat.emission = st["river"]
 	river_mat.emission_energy_multiplier = 0.25
-	var stone_mat: StandardMaterial3D = _make_pbr_material(st["wall"], 0.86, 0.04, 8.0)
+	var stone_mat: StandardMaterial3D = _load_pbr_asset_or_fallback("limestone", st["wall"], 0.86, 0.04, 8.0)
 	var plaster_mat: StandardMaterial3D = _make_pbr_material(Color(0.76, 0.68, 0.54), 0.90, 0.0, 4.0)
-	var timber_mat: StandardMaterial3D = _make_pbr_material(Color(0.36, 0.22, 0.11), 0.84, 0.02, 4.0)
+	var timber_mat: StandardMaterial3D = _load_pbr_asset_or_fallback("cedar", Color(0.36, 0.22, 0.11), 0.84, 0.02, 4.0)
 	var gold_mat: StandardMaterial3D = _make_pbr_material(st["accent"], 0.24, 0.88, 3.0, true)
 	gold_mat.emission = st["accent"]
 	gold_mat.emission_energy_multiplier = 0.22
@@ -587,7 +638,9 @@ func _rebuild_3d_stage_scene() -> void:
 		var ch: Dictionary = c_item
 		var cpos: Vector3 = ch["pos"]
 		var is_open: bool = opened_chests.has(str(ch["id"]))
-		_add_mesh(dynamic_group, chest_m, cpos + Vector3(0.0, 0.39, 0.0), Vector3.ZERO, timber_mat if is_open else gold_mat)
+		var glb_ch: Node3D = _try_spawn_glb_asset(dynamic_group, "res://assets/models/secret_chest.glb", cpos, 1.35, 0.0)
+		if glb_ch == null:
+			_add_mesh(dynamic_group, chest_m, cpos + Vector3(0.0, 0.39, 0.0), Vector3.ZERO, timber_mat if is_open else gold_mat)
 		var clbl: Label3D = Label3D.new()
 		clbl.text = "OPENED" if is_open else "SECRET CHEST [E]"
 		clbl.position = cpos + Vector3(0.0, 1.35, 0.0)
