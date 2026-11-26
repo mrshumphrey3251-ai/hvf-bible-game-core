@@ -384,6 +384,11 @@ func _gui_input(event: InputEvent) -> void:
 			return
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			var st: Dictionary = WORLD_STAGES.get(current_stage, WORLD_STAGES["ERA_TORAH"])
+			var tab_c: Vector2 = _norm_to_screen(float(st["tabernacle_pos"].x), float(st["tabernacle_pos"].y))
+			if click_p.distance_to(tab_c + Vector2(68.0, 12.0)) <= 36.0:
+				emit_signal("academy_toggled")
+				accept_event()
+				return
 			var m_norm: Vector2 = st.get("merchant_pos", Vector2(0.14, 0.64))
 			var merch_screen: Vector2 = _norm_to_screen(m_norm.x, m_norm.y)
 			if click_p.distance_to(merch_screen) <= 56.0:
@@ -1157,6 +1162,12 @@ func _draw() -> void:
 	if font != null:
 		draw_string(font, tab_pos + Vector2(-95.0, -74.0), str(st.get("tabernacle_name", "Tabernacle Sanctuary")), HORIZONTAL_ALIGNMENT_CENTER, 190, 12, Color(1.0, 0.94, 0.55))
 		draw_string(font, tab_pos + Vector2(-95.0, 22.0), "[SAFE ZONE: HEAL & TRADE (T)]", HORIZONTAL_ALIGNMENT_CENTER, 190, 10, accent_col)
+	# Sacred Scroll Lectern [L] for Scripture & Covenant Law Academy
+	var lec_pos: Vector2 = tab_pos + Vector2(68.0, 12.0)
+	draw_rect(Rect2(lec_pos.x - 10.0, lec_pos.y - 12.0, 20.0, 22.0), Color(0.45, 0.28, 0.14))
+	draw_rect(Rect2(lec_pos.x - 14.0, lec_pos.y - 18.0, 28.0, 8.0), Color(0.98, 0.94, 0.78))
+	if font != null:
+		draw_string(font, lec_pos + Vector2(-60.0, -24.0), "ACADEMY LECTERN [L]", HORIZONTAL_ALIGNMENT_CENTER, 120, 10, Color(0.48, 0.96, 0.72))
 
 	# 2. SECRET CHESTS
 	var chests: Array = st.get("chests", [])

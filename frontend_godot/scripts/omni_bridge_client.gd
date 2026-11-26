@@ -385,6 +385,19 @@ func _ready() -> void:
 			acad_panel.visible = not acad_panel.visible
 
 		academy_btn.pressed.connect(toggle_acad_fn)
+		var top_acad_btn: Button = Button.new()
+		top_acad_btn.name = "TopAcademyStoreBtn"
+		top_acad_btn.text = "Bible Academy & Store ($4.99 / $14.99) [L]"
+		top_acad_btn.z_index = 25
+		top_acad_btn.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+		top_acad_btn.offset_left = -335.0
+		top_acad_btn.offset_right = -20.0
+		top_acad_btn.offset_top = 68.0
+		top_acad_btn.offset_bottom = 100.0
+		top_acad_btn.add_theme_color_override("font_color", Color(1.0, 0.92, 0.42))
+		top_acad_btn.pressed.connect(toggle_acad_fn)
+		add_child(top_acad_btn)
+
 		world_node.academy_toggled.connect(toggle_acad_fn)
 		world_node.upgrade_modal_requested.connect(func(reason_txt: String):
 			acad_panel.visible = true
