@@ -127,7 +127,7 @@ func _ready() -> void:
 
 	# Phase 36: Full-Screen Immersive Action-Adventure World + Floating Bottom HUD + Toggleable Campaign Drawer
 	var margin_ui: Control = get_node_or_null("MarginContainer")
-	var world_script = load("res://scripts/sovereign_immersive_world.gd")
+	var world_script = load("res://scripts/sovereign_first_person_3d.gd")
 	var mp_script = load("res://scripts/sovereign_multiplayer_client.gd")
 	if world_script != null:
 		if margin_ui != null:
@@ -135,7 +135,7 @@ func _ready() -> void:
 			margin_ui.z_index = 20
 
 		var world_node = world_script.new()
-		world_node.name = "ImmersiveBibleWorld"
+		world_node.name = "FirstPerson3DWorld"
 		add_child(world_node)
 		move_child(world_node, 0)
 
