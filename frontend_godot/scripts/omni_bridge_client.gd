@@ -253,6 +253,145 @@ func _ready() -> void:
 		armory_panel.add_child(arm_vbox)
 		add_child(armory_panel)
 
+		var academy_btn: Button = Button.new()
+		academy_btn.text = "Bible Academy [L]"
+		hud_hbox.add_child(academy_btn)
+
+		# Phase 41B: Scripture & Covenant Law Academy + $4.99 / $14.99 Entitlement Store
+		var acad_panel: PanelContainer = PanelContainer.new()
+		acad_panel.name = "ScriptureAcademyPanel"
+		acad_panel.visible = false
+		acad_panel.z_index = 22
+		acad_panel.set_anchors_preset(Control.PRESET_CENTER)
+		acad_panel.offset_left = -340.0
+		acad_panel.offset_right = 340.0
+		acad_panel.offset_top = -215.0
+		acad_panel.offset_bottom = 215.0
+
+		var acad_vbox: VBoxContainer = VBoxContainer.new()
+		acad_vbox.add_theme_constant_override("separation", 6)
+
+		var acad_title: Label = Label.new()
+		acad_title.text = "SOVEREIGN SCRIPTURE & COVENANT LAW ACADEMY (ULTIMATE LAW EDITION)"
+		acad_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		acad_title.add_theme_color_override("font_color", Color(1.0, 0.88, 0.35))
+		acad_vbox.add_child(acad_title)
+
+		var tier_status_lbl: Label = Label.new()
+		tier_status_lbl.text = "ACTIVE TIER: Free Playable Prologue (Stage 1 Sinai)"
+		tier_status_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		tier_status_lbl.add_theme_color_override("font_color", Color(0.45, 0.94, 0.65))
+		acad_vbox.add_child(tier_status_lbl)
+
+		var store_hbox: HBoxContainer = HBoxContainer.new()
+		store_hbox.add_theme_constant_override("separation", 6)
+
+		var buy_499_btn: Button = Button.new()
+		buy_499_btn.text = "Unlock Full Game ($4.99)"
+		buy_499_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+		var buy_1499_btn: Button = Button.new()
+		buy_1499_btn.text = "Unlock Bible Academy ($14.99/mo)"
+		buy_1499_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+		store_hbox.add_child(buy_499_btn)
+		store_hbox.add_child(buy_1499_btn)
+		acad_vbox.add_child(store_hbox)
+
+		var module_tabs: HBoxContainer = HBoxContainer.new()
+		module_tabs.add_theme_constant_override("separation", 6)
+		var btn_lexicon: Button = Button.new()
+		btn_lexicon.text = "1. Hebrew/Greek Lexicon"
+		btn_lexicon.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var btn_cov_law: Button = Button.new()
+		btn_cov_law.text = "2. Covenant Law Case Studies"
+		btn_cov_law.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var btn_mastery: Button = Button.new()
+		btn_mastery.text = "3. Complete Study Lesson (+50T)"
+		btn_mastery.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		module_tabs.add_child(btn_lexicon)
+		module_tabs.add_child(btn_cov_law)
+		module_tabs.add_child(btn_mastery)
+		acad_vbox.add_child(module_tabs)
+
+		var study_reader: RichTextLabel = RichTextLabel.new()
+		study_reader.bbcode_enabled = true
+		study_reader.custom_minimum_size = Vector2(0, 210)
+		study_reader.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		study_reader.text = "[b][color=#f5d061]FREE PROLOGUE PREVIEW ? SCRIPTURE & COVENANT LAW ACADEMY[/color][/b]\n? [b]Free Prologue (Stage 1):[/b] Explore Sinai, battle Raiders, loot Secret Chests & play Multiplayer.\n? [b]Full Covenant Pilgrim Edition ($4.99 One-Time):[/b] Unlocks all 6 Biblical Eras, Land Deeds, 4-Stage Homestead Construction & Lv.5 Armory.\n? [b]Scripture & Covenant Law Academy ($14.99/mo):[/b] Unlocks full 66-Book Exegesis, Original Hebrew/Greek Lexicons, Ultimate-Law Covenant Case Studies & SHA-256 Academic Transcripts."
+		acad_vbox.add_child(study_reader)
+
+		var btn_close_acad: Button = Button.new()
+		btn_close_acad.text = "Close Academy & Store [L]"
+		btn_close_acad.pressed.connect(func():
+			acad_panel.visible = false
+		)
+		acad_vbox.add_child(btn_close_acad)
+
+		acad_panel.add_child(acad_vbox)
+		add_child(acad_panel)
+
+		var activate_tier_fn: Callable = func(key_code: String, full_ok: bool, acad_ok: bool, tier_lbl: String):
+			world_node.set_entitlement_tier(full_ok, acad_ok, tier_lbl)
+			tier_status_lbl.text = "ACTIVE TIER: %s [VERIFIED]" % tier_lbl
+			if audio_synth != null and audio_synth.has_method("play_covenant_chime"):
+				audio_synth.play_covenant_chime()
+			var p_tcp: StreamPeerTCP = StreamPeerTCP.new()
+			if p_tcp.connect_to_host(host, port) == OK:
+				p_tcp.poll()
+				var sp: int = 0
+				while p_tcp.get_status() == StreamPeerTCP.STATUS_CONNECTING and sp < 10:
+					p_tcp.poll()
+					sp += 1
+				if p_tcp.get_status() == StreamPeerTCP.STATUS_CONNECTED:
+					var req_s: String = JSON.stringify({"action": "ENTITLEMENT_ACTIVATE", "player_id": "PILGRIM_LOCAL", "license_key": key_code}) + "\n"
+					p_tcp.put_data(req_s.to_utf8_buffer())
+					p_tcp.poll()
+				p_tcp.disconnect_from_host()
+
+		buy_499_btn.pressed.connect(func():
+			activate_tier_fn.call("HVF-PILGRIM-499", true, false, "Full Pilgrim ($4.99)")
+			study_reader.text = "[b][color=#7de2d1]FULL COVENANT PILGRIM EDITION ($4.99) ACTIVATED![/color][/b]\nAll 6 Biblical Era Portals, Land Deeds, 4-Stage On-Screen House Construction, and Lv.5 Armory Upgrades are now unlocked!\n\n[i]Upgrade to the $14.99/mo Scripture & Covenant Law Academy above to unlock full Hebrew/Greek Lexicon & Covenant Law Case Studies.[/i]"
+		)
+
+		buy_1499_btn.pressed.connect(func():
+			activate_tier_fn.call("HVF-ACADEMY-1499", true, true, "Scripture Academy ($14.99/mo)")
+			study_reader.text = "[b][color=#f5d061]SCRIPTURE & COVENANT LAW ACADEMY ($14.99/MO) ACTIVATED![/color][/b]\nWelcome, Scholar! You now have full access to the 66-Book Curriculum, Original Hebrew/Greek Lexicons, Ultimate-Law Covenant Case Studies, and SHA-256 Academic Transcripts."
+		)
+
+		btn_lexicon.pressed.connect(func():
+			if not world_node.has_academy_access:
+				study_reader.text = "[b][color=#ff8a80]ACADEMY TIER REQUIRED ($14.99/mo):[/color][/b] Click [b]Unlock Bible Academy ($14.99/mo)[/b] above to study original Hebrew & Greek roots!\n\n[i]Sample Entry:[/i] [b]BERIT (??????? ? Hebrew):[/b] Covenant, solemn binding oath ratified by blood and sacrifice (Gen 15:18; Exod 24:8)."
+			else:
+				study_reader.text = "[b][color=#f5d061]ORIGINAL HEBREW & GREEK ROOT LEXICON (66-BOOK CONCORDANCE)[/color][/b]\n? [b]BERIT (???????):[/b] Covenant / Solemn Treaty ? Unilateral & bilateral divine oath (Gen 15; Jer 31:31).\n? [b]CHESED (?????):[/b] Steadfast Covenant Loyalty & Mercy ? Faithful love anchored in promise (Ps 136).\n? [b]TORAH (???????):[/b] Instruction / Covenant Law ? Divine direction for justice, worship & life (Deut 6).\n? [b]LOGOS (?????):[/b] Eternal Word & Reason ? Pre-existent divine self-expression incarnate (John 1:1).\n? [b]DIKAIOSYNE (??????????):[/b] Covenant Righteousness & Judicial Standing (Rom 3:21-26)."
+		)
+
+		btn_cov_law.pressed.connect(func():
+			if not world_node.has_academy_access:
+				study_reader.text = "[b][color=#ff8a80]ACADEMY TIER REQUIRED ($14.99/mo):[/color][/b] Click [b]Unlock Bible Academy ($14.99/mo)[/b] above to open Ultimate-Law Covenant Case Studies!\n\n[i]Preview Case #01:[/i] [b]Cities of Refuge & Due Process (Num 35:9-34)[/b] ? Separation of accidental manslaughter from premeditated murder."
+			else:
+				study_reader.text = "[b][color=#f5d061]COVENANT LAW CASE STUDIES (ULTIMATE LAW JURISPRUDENCE)[/color][/b]\n? [b]CASE 01 ? Due Process & Two-Witness Rule (Deut 19:15):[/b] Establishes evidentiary burden of proof before judicial conviction.\n? [b]CASE 02 ? Restitution Over Retaliation (Exod 22:1-15):[/b] Restorative property law requiring multi-fold restitution to make victims whole.\n? [b]CASE 03 ? Jubilee Land Redemption (Lev 25:8-28):[/b] Anti-monopoly agrarian inheritance protection ensuring family land reverts every 50th year.\n? [b]CASE 04 ? New Covenant Heart Inscription (Jer 31:31-34; Heb 8):[/b] Transition from external stone tablets to Spirit-empowered obedience."
+		)
+
+		btn_mastery.pressed.connect(func():
+			if not world_node.has_academy_access:
+				study_reader.text = "[b][color=#ff8a80]ACADEMY TIER REQUIRED ($14.99/mo):[/color][/b] Activate the Scripture Academy tier above to complete accredited lessons for +50 Talents & Builder Credits!"
+			else:
+				world_node.add_trivia_talents(50, "Scripture & Covenant Law Academy")
+				study_reader.text = "[b][color=#7de2d1]ACADEMY STUDY MODULE COMPLETED![/color][/b]\nAwarded [b]+50 Earned Talents[/b] and [b]+1 Builder Task Credit[/b]! Your mastery progress is sealed for SHA-256 Academic Transcript export."
+		)
+
+		var toggle_acad_fn: Callable = func():
+			acad_panel.visible = not acad_panel.visible
+
+		academy_btn.pressed.connect(toggle_acad_fn)
+		world_node.academy_toggled.connect(toggle_acad_fn)
+		world_node.upgrade_modal_requested.connect(func(reason_txt: String):
+			acad_panel.visible = true
+			study_reader.text = "[b][color=#f5d061]UPGRADE REQUIRED:[/color][/b] %s\n\nChoose your tier above:\n? [b]Full Covenant Pilgrim Edition ($4.99 One-Time)[/b] ? All 6 Stages, Homestead Building & Lv.5 Armory.\n? [b]Scripture & Covenant Law Academy ($14.99/mo)[/b] ? Everything above + Full 66-Book Study, Lexicon & Covenant Law Case Studies." % reason_txt
+		)
+
+
 		var toggle_arm_fn: Callable = func():
 			armory_panel.visible = not armory_panel.visible
 			if armory_panel.visible:
