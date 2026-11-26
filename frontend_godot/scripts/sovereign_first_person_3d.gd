@@ -24,11 +24,40 @@ const ROBE_PALETTE := {
 	"Galilee Cyan": Color(0.16, 0.58, 0.66)
 }
 
+const WATER_SHADER_CODE := """
+shader_type spatial;
+render_mode specular_schlick_ggx, cull_back;
+
+uniform vec4 shallow_col : source_color = vec4(0.10, 0.48, 0.64, 0.88);
+uniform vec4 deep_col : source_color = vec4(0.03, 0.18, 0.32, 0.96);
+uniform vec4 foam_col : source_color = vec4(0.86, 0.94, 0.98, 1.0);
+
+void vertex() {
+	float w1 = sin(VERTEX.z * 1.4 + TIME * 2.2) * 0.045;
+	float w2 = cos(VERTEX.x * 2.1 - TIME * 1.7) * 0.035;
+	VERTEX.y += w1 + w2;
+}
+
+void fragment() {
+	float ripple1 = sin(UV.y * 42.0 + TIME * 2.8 + sin(UV.x * 16.0) * 2.0);
+	float ripple2 = cos(UV.x * 36.0 - TIME * 2.1 + UV.y * 20.0);
+	float wave_mix = clamp((ripple1 + ripple2) * 0.25 + 0.5, 0.0, 1.0);
+	float edge_foam = smoothstep(0.36, 0.50, abs(UV.x - 0.5));
+	vec3 col = mix(deep_col.rgb, shallow_col.rgb, wave_mix);
+	col = mix(col, foam_col.rgb, edge_foam * 0.65 + smoothstep(0.86, 0.98, wave_mix) * 0.35);
+	ALBEDO = col;
+	ROUGHNESS = 0.08;
+	METALLIC = 0.15;
+	SPECULAR = 0.92;
+	NORMAL = normalize(vec3(ripple1 * 0.14, 1.0, ripple2 * 0.14));
+}
+"""
+
 const WORLD_STAGES := {
 	"ERA_TORAH": {
 		"title": "I. WILDERNESS OF SINAI & TABERNACLE",
-		"sky_top": Color(0.12, 0.18, 0.32), "sky_hor": Color(0.68, 0.48, 0.28), "sun_energy": 1.85,
-		"ground": Color(0.48, 0.36, 0.22), "river": Color(0.08, 0.34, 0.52), "wall": Color(0.56, 0.48, 0.36), "accent": Color(0.92, 0.72, 0.24),
+		"sky_top": Color(0.12, 0.18, 0.34), "sky_hor": Color(0.72, 0.50, 0.28), "sun_energy": 1.95,
+		"ground": Color(0.50, 0.38, 0.22), "river": Color(0.08, 0.38, 0.56), "wall": Color(0.56, 0.48, 0.36), "accent": Color(0.95, 0.76, 0.26),
 		"tabernacle_name": "Tabernacle of Meeting", "tabernacle_pos": Vector3(-11.0, 0.0, -6.0), "merchant_pos": Vector3(-14.0, 0.0, 6.5), "plot_pos": Vector3(-5.5, 0.0, 11.5),
 		"npcs": [
 			{"name": "Moses", "pos": Vector3(-8.5, 0.0, -1.5), "color": Color(0.76, 0.56, 0.18), "scenario": "GEN_001", "greeting": "Cross the stone bridge to battle raiders [Left-Click / F], loot chests [E], or study at the Lectern [L]!"},
@@ -127,9 +156,11 @@ var shield_active: bool = false
 var shield_timer: float = 0.0
 var attack_swing_timer: float = 0.0
 var attack_cooldown: float = 0.0
+var camera_shake: float = 0.0
+var hit_flash_alpha: float = 0.0
 var in_tabernacle: bool = false
 
-var banner_text: String = "PBR 3D ENGINE ACTIVE ? Click viewport for Mouse-Look ([ESC] unlock cursor) | [WASD] Move | [F / Left-Click] Sword | [Q] Shield"
+var banner_text: String = "Click viewport for Mouse-Look ([ESC] free cursor) | [WASD] Move | [F / Left-Click] Sword | [Q] Shield | [E] Interact | [L] Academy"
 var banner_timer: float = 10.0
 var remote_pilgrims: Array = []
 var local_pilgrim_name: String = "Pilgrim"
@@ -152,6 +183,7 @@ var hud_overlay: Control
 
 var pbr_noise_tex: NoiseTexture2D
 var pbr_normal_tex: NoiseTexture2D
+var terrain_noise: FastNoiseLite
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -168,6 +200,11 @@ func _init_pbr_textures() -> void:
 	noise.frequency = 0.045
 	noise.fractal_octaves = 4
 
+	terrain_noise = FastNoiseLite.new()
+	terrain_noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
+	terrain_noise.frequency = 0.06
+	terrain_noise.fractal_octaves = 3
+
 	pbr_noise_tex = NoiseTexture2D.new()
 	pbr_noise_tex.width = 256
 	pbr_noise_tex.height = 256
@@ -181,6 +218,99 @@ func _init_pbr_textures() -> void:
 	pbr_normal_tex.as_normal_map = true
 	pbr_normal_tex.bump_strength = 6.5
 	pbr_normal_tex.noise = noise
+
+func _sample_terrain_height(x: float, z: float) -> float:
+	# Carve sunken riverbed channel at X = 3.5m, keep Tabernacle/Village courtyard level, and sculpt undulating dunes/hills outside!
+	var dist_river: float = absf(x - 3.5)
+	if dist_river < 2.2:
+		return -0.55 * (1.0 - dist_river / 2.2)
+	var dist_village: float = Vector2(x + 9.0, z).length()
+	var flat_mask: float = clampf((dist_village - 6.5) / 8.0, 0.0, 1.0)
+	var ridge_boost: float = clampf((absf(z) - 10.0) / 8.0, 0.0, 1.0) * 1.45
+	var n_val: float = terrain_noise.get_noise_2d(x * 3.0, z * 3.0) if terrain_noise != null else 0.0
+	return (n_val * 1.15 * flat_mask) + (absf(n_val) * ridge_boost)
+
+func _build_sculpted_terrain_mesh(mat: StandardMaterial3D) -> MeshInstance3D:
+	var st_tool: SurfaceTool = SurfaceTool.new()
+	st_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var cols: int = 56
+	var rows: int = 48
+	var min_x: float = -24.0
+	var max_x: float = 24.0
+	var min_z: float = -20.0
+	var max_z: float = 20.0
+	var dx: float = (max_x - min_x) / float(cols)
+	var dz: float = (max_z - min_z) / float(rows)
+
+	for iz in range(rows):
+		for ix in range(cols):
+			var x0: float = min_x + float(ix) * dx
+			var x1: float = x0 + dx
+			var z0: float = min_z + float(iz) * dz
+			var z1: float = z0 + dz
+
+			var p00: Vector3 = Vector3(x0, _sample_terrain_height(x0, z0), z0)
+			var p10: Vector3 = Vector3(x1, _sample_terrain_height(x1, z0), z0)
+			var p01: Vector3 = Vector3(x0, _sample_terrain_height(x0, z1), z1)
+			var p11: Vector3 = Vector3(x1, _sample_terrain_height(x1, z1), z1)
+
+			var u0: float = float(ix) / float(cols)
+			var u1: float = float(ix + 1) / float(cols)
+			var v0: float = float(iz) / float(rows)
+			var v1: float = float(iz + 1) / float(rows)
+
+			st_tool.set_uv(Vector2(u0, v0))
+			st_tool.add_vertex(p00)
+			st_tool.set_uv(Vector2(u1, v0))
+			st_tool.add_vertex(p10)
+			st_tool.set_uv(Vector2(u0, v1))
+			st_tool.add_vertex(p01)
+
+			st_tool.set_uv(Vector2(u1, v0))
+			st_tool.add_vertex(p10)
+			st_tool.set_uv(Vector2(u1, v1))
+			st_tool.add_vertex(p11)
+			st_tool.set_uv(Vector2(u0, v1))
+			st_tool.add_vertex(p01)
+
+	st_tool.generate_normals()
+	var arr_mesh: ArrayMesh = st_tool.commit()
+	var mi: MeshInstance3D = MeshInstance3D.new()
+	mi.mesh = arr_mesh
+	mi.material_override = mat
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	return mi
+
+func _spawn_fire_particles(parent: Node3D, pos: Vector3, scale_f: float = 1.0) -> void:
+	var gp: GPUParticles3D = GPUParticles3D.new()
+	gp.position = pos
+	gp.amount = 28
+	gp.lifetime = 0.85
+	gp.preprocess = 0.4
+
+	var pmat: ParticleProcessMaterial = ParticleProcessMaterial.new()
+	pmat.direction = Vector3(0.0, 1.0, 0.0)
+	pmat.spread = 18.0
+	pmat.initial_velocity_min = 0.9 * scale_f
+	pmat.initial_velocity_max = 1.9 * scale_f
+	pmat.gravity = Vector3(0.0, 0.6, 0.0)
+	pmat.scale_min = 0.6 * scale_f
+	pmat.scale_max = 1.25 * scale_f
+	pmat.color = Color(1.0, 0.65, 0.16, 0.95)
+	gp.process_material = pmat
+
+	var ember_m: SphereMesh = SphereMesh.new()
+	ember_m.radius = 0.11 * scale_f
+	ember_m.height = 0.22 * scale_f
+	var fire_mat: StandardMaterial3D = StandardMaterial3D.new()
+	fire_mat.albedo_color = Color(1.0, 0.72, 0.22)
+	fire_mat.emission_enabled = true
+	fire_mat.emission = Color(1.0, 0.48, 0.10)
+	fire_mat.emission_energy_multiplier = 2.4
+	fire_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	gp.draw_pass_1 = ember_m
+	gp.material_override = fire_mat
+	parent.add_child(gp)
 
 func _make_pbr_material(col: Color, rough: float = 0.82, metal: float = 0.05, uv_tile: float = 6.0, emissive: bool = false) -> StandardMaterial3D:
 	var mat: StandardMaterial3D = StandardMaterial3D.new()
@@ -198,7 +328,6 @@ func _make_pbr_material(col: Color, rough: float = 0.82, metal: float = 0.05, uv
 		mat.emission = col
 		mat.emission_energy_multiplier = 0.85
 	return mat
-
 
 func _load_pbr_asset_or_fallback(prefix: String, fallback_col: Color, rough: float = 0.85, metal: float = 0.04, uv_tile: float = 8.0) -> StandardMaterial3D:
 	var albedo_jpg: String = "res://assets/textures/%s_albedo.jpg" % prefix
@@ -255,10 +384,9 @@ func _build_3d_viewport() -> void:
 	world_root.name = "World3DRoot"
 	sub_viewport.add_child(world_root)
 
-	# Realistic Procedural Atmospheric Sky + ACES Filmic Tone Mapping + Volumetric Haze
 	sky_mat = ProceduralSkyMaterial.new()
-	sky_mat.sky_top_color = Color(0.12, 0.18, 0.32)
-	sky_mat.sky_horizon_color = Color(0.68, 0.48, 0.28)
+	sky_mat.sky_top_color = Color(0.12, 0.18, 0.34)
+	sky_mat.sky_horizon_color = Color(0.72, 0.50, 0.28)
 	sky_mat.ground_bottom_color = Color(0.18, 0.14, 0.10)
 	sky_mat.ground_horizon_color = Color(0.42, 0.32, 0.22)
 	sky_mat.sun_angle_max = 28.0
@@ -275,17 +403,17 @@ func _build_3d_viewport() -> void:
 	env.tonemap_mode = Environment.TONE_MAPPER_ACES
 	env.ssao_enabled = true
 	env.glow_enabled = true
-	env.glow_intensity = 0.45
+	env.glow_intensity = 0.55
 	env.fog_enabled = true
 	env.fog_light_color = Color(0.55, 0.42, 0.28)
-	env.fog_density = 0.009
+	env.fog_density = 0.008
 	world_env.environment = env
 	world_root.add_child(world_env)
 
 	sun_light = DirectionalLight3D.new()
 	sun_light.rotation_degrees = Vector3(-42.0, 38.0, 0.0)
 	sun_light.light_color = Color(1.0, 0.94, 0.84)
-	sun_light.light_energy = 1.85
+	sun_light.light_energy = 1.95
 	sun_light.shadow_enabled = true
 	sun_light.directional_shadow_max_distance = 65.0
 	world_root.add_child(sun_light)
@@ -299,7 +427,6 @@ func _build_3d_viewport() -> void:
 	camera_3d.current = true
 	player_head.add_child(camera_3d)
 
-	# Sculpted Metallic First-Person Sword of the Spirit
 	sword_pivot = Node3D.new()
 	sword_pivot.position = Vector3(0.40, -0.34, -0.56)
 	sword_pivot.rotation_degrees = Vector3(14.0, -16.0, 8.0)
@@ -333,7 +460,6 @@ func _build_3d_viewport() -> void:
 	sword_blade_mesh.material_override = blade_mat
 	sword_pivot.add_child(sword_blade_mesh)
 
-	# Sculpted Metallic Shield of Faith
 	shield_mesh = MeshInstance3D.new()
 	var sh_cm: CylinderMesh = CylinderMesh.new()
 	sh_cm.top_radius = 0.28
@@ -356,7 +482,7 @@ func _build_3d_viewport() -> void:
 	hud_overlay.draw.connect(_on_draw_hud_overlay)
 	add_child(hud_overlay)
 
-func _add_mesh(parent: Node3D, m: Mesh, pos: Vector3, rot_deg: Vector3, mat: StandardMaterial3D, cast_sh: bool = true) -> MeshInstance3D:
+func _add_mesh(parent: Node3D, m: Mesh, pos: Vector3, rot_deg: Vector3, mat: Material, cast_sh: bool = true) -> MeshInstance3D:
 	var mi: MeshInstance3D = MeshInstance3D.new()
 	mi.mesh = m
 	mi.position = pos
@@ -367,8 +493,9 @@ func _add_mesh(parent: Node3D, m: Mesh, pos: Vector3, rot_deg: Vector3, mat: Sta
 	return mi
 
 func _make_sculpted_character_3d(parent: Node3D, pos: Vector3, tunic_col: Color, label_txt: String, scale_f: float = 1.0, is_enemy: bool = false) -> Node3D:
+	var g_pos: Vector3 = Vector3(pos.x, _sample_terrain_height(pos.x, pos.z), pos.z)
 	var custom_glb: String = "res://assets/models/sentinel_enemy.glb" if is_enemy else "res://assets/models/pilgrim_hero.glb"
-	var glb_actor: Node3D = _try_spawn_glb_asset(parent, custom_glb, pos, scale_f, 0.0)
+	var glb_actor: Node3D = _try_spawn_glb_asset(parent, custom_glb, g_pos, scale_f, 0.0)
 	if glb_actor != null:
 		var lbl_g: Label3D = Label3D.new()
 		lbl_g.text = label_txt
@@ -379,8 +506,9 @@ func _make_sculpted_character_3d(parent: Node3D, pos: Vector3, tunic_col: Color,
 		lbl_g.modulate = Color(1.0, 0.76, 0.70) if is_enemy else Color(1.0, 0.96, 0.84)
 		glb_actor.add_child(lbl_g)
 		return glb_actor
+
 	var root: Node3D = Node3D.new()
-	root.position = pos
+	root.position = g_pos
 	parent.add_child(root)
 
 	var cloth_mat: StandardMaterial3D = _make_pbr_material(tunic_col, 0.88, 0.02, 2.0)
@@ -388,7 +516,6 @@ func _make_sculpted_character_3d(parent: Node3D, pos: Vector3, tunic_col: Color,
 	var skin_mat: StandardMaterial3D = _make_pbr_material(Color(0.76, 0.58, 0.44), 0.78, 0.0, 1.0)
 	var boot_mat: StandardMaterial3D = _make_pbr_material(Color(0.24, 0.15, 0.09), 0.85, 0.05, 1.0)
 
-	# Sculpted Cylindrical Legs & Boots
 	var leg_m: CylinderMesh = CylinderMesh.new()
 	leg_m.top_radius = 0.08 * scale_f
 	leg_m.bottom_radius = 0.07 * scale_f
@@ -396,28 +523,24 @@ func _make_sculpted_character_3d(parent: Node3D, pos: Vector3, tunic_col: Color,
 	_add_mesh(root, leg_m, Vector3(-0.14 * scale_f, 0.38 * scale_f, 0.0), Vector3.ZERO, boot_mat)
 	_add_mesh(root, leg_m, Vector3(0.14 * scale_f, 0.38 * scale_f, 0.0), Vector3.ZERO, boot_mat)
 
-	# Tapered Flowing Tunic & Mantle Cloak
 	var robe_m: CylinderMesh = CylinderMesh.new()
 	robe_m.top_radius = 0.22 * scale_f
 	robe_m.bottom_radius = 0.34 * scale_f
 	robe_m.height = 0.92 * scale_f
 	_add_mesh(root, robe_m, Vector3(0.0, 1.12 * scale_f, 0.0), Vector3.ZERO, cloth_mat)
 
-	# Ornate Belt Ring
 	var belt_m: CylinderMesh = CylinderMesh.new()
 	belt_m.top_radius = 0.26 * scale_f
 	belt_m.bottom_radius = 0.26 * scale_f
 	belt_m.height = 0.09 * scale_f
 	_add_mesh(root, belt_m, Vector3(0.0, 1.14 * scale_f, 0.0), Vector3.ZERO, trim_mat)
 
-	# Sculpted Capsule Arms
 	var arm_m: CapsuleMesh = CapsuleMesh.new()
 	arm_m.radius = 0.07 * scale_f
 	arm_m.height = 0.64 * scale_f
 	_add_mesh(root, arm_m, Vector3(-0.31 * scale_f, 1.22 * scale_f, 0.0), Vector3(0.0, 0.0, 12.0), cloth_mat)
 	_add_mesh(root, arm_m, Vector3(0.31 * scale_f, 1.22 * scale_f, 0.0), Vector3(0.0, 0.0, -12.0), cloth_mat)
 
-	# Sculpted Sphere Head & Headpiece/Helm
 	var head_m: SphereMesh = SphereMesh.new()
 	head_m.radius = 0.17 * scale_f
 	head_m.height = 0.36 * scale_f
@@ -429,7 +552,6 @@ func _make_sculpted_character_3d(parent: Node3D, pos: Vector3, tunic_col: Color,
 	var helm_mat: StandardMaterial3D = _make_pbr_material(Color(0.22, 0.24, 0.28), 0.30, 0.85, 1.0) if is_enemy else _make_pbr_material(Color(0.86, 0.78, 0.62), 0.85, 0.0, 1.0)
 	_add_mesh(root, helm_m, Vector3(0.0, 1.86 * scale_f, 0.0), Vector3.ZERO, helm_mat)
 
-	# Weapon or Shepherd Staff
 	if is_enemy:
 		var wpn_m: PrismMesh = PrismMesh.new()
 		wpn_m.size = Vector3(0.08 * scale_f, 1.05 * scale_f, 0.03 * scale_f)
@@ -462,14 +584,11 @@ func _rebuild_3d_stage_scene() -> void:
 		sky_mat.sky_top_color = st["sky_top"]
 		sky_mat.sky_horizon_color = st["sky_hor"]
 	if sun_light != null:
-		sun_light.light_energy = float(st.get("sun_energy", 1.85))
+		sun_light.light_energy = float(st.get("sun_energy", 1.95))
 	if world_env != null and world_env.environment != null:
 		world_env.environment.fog_light_color = st["sky_hor"]
 
 	var ground_mat: StandardMaterial3D = _load_pbr_asset_or_fallback("sand" if current_stage == "ERA_TORAH" else "grass", st["ground"], 0.92, 0.0, 18.0)
-	var river_mat: StandardMaterial3D = _make_pbr_material(st["river"], 0.12, 0.35, 10.0, true)
-	river_mat.emission = st["river"]
-	river_mat.emission_energy_multiplier = 0.25
 	var stone_mat: StandardMaterial3D = _load_pbr_asset_or_fallback("limestone", st["wall"], 0.86, 0.04, 8.0)
 	var plaster_mat: StandardMaterial3D = _make_pbr_material(Color(0.76, 0.68, 0.54), 0.90, 0.0, 4.0)
 	var timber_mat: StandardMaterial3D = _load_pbr_asset_or_fallback("cedar", Color(0.36, 0.22, 0.11), 0.84, 0.02, 4.0)
@@ -478,41 +597,44 @@ func _rebuild_3d_stage_scene() -> void:
 	gold_mat.emission_energy_multiplier = 0.22
 	var foliage_mat: StandardMaterial3D = _make_pbr_material(Color(0.16, 0.38, 0.18), 0.88, 0.0, 3.0)
 
-	# 1. Textured PBR Terrain Ground Plane
-	var g_box: BoxMesh = BoxMesh.new()
-	g_box.size = Vector3(48.0, 0.5, 40.0)
-	_add_mesh(dynamic_group, g_box, Vector3(0.0, -0.25, 0.0), Vector3.ZERO, ground_mat, false)
+	# 1. Undulating 3D Desert / Valley Heightmap Terrain (SurfaceTool ArrayMesh)
+	var terrain_mi: MeshInstance3D = _build_sculpted_terrain_mesh(ground_mat)
+	dynamic_group.add_child(terrain_mi)
 
-	# 2. Reflective River & Sculpted Arched Stone Bridge
-	var r_box: BoxMesh = BoxMesh.new()
-	r_box.size = Vector3(3.8, 0.38, 40.0)
-	_add_mesh(dynamic_group, r_box, Vector3(3.5, -0.17, 0.0), Vector3.ZERO, river_mat, false)
+	# 2. Real-Time Animated Spatial Water Shader River + Stone Arch Bridge
+	var water_shader: Shader = Shader.new()
+	water_shader.code = WATER_SHADER_CODE
+	var water_mat: ShaderMaterial = ShaderMaterial.new()
+	water_mat.shader = water_shader
+	var water_plane: PlaneMesh = PlaneMesh.new()
+	water_plane.size = Vector2(4.2, 40.0)
+	water_plane.subdivide_width = 16
+	water_plane.subdivide_depth = 64
+	_add_mesh(dynamic_group, water_plane, Vector3(3.5, -0.14, 0.0), Vector3.ZERO, water_mat, false)
 
 	var br_deck: BoxMesh = BoxMesh.new()
-	br_deck.size = Vector3(5.2, 0.32, 3.6)
-	_add_mesh(dynamic_group, br_deck, Vector3(3.5, 0.16, 0.0), Vector3.ZERO, stone_mat)
+	br_deck.size = Vector3(5.4, 0.34, 3.6)
+	_add_mesh(dynamic_group, br_deck, Vector3(3.5, 0.18, 0.0), Vector3.ZERO, stone_mat)
 	var br_rail: BoxMesh = BoxMesh.new()
-	br_rail.size = Vector3(5.2, 0.62, 0.28)
-	_add_mesh(dynamic_group, br_rail, Vector3(3.5, 0.58, -1.68), Vector3.ZERO, stone_mat)
-	_add_mesh(dynamic_group, br_rail, Vector3(3.5, 0.58, 1.68), Vector3.ZERO, stone_mat)
+	br_rail.size = Vector3(5.4, 0.64, 0.28)
+	_add_mesh(dynamic_group, br_rail, Vector3(3.5, 0.60, -1.68), Vector3.ZERO, stone_mat)
+	_add_mesh(dynamic_group, br_rail, Vector3(3.5, 0.60, 1.68), Vector3.ZERO, stone_mat)
 
-	# 3. Fortified Limestone Perimeter Walls, Crenellations & Cylindrical Watchtowers
+	# 3. Fortified Perimeter Walls & Watchtowers With Live GPUParticles3D Torch Fire!
 	var wall_m: BoxMesh = BoxMesh.new()
-	wall_m.size = Vector3(44.0, 3.4, 1.2)
-	_add_mesh(dynamic_group, wall_m, Vector3(0.0, 1.7, -18.0), Vector3.ZERO, stone_mat)
-	_add_mesh(dynamic_group, wall_m, Vector3(0.0, 1.7, 18.0), Vector3.ZERO, stone_mat)
+	wall_m.size = Vector3(44.0, 3.6, 1.2)
+	_add_mesh(dynamic_group, wall_m, Vector3(0.0, 1.8, -18.0), Vector3.ZERO, stone_mat)
+	_add_mesh(dynamic_group, wall_m, Vector3(0.0, 1.8, 18.0), Vector3.ZERO, stone_mat)
 
 	var tower_m: CylinderMesh = CylinderMesh.new()
 	tower_m.top_radius = 1.45
 	tower_m.bottom_radius = 1.65
-	tower_m.height = 6.2
+	tower_m.height = 6.4
 	tower_m.radial_segments = 16
-	var brazier_m: SphereMesh = SphereMesh.new()
-	brazier_m.radius = 0.42
 	for wx in [-20.5, 20.5]:
 		for wz in [-17.5, 17.5]:
-			_add_mesh(dynamic_group, tower_m, Vector3(wx, 3.1, wz), Vector3.ZERO, stone_mat)
-			_add_mesh(dynamic_group, brazier_m, Vector3(wx, 6.4, wz), Vector3.ZERO, _make_pbr_material(Color(1.0, 0.55, 0.14), 0.2, 0.0, 1.0, true), false)
+			_add_mesh(dynamic_group, tower_m, Vector3(wx, 3.2, wz), Vector3.ZERO, stone_mat)
+			_spawn_fire_particles(dynamic_group, Vector3(wx, 6.45, wz), 1.35)
 
 	# 4. Biblical Limestone Houses & Sculpted Trees
 	var house_body: BoxMesh = BoxMesh.new()
@@ -521,8 +643,9 @@ func _rebuild_3d_stage_scene() -> void:
 	house_trim.size = Vector3(4.1, 0.28, 3.7)
 	for h_pos in [Vector3(-16.5, 0.0, -11.5), Vector3(-5.0, 0.0, -12.0), Vector3(-16.5, 0.0, 1.0)]:
 		var hp: Vector3 = h_pos
-		_add_mesh(dynamic_group, house_body, hp + Vector3(0.0, 1.45, 0.0), Vector3.ZERO, plaster_mat)
-		_add_mesh(dynamic_group, house_trim, hp + Vector3(0.0, 3.0, 0.0), Vector3.ZERO, timber_mat)
+		var gy: float = _sample_terrain_height(hp.x, hp.z)
+		_add_mesh(dynamic_group, house_body, Vector3(hp.x, gy + 1.45, hp.z), Vector3.ZERO, plaster_mat)
+		_add_mesh(dynamic_group, house_trim, Vector3(hp.x, gy + 3.0, hp.z), Vector3.ZERO, timber_mat)
 
 	var trunk_m: CylinderMesh = CylinderMesh.new()
 	trunk_m.top_radius = 0.16
@@ -533,10 +656,11 @@ func _rebuild_3d_stage_scene() -> void:
 	canopy_m.height = 1.6
 	for t_pos in [Vector3(-17.5, 0.0, -4.0), Vector3(-2.0, 0.0, -8.5), Vector3(7.5, 0.0, -12.0), Vector3(16.5, 0.0, 12.5)]:
 		var tp: Vector3 = t_pos
-		_add_mesh(dynamic_group, trunk_m, tp + Vector3(0.0, 1.5, 0.0), Vector3.ZERO, timber_mat)
-		_add_mesh(dynamic_group, canopy_m, tp + Vector3(0.0, 3.2, 0.0), Vector3.ZERO, foliage_mat)
+		var ty: float = _sample_terrain_height(tp.x, tp.z)
+		_add_mesh(dynamic_group, trunk_m, Vector3(tp.x, ty + 1.5, tp.z), Vector3.ZERO, timber_mat)
+		_add_mesh(dynamic_group, canopy_m, Vector3(tp.x, ty + 3.2, tp.z), Vector3.ZERO, foliage_mat)
 
-	# 5. Sculpted Tabernacle / Sanctuary with Pitched Canopy, Pillars & Warm Fire PointLight3D
+	# 5. Tabernacle / Sanctuary + Live Altar Fire Particles + OmniLight3D
 	var tab_p: Vector3 = st["tabernacle_pos"]
 	var tab_walls: BoxMesh = BoxMesh.new()
 	tab_walls.size = Vector3(5.0, 3.2, 4.4)
@@ -552,11 +676,13 @@ func _rebuild_3d_stage_scene() -> void:
 	_add_mesh(dynamic_group, pillar_m, tab_p + Vector3(-2.2, 1.7, 2.3), Vector3.ZERO, gold_mat)
 	_add_mesh(dynamic_group, pillar_m, tab_p + Vector3(2.2, 1.7, 2.3), Vector3.ZERO, gold_mat)
 
+	_spawn_fire_particles(dynamic_group, tab_p + Vector3(0.0, 1.15, 2.6), 1.45)
+
 	altar_light = OmniLight3D.new()
-	altar_light.position = tab_p + Vector3(0.0, 2.2, 2.8)
+	altar_light.position = tab_p + Vector3(0.0, 2.4, 2.8)
 	altar_light.light_color = Color(1.0, 0.72, 0.28)
-	altar_light.light_energy = 2.6
-	altar_light.omni_range = 14.0
+	altar_light.light_energy = 2.8
+	altar_light.omni_range = 15.0
 	dynamic_group.add_child(altar_light)
 
 	var tab_lbl: Label3D = Label3D.new()
@@ -637,13 +763,14 @@ func _rebuild_3d_stage_scene() -> void:
 	for c_item in st.get("chests", []):
 		var ch: Dictionary = c_item
 		var cpos: Vector3 = ch["pos"]
+		var cy: float = _sample_terrain_height(cpos.x, cpos.z)
 		var is_open: bool = opened_chests.has(str(ch["id"]))
-		var glb_ch: Node3D = _try_spawn_glb_asset(dynamic_group, "res://assets/models/secret_chest.glb", cpos, 1.35, 0.0)
+		var glb_ch: Node3D = _try_spawn_glb_asset(dynamic_group, "res://assets/models/secret_chest.glb", Vector3(cpos.x, cy, cpos.z), 1.35, 0.0)
 		if glb_ch == null:
-			_add_mesh(dynamic_group, chest_m, cpos + Vector3(0.0, 0.39, 0.0), Vector3.ZERO, timber_mat if is_open else gold_mat)
+			_add_mesh(dynamic_group, chest_m, Vector3(cpos.x, cy + 0.39, cpos.z), Vector3.ZERO, timber_mat if is_open else gold_mat)
 		var clbl: Label3D = Label3D.new()
 		clbl.text = "OPENED" if is_open else "SECRET CHEST [E]"
-		clbl.position = cpos + Vector3(0.0, 1.35, 0.0)
+		clbl.position = Vector3(cpos.x, cy + 1.35, cpos.z)
 		clbl.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 		clbl.font_size = 32
 		clbl.outline_size = 8
@@ -1013,6 +1140,7 @@ func _perform_sword_strike() -> void:
 				best_dist = d
 				best_idx = i
 	if best_idx != -1:
+		camera_shake = 0.22
 		var ed: Dictionary = stage_enemies[best_idx]
 		var dmg: int = maxi(14, get_sword_damage() - int(ed.get("armor", 0)))
 		var new_hp: int = maxi(0, int(ed["hp"]) - dmg)
@@ -1044,6 +1172,8 @@ func _apply_damage_to_player(raw_dmg: int, attacker_label: String, tab_pos: Vect
 	var armor_mit: int = maxi(3, raw_dmg - get_player_armor())
 	var final_dmg: int = maxi(2, int(armor_mit * 0.22)) if shield_active else armor_mit
 	spirit_hp = maxi(0, spirit_hp - final_dmg)
+	camera_shake = 0.30
+	hit_flash_alpha = 0.35
 	if shield_active:
 		_announce("SHIELD OF FAITH BLOCKED %s! (-%d HP)" % [attacker_label, final_dmg], 2.5)
 	else:
@@ -1067,13 +1197,21 @@ func _process(delta: float) -> void:
 		attack_swing_timer = maxf(0.0, attack_swing_timer - delta)
 	if attack_cooldown > 0.0:
 		attack_cooldown = maxf(0.0, attack_cooldown - delta)
+	if camera_shake > 0.0:
+		camera_shake = maxf(0.0, camera_shake - delta * 1.4)
+	if hit_flash_alpha > 0.0:
+		hit_flash_alpha = maxf(0.0, hit_flash_alpha - delta * 1.2)
 
 	if altar_light != null:
-		altar_light.light_energy = 2.4 + sin(anim_time * 9.0) * 0.45
+		altar_light.light_energy = 2.6 + sin(anim_time * 9.0) * 0.55
 
 	if player_head != null and camera_3d != null:
 		player_head.rotation.y = cam_yaw
 		camera_3d.rotation.x = cam_pitch
+		if camera_shake > 0.0:
+			camera_3d.position = Vector3(sin(anim_time * 55.0) * camera_shake * 0.14, cos(anim_time * 48.0) * camera_shake * 0.14, 0.0)
+		else:
+			camera_3d.position = Vector3.ZERO
 
 	if sword_pivot != null:
 		if attack_swing_timer > 0.0:
@@ -1100,16 +1238,21 @@ func _process(delta: float) -> void:
 	if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
 		move_dir -= right
 
+	var ground_y: float = _sample_terrain_height(player_pos_3d.x, player_pos_3d.z)
+	# Keep player level across the stone bridge deck at Z in [-1.6, 1.6], X in [1.0, 6.0]
+	if absf(player_pos_3d.x - 3.5) <= 2.6 and absf(player_pos_3d.z) <= 1.7:
+		ground_y = 0.32
+
 	if move_dir.length() > 0.01:
 		var spd: float = get_current_move_speed()
 		player_pos_3d += move_dir.normalized() * spd * delta
 		player_pos_3d.x = clampf(player_pos_3d.x, -18.8, 18.8)
 		player_pos_3d.z = clampf(player_pos_3d.z, -15.2, 15.2)
 		var bob: float = sin(anim_time * 11.0) * 0.045
-		player_head.position = Vector3(player_pos_3d.x, 1.72 + bob, player_pos_3d.z)
+		player_head.position = Vector3(player_pos_3d.x, ground_y + 1.72 + bob, player_pos_3d.z)
 		emit_signal("player_moved", current_stage, (player_pos_3d.x + 20.0) * 20.0, (player_pos_3d.z + 18.0) * 16.0)
 	else:
-		player_head.position = Vector3(player_pos_3d.x, 1.72, player_pos_3d.z)
+		player_head.position = Vector3(player_pos_3d.x, ground_y + 1.72, player_pos_3d.z)
 
 	var st: Dictionary = WORLD_STAGES.get(current_stage, WORLD_STAGES["ERA_TORAH"])
 	var tab_pos: Vector3 = st["tabernacle_pos"]
@@ -1133,8 +1276,9 @@ func _process(delta: float) -> void:
 				ed["pos3d"] = epos
 				if ed.has("node3d") and is_instance_valid(ed["node3d"]):
 					var n3d: Node3D = ed["node3d"]
-					n3d.position = epos
-					n3d.look_at(Vector3(player_pos_3d.x, epos.y, player_pos_3d.z), Vector3.UP)
+					var ey: float = _sample_terrain_height(epos.x, epos.z)
+					n3d.position = Vector3(epos.x, ey, epos.z)
+					n3d.look_at(Vector3(player_pos_3d.x, ey, player_pos_3d.z), Vector3.UP)
 			var atk_t: float = float(ed.get("atk_timer", 1.2)) - delta
 			if atk_t <= 0.0 and dist_p <= 3.0:
 				atk_t = 1.65
@@ -1165,15 +1309,32 @@ func _on_draw_hud_overlay() -> void:
 	var st: Dictionary = WORLD_STAGES.get(current_stage, WORLD_STAGES["ERA_TORAH"])
 	var acc: Color = st["accent"]
 
-	hud_overlay.draw_rect(Rect2(12.0, 10.0, w - 24.0, 52.0), Color(0.04, 0.04, 0.07, 0.84))
-	hud_overlay.draw_string(font, Vector2(22.0, 30.0), "%s  |  TALENTS: %d  |  HP: %d/%d  |  GEAR: Sword Lv.%d / Armor Lv.%d / Boots Lv.%d  |  HOUSE: %d/4" % [str(st["title"]), earned_talents, spirit_hp, max_spirit_hp, sword_level, armor_level, boots_level, int(house_stages.get(current_stage, 0))], HORIZONTAL_ALIGNMENT_LEFT, int(w - 44.0), 13, acc)
-	hud_overlay.draw_string(font, Vector2(22.0, 50.0), "[Click Viewport] Mouse-Look ([ESC] Free Cursor)  |  [WASD] Walk  |  [F / Left-Click] Sword  |  [Q] Shield  |  [E] Interact  |  [L] Academy", HORIZONTAL_ALIGNMENT_LEFT, int(w - 44.0), 11, Color(0.88, 0.90, 0.95))
+	# Damage Vignette Flash
+	if hit_flash_alpha > 0.0:
+		hud_overlay.draw_rect(Rect2(0.0, 0.0, w, h), Color(0.85, 0.08, 0.08, hit_flash_alpha))
 
+	# Sleek Glassmorphic Dark-Gold Top Bar
+	hud_overlay.draw_rect(Rect2(14.0, 10.0, w - 28.0, 56.0), Color(0.04, 0.04, 0.06, 0.78))
+	hud_overlay.draw_rect(Rect2(14.0, 10.0, w - 28.0, 56.0), Color(acc.r, acc.g, acc.b, 0.55), false, 1.5)
+
+	# Modern Health Bar Gauge inside Top-Left HUD
+	var hp_pct: float = clampf(float(spirit_hp) / float(maxi(1, max_spirit_hp)), 0.0, 1.0)
+	hud_overlay.draw_rect(Rect2(24.0, 38.0, 170.0, 14.0), Color(0.12, 0.06, 0.06, 0.92))
+	var hp_col: Color = Color(0.22, 0.85, 0.48) if hp_pct > 0.5 else (Color(0.95, 0.72, 0.20) if hp_pct > 0.25 else Color(0.92, 0.24, 0.22))
+	hud_overlay.draw_rect(Rect2(26.0, 40.0, 166.0 * hp_pct, 10.0), hp_col)
+	hud_overlay.draw_string(font, Vector2(30.0, 49.0), "SPIRIT HP: %d / %d" % [spirit_hp, max_spirit_hp], HORIZONTAL_ALIGNMENT_LEFT, 160, 10, Color.WHITE)
+
+	hud_overlay.draw_string(font, Vector2(24.0, 28.0), "%s   |   TALENTS: %d   |   GEAR: Sword Lv.%d / Armor Lv.%d / Boots Lv.%d   |   HOUSE: %d/4" % [str(st["title"]), earned_talents, sword_level, armor_level, boots_level, int(house_stages.get(current_stage, 0))], HORIZONTAL_ALIGNMENT_LEFT, int(w - 48.0), 13, acc)
+	hud_overlay.draw_string(font, Vector2(208.0, 49.0), "[Click Viewport] Mouse-Look ([ESC] Free Cursor)  |  [WASD] Move  |  [F / L-Click] Sword  |  [Q] Shield  |  [E] Interact  |  [L] Academy", HORIZONTAL_ALIGNMENT_LEFT, int(w - 230.0), 11, Color(0.90, 0.92, 0.96))
+
+	# Modern Precision Reticle
 	var cx: float = w * 0.5
 	var cy: float = h * 0.5
-	hud_overlay.draw_arc(Vector2(cx, cy), 6.0, 0.0, TAU, 16, Color(1.0, 0.94, 0.65, 0.80), 1.5)
+	hud_overlay.draw_arc(Vector2(cx, cy), 7.0, 0.0, TAU, 24, Color(1.0, 0.94, 0.65, 0.72), 1.5)
 	hud_overlay.draw_circle(Vector2(cx, cy), 2.0, acc)
 
+	# Sleek Floating Action Banner
 	if banner_timer > 0.0 and banner_text != "":
-		hud_overlay.draw_rect(Rect2(16.0, h - 98.0, w - 32.0, 28.0), Color(0.05, 0.04, 0.08, 0.90))
-		hud_overlay.draw_string(font, Vector2(24.0, h - 79.0), banner_text, HORIZONTAL_ALIGNMENT_LEFT, int(w - 48.0), 13, Color(1.0, 0.94, 0.58))
+		hud_overlay.draw_rect(Rect2(16.0, h - 100.0, w - 32.0, 30.0), Color(0.04, 0.04, 0.07, 0.85))
+		hud_overlay.draw_rect(Rect2(16.0, h - 100.0, w - 32.0, 30.0), Color(acc.r, acc.g, acc.b, 0.50), false, 1.0)
+		hud_overlay.draw_string(font, Vector2(26.0, h - 80.0), banner_text, HORIZONTAL_ALIGNMENT_LEFT, int(w - 52.0), 13, Color(1.0, 0.94, 0.58))
