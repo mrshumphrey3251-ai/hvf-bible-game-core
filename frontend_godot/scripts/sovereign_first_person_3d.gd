@@ -16,22 +16,23 @@ signal upgrade_modal_requested(reason: String)
 const ERA_ORDER := ["ERA_TORAH", "ERA_HISTORY", "ERA_WISDOM", "ERA_PROPHETS", "ERA_GOSPELS", "ERA_EPISTLES"]
 
 const ROBE_PALETTE := {
-	"Sapphire": Color(0.18, 0.48, 0.92),
-	"Judah Gold": Color(0.94, 0.74, 0.22),
-	"Emerald": Color(0.20, 0.75, 0.48),
-	"Tyrian Purple": Color(0.62, 0.28, 0.82),
-	"Crimson": Color(0.86, 0.24, 0.28),
-	"Galilee Cyan": Color(0.22, 0.82, 0.90)
+	"Sapphire": Color(0.14, 0.34, 0.68),
+	"Judah Gold": Color(0.78, 0.58, 0.16),
+	"Emerald": Color(0.14, 0.52, 0.32),
+	"Tyrian Purple": Color(0.44, 0.18, 0.58),
+	"Crimson": Color(0.66, 0.16, 0.18),
+	"Galilee Cyan": Color(0.16, 0.58, 0.66)
 }
 
 const WORLD_STAGES := {
 	"ERA_TORAH": {
-		"title": "I. WILDERNESS OF SINAI & TABERNACLE (3D FIRST-PERSON)",
-		"sky": Color(0.14, 0.10, 0.07), "ground": Color(0.32, 0.23, 0.13), "river": Color(0.12, 0.48, 0.72), "wall": Color(0.46, 0.38, 0.28), "accent": Color(0.96, 0.78, 0.28),
+		"title": "I. WILDERNESS OF SINAI & TABERNACLE",
+		"sky_top": Color(0.12, 0.18, 0.32), "sky_hor": Color(0.68, 0.48, 0.28), "sun_energy": 1.85,
+		"ground": Color(0.48, 0.36, 0.22), "river": Color(0.08, 0.34, 0.52), "wall": Color(0.56, 0.48, 0.36), "accent": Color(0.92, 0.72, 0.24),
 		"tabernacle_name": "Tabernacle of Meeting", "tabernacle_pos": Vector3(-11.0, 0.0, -6.0), "merchant_pos": Vector3(-14.0, 0.0, 6.5), "plot_pos": Vector3(-5.5, 0.0, 11.5),
 		"npcs": [
-			{"name": "Moses", "pos": Vector3(-8.5, 0.0, -1.5), "color": Color(0.90, 0.70, 0.24), "scenario": "GEN_001", "greeting": "Cross the stone bridge to battle raiders [Left-Click / F], loot 3D chests [E], or study at the Lectern [L]!"},
-			{"name": "Caleb", "pos": Vector3(-3.0, 0.0, 3.5), "color": Color(0.24, 0.70, 0.44), "scenario": "TOR_005", "greeting": "Watch the Anakite Giant across the river?raise Shield of Faith [Q] when he strikes!"}
+			{"name": "Moses", "pos": Vector3(-8.5, 0.0, -1.5), "color": Color(0.76, 0.56, 0.18), "scenario": "GEN_001", "greeting": "Cross the stone bridge to battle raiders [Left-Click / F], loot chests [E], or study at the Lectern [L]!"},
+			{"name": "Caleb", "pos": Vector3(-3.0, 0.0, 3.5), "color": Color(0.18, 0.52, 0.32), "scenario": "TOR_005", "greeting": "Watch the Anakite Giant across the river?raise Shield of Faith [Q] when he strikes!"}
 		],
 		"chests": [
 			{"id": "CHEST_TOR_1", "pos": Vector3(-15.5, 0.0, 13.0), "timber": 140, "stone": 120, "oil": 2, "manna": 30, "relic": "Bronze Altar Ember"},
@@ -44,41 +45,46 @@ const WORLD_STAGES := {
 	},
 	"ERA_HISTORY": {
 		"title": "II. FORTIFIED WALLS OF JERUSALEM & JORDAN RIVER",
-		"sky": Color(0.10, 0.16, 0.22), "ground": Color(0.20, 0.27, 0.17), "river": Color(0.10, 0.50, 0.75), "wall": Color(0.52, 0.48, 0.40), "accent": Color(0.45, 0.86, 0.58),
+		"sky_top": Color(0.10, 0.22, 0.42), "sky_hor": Color(0.52, 0.64, 0.72), "sun_energy": 1.95,
+		"ground": Color(0.26, 0.34, 0.20), "river": Color(0.08, 0.38, 0.58), "wall": Color(0.62, 0.58, 0.48), "accent": Color(0.45, 0.86, 0.58),
 		"tabernacle_name": "Shiloh Sanctuary", "tabernacle_pos": Vector3(-11.0, 0.0, -6.0), "merchant_pos": Vector3(-14.0, 0.0, 6.5), "plot_pos": Vector3(-5.5, 0.0, 11.5),
-		"npcs": [{"name": "Joshua", "pos": Vector3(-8.5, 0.0, -1.5), "color": Color(0.84, 0.36, 0.24), "scenario": "HIS_001", "greeting": "Cross the Jordan stone bridge and breach the Jericho garrison!"}],
+		"npcs": [{"name": "Joshua", "pos": Vector3(-8.5, 0.0, -1.5), "color": Color(0.68, 0.26, 0.18), "scenario": "HIS_001", "greeting": "Cross the Jordan stone bridge and breach the Jericho garrison!"}],
 		"chests": [{"id": "CHEST_HIS_1", "pos": Vector3(-15.5, 0.0, 13.0), "timber": 140, "stone": 160, "oil": 2, "manna": 35, "relic": "Gilgal Memorial Stone"}],
 		"enemies": [{"name": "Jericho Sentinel", "archetype": "sentinel", "pos": Vector3(10.0, 0.0, -2.0), "hp": 140, "max_hp": 140, "atk": 17, "spd": 3.0, "armor": 10, "score": 45, "talents": 45}]
 	},
 	"ERA_WISDOM": {
 		"title": "III. MOUNT ZION & SOLOMON'S TEMPLE COURTS",
-		"sky": Color(0.16, 0.11, 0.22), "ground": Color(0.25, 0.19, 0.26), "river": Color(0.14, 0.46, 0.72), "wall": Color(0.58, 0.52, 0.42), "accent": Color(0.98, 0.84, 0.36),
+		"sky_top": Color(0.16, 0.12, 0.28), "sky_hor": Color(0.64, 0.44, 0.36), "sun_energy": 1.80,
+		"ground": Color(0.36, 0.30, 0.26), "river": Color(0.10, 0.36, 0.56), "wall": Color(0.68, 0.62, 0.50), "accent": Color(0.95, 0.78, 0.28),
 		"tabernacle_name": "Golden Temple Sanctuary", "tabernacle_pos": Vector3(-11.0, 0.0, -6.0), "merchant_pos": Vector3(-14.0, 0.0, 6.5), "plot_pos": Vector3(-5.5, 0.0, 11.5),
-		"npcs": [{"name": "King David", "pos": Vector3(-8.5, 0.0, -1.5), "color": Color(0.92, 0.72, 0.22), "scenario": "WIS_001", "greeting": "Equip Breastplate Armor at the Armory [M] before facing the Philistine Champion!"}],
+		"npcs": [{"name": "King David", "pos": Vector3(-8.5, 0.0, -1.5), "color": Color(0.76, 0.56, 0.16), "scenario": "WIS_001", "greeting": "Equip Breastplate Armor at the Armory [M] before facing the Philistine Champion!"}],
 		"chests": [{"id": "CHEST_WIS_1", "pos": Vector3(-15.5, 0.0, 13.0), "timber": 200, "stone": 180, "oil": 3, "manna": 40, "relic": "Davidic Harp String"}],
 		"enemies": [{"name": "Philistine Champion", "archetype": "giant", "pos": Vector3(12.0, 0.0, 1.5), "hp": 185, "max_hp": 185, "atk": 24, "spd": 2.9, "armor": 12, "score": 65, "talents": 75}]
 	},
 	"ERA_PROPHETS": {
 		"title": "IV. PROPHETIC WATCHTOWER & SCROLL HALL",
-		"sky": Color(0.18, 0.09, 0.09), "ground": Color(0.24, 0.15, 0.14), "river": Color(0.14, 0.42, 0.64), "wall": Color(0.48, 0.38, 0.32), "accent": Color(0.98, 0.56, 0.32),
+		"sky_top": Color(0.18, 0.08, 0.10), "sky_hor": Color(0.68, 0.34, 0.22), "sun_energy": 1.75,
+		"ground": Color(0.34, 0.24, 0.20), "river": Color(0.10, 0.34, 0.52), "wall": Color(0.54, 0.44, 0.36), "accent": Color(0.96, 0.52, 0.26),
 		"tabernacle_name": "Altar of Burning Coals", "tabernacle_pos": Vector3(-11.0, 0.0, -6.0), "merchant_pos": Vector3(-14.0, 0.0, 6.5), "plot_pos": Vector3(-5.5, 0.0, 11.5),
-		"npcs": [{"name": "Isaiah", "pos": Vector3(-8.5, 0.0, -1.5), "color": Color(0.90, 0.54, 0.24), "scenario": "PRO_001", "greeting": "No weapon formed against you shall prosper!"}],
+		"npcs": [{"name": "Isaiah", "pos": Vector3(-8.5, 0.0, -1.5), "color": Color(0.74, 0.42, 0.18), "scenario": "PRO_001", "greeting": "No weapon formed against you shall prosper!"}],
 		"chests": [{"id": "CHEST_PRO_1", "pos": Vector3(-15.5, 0.0, 13.0), "timber": 160, "stone": 190, "oil": 3, "manna": 45, "relic": "Prophetic Scroll Cylinder"}],
 		"enemies": [{"name": "Babylonian Siege Warden", "archetype": "sentinel", "pos": Vector3(12.0, 0.0, 1.5), "hp": 190, "max_hp": 190, "atk": 23, "spd": 3.2, "armor": 14, "score": 70, "talents": 80}]
 	},
 	"ERA_GOSPELS": {
 		"title": "V. CAPERNAUM VILLAGE & SEA OF GALILEE SHORE",
-		"sky": Color(0.08, 0.20, 0.28), "ground": Color(0.15, 0.28, 0.20), "river": Color(0.10, 0.54, 0.78), "wall": Color(0.46, 0.44, 0.40), "accent": Color(0.42, 0.90, 0.96),
+		"sky_top": Color(0.08, 0.24, 0.46), "sky_hor": Color(0.46, 0.68, 0.78), "sun_energy": 2.0,
+		"ground": Color(0.22, 0.34, 0.22), "river": Color(0.06, 0.42, 0.64), "wall": Color(0.56, 0.52, 0.46), "accent": Color(0.38, 0.88, 0.94),
 		"tabernacle_name": "House of Prayer Sanctuary", "tabernacle_pos": Vector3(-11.0, 0.0, -6.0), "merchant_pos": Vector3(-14.0, 0.0, 6.5), "plot_pos": Vector3(-5.5, 0.0, 11.5),
-		"npcs": [{"name": "Peter", "pos": Vector3(-8.5, 0.0, -1.5), "color": Color(0.28, 0.74, 0.92), "scenario": "GOS_001", "greeting": "Cross the Galilee stone bridge and calm the Tempest Spirit!"}],
+		"npcs": [{"name": "Peter", "pos": Vector3(-8.5, 0.0, -1.5), "color": Color(0.22, 0.58, 0.76), "scenario": "GOS_001", "greeting": "Cross the Galilee stone bridge and calm the Tempest Spirit!"}],
 		"chests": [{"id": "CHEST_GOS_1", "pos": Vector3(-15.5, 0.0, 13.0), "timber": 190, "stone": 150, "oil": 3, "manna": 60, "relic": "Five Loaves Basket"}],
 		"enemies": [{"name": "Tempest Shadow Spirit", "archetype": "spirit", "pos": Vector3(12.0, 0.0, 1.5), "hp": 195, "max_hp": 195, "atk": 25, "spd": 3.9, "armor": 8, "score": 80, "talents": 90}]
 	},
 	"ERA_EPISTLES": {
 		"title": "VI. ANTIOCH WALLED CITY & UPPER ROOM",
-		"sky": Color(0.14, 0.11, 0.22), "ground": Color(0.20, 0.19, 0.26), "river": Color(0.14, 0.46, 0.72), "wall": Color(0.52, 0.48, 0.44), "accent": Color(0.98, 0.84, 0.42),
+		"sky_top": Color(0.12, 0.14, 0.30), "sky_hor": Color(0.54, 0.46, 0.58), "sun_energy": 1.85,
+		"ground": Color(0.28, 0.26, 0.32), "river": Color(0.08, 0.38, 0.62), "wall": Color(0.60, 0.56, 0.50), "accent": Color(0.95, 0.80, 0.36),
 		"tabernacle_name": "Upper Room Flame Sanctuary", "tabernacle_pos": Vector3(-11.0, 0.0, -6.0), "merchant_pos": Vector3(-14.0, 0.0, 6.5), "plot_pos": Vector3(-5.5, 0.0, 11.5),
-		"npcs": [{"name": "Apostle Paul", "pos": Vector3(-8.5, 0.0, -1.5), "color": Color(0.92, 0.74, 0.28), "scenario": "EPI_001", "greeting": "Stand in the full Armor of God against Principalities Vanguard!"}],
+		"npcs": [{"name": "Apostle Paul", "pos": Vector3(-8.5, 0.0, -1.5), "color": Color(0.78, 0.60, 0.22), "scenario": "EPI_001", "greeting": "Stand in the full Armor of God against Principalities Vanguard!"}],
 		"chests": [{"id": "CHEST_EPI_1", "pos": Vector3(15.0, 0.0, 9.5), "timber": 250, "stone": 250, "oil": 4, "manna": 75, "relic": "Full Armor of God Seal"}],
 		"enemies": [{"name": "Principalities Vanguard", "archetype": "spirit", "pos": Vector3(12.0, 0.0, 1.5), "hp": 230, "max_hp": 230, "atk": 28, "spd": 4.1, "armor": 14, "score": 110, "talents": 120}]
 	}
@@ -87,7 +93,7 @@ const WORLD_STAGES := {
 var current_stage: String = "ERA_TORAH"
 var player_pos_3d: Vector3 = Vector3(-6.5, 0.0, 1.5)
 var cam_yaw: float = -1.35
-var cam_pitch: float = -0.06
+var cam_pitch: float = -0.05
 var mouse_captured: bool = false
 var anim_time: float = 0.0
 var portal_cooldown: float = 0.0
@@ -123,7 +129,7 @@ var attack_swing_timer: float = 0.0
 var attack_cooldown: float = 0.0
 var in_tabernacle: bool = false
 
-var banner_text: String = "FIRST-PERSON 3D ACTIVE! Click viewport to Mouse-Look (ESC to unlock cursor) | [WASD] Move | [F / Left-Click] Sword | [Q] Shield | [E] Interact"
+var banner_text: String = "PBR 3D ENGINE ACTIVE ? Click viewport for Mouse-Look ([ESC] unlock cursor) | [WASD] Move | [F / Left-Click] Sword | [Q] Shield"
 var banner_timer: float = 10.0
 var remote_pilgrims: Array = []
 var local_pilgrim_name: String = "Pilgrim"
@@ -138,17 +144,60 @@ var sword_pivot: Node3D
 var sword_blade_mesh: MeshInstance3D
 var shield_mesh: MeshInstance3D
 var world_env: WorldEnvironment
+var sky_mat: ProceduralSkyMaterial
 var sun_light: DirectionalLight3D
+var altar_light: OmniLight3D
 var dynamic_group: Node3D
 var hud_overlay: Control
+
+var pbr_noise_tex: NoiseTexture2D
+var pbr_normal_tex: NoiseTexture2D
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	focus_mode = Control.FOCUS_ALL
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	_init_pbr_textures()
 	_build_3d_viewport()
 	set_stage("ERA_TORAH")
 	set_process(true)
+
+func _init_pbr_textures() -> void:
+	var noise: FastNoiseLite = FastNoiseLite.new()
+	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
+	noise.frequency = 0.045
+	noise.fractal_octaves = 4
+
+	pbr_noise_tex = NoiseTexture2D.new()
+	pbr_noise_tex.width = 256
+	pbr_noise_tex.height = 256
+	pbr_noise_tex.seamless = true
+	pbr_noise_tex.noise = noise
+
+	pbr_normal_tex = NoiseTexture2D.new()
+	pbr_normal_tex.width = 256
+	pbr_normal_tex.height = 256
+	pbr_normal_tex.seamless = true
+	pbr_normal_tex.as_normal_map = true
+	pbr_normal_tex.bump_strength = 6.5
+	pbr_normal_tex.noise = noise
+
+func _make_pbr_material(col: Color, rough: float = 0.82, metal: float = 0.05, uv_tile: float = 6.0, emissive: bool = false) -> StandardMaterial3D:
+	var mat: StandardMaterial3D = StandardMaterial3D.new()
+	mat.albedo_color = col
+	mat.albedo_texture = pbr_noise_tex
+	mat.normal_enabled = true
+	mat.normal_texture = pbr_normal_tex
+	mat.normal_scale = 0.85
+	mat.roughness = rough
+	mat.metallic = metal
+	mat.uv1_scale = Vector3(uv_tile, uv_tile, uv_tile)
+	mat.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	if emissive:
+		mat.emission_enabled = true
+		mat.emission = col
+		mat.emission_energy_multiplier = 0.85
+	return mat
 
 func _build_3d_viewport() -> void:
 	viewport_container = SubViewportContainer.new()
@@ -159,6 +208,7 @@ func _build_3d_viewport() -> void:
 
 	sub_viewport = SubViewport.new()
 	sub_viewport.own_world_3d = true
+	sub_viewport.msaa_3d = Viewport.MSAA_4X
 	sub_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	viewport_container.add_child(sub_viewport)
 
@@ -166,22 +216,39 @@ func _build_3d_viewport() -> void:
 	world_root.name = "World3DRoot"
 	sub_viewport.add_child(world_root)
 
+	# Realistic Procedural Atmospheric Sky + ACES Filmic Tone Mapping + Volumetric Haze
+	sky_mat = ProceduralSkyMaterial.new()
+	sky_mat.sky_top_color = Color(0.12, 0.18, 0.32)
+	sky_mat.sky_horizon_color = Color(0.68, 0.48, 0.28)
+	sky_mat.ground_bottom_color = Color(0.18, 0.14, 0.10)
+	sky_mat.ground_horizon_color = Color(0.42, 0.32, 0.22)
+	sky_mat.sun_angle_max = 28.0
+
+	var sky: Sky = Sky.new()
+	sky.sky_material = sky_mat
+
 	world_env = WorldEnvironment.new()
 	var env: Environment = Environment.new()
-	env.background_mode = Environment.BG_COLOR
-	env.background_color = Color(0.14, 0.10, 0.07)
-	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	env.ambient_light_color = Color(0.55, 0.50, 0.42)
-	env.ambient_light_energy = 0.85
+	env.background_mode = Environment.BG_SKY
+	env.sky = sky
+	env.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
+	env.ambient_light_sky_contribution = 0.65
+	env.tonemap_mode = Environment.TONE_MAPPER_ACES
+	env.ssao_enabled = true
+	env.glow_enabled = true
+	env.glow_intensity = 0.45
 	env.fog_enabled = true
-	env.fog_light_color = Color(0.24, 0.18, 0.12)
-	env.fog_density = 0.014
+	env.fog_light_color = Color(0.55, 0.42, 0.28)
+	env.fog_density = 0.009
 	world_env.environment = env
 	world_root.add_child(world_env)
 
 	sun_light = DirectionalLight3D.new()
-	sun_light.rotation_degrees = Vector3(-48.0, 35.0, 0.0)
-	sun_light.light_energy = 1.45
+	sun_light.rotation_degrees = Vector3(-42.0, 38.0, 0.0)
+	sun_light.light_color = Color(1.0, 0.94, 0.84)
+	sun_light.light_energy = 1.85
+	sun_light.shadow_enabled = true
+	sun_light.directional_shadow_max_distance = 65.0
 	world_root.add_child(sun_light)
 
 	player_head = Node3D.new()
@@ -189,51 +256,55 @@ func _build_3d_viewport() -> void:
 	world_root.add_child(player_head)
 
 	camera_3d = Camera3D.new()
-	camera_3d.fov = 74.0
+	camera_3d.fov = 72.0
 	camera_3d.current = true
 	player_head.add_child(camera_3d)
 
+	# Sculpted Metallic First-Person Sword of the Spirit
 	sword_pivot = Node3D.new()
-	sword_pivot.position = Vector3(0.42, -0.34, -0.58)
-	sword_pivot.rotation_degrees = Vector3(12.0, -14.0, 8.0)
+	sword_pivot.position = Vector3(0.40, -0.34, -0.56)
+	sword_pivot.rotation_degrees = Vector3(14.0, -16.0, 8.0)
 	camera_3d.add_child(sword_pivot)
 
-	var hilt_mesh: MeshInstance3D = MeshInstance3D.new()
-	var hilt_box: BoxMesh = BoxMesh.new()
-	hilt_box.size = Vector3(0.18, 0.04, 0.04)
-	hilt_mesh.mesh = hilt_box
-	var gold_mat: StandardMaterial3D = StandardMaterial3D.new()
-	gold_mat.albedo_color = Color(0.96, 0.78, 0.24)
-	hilt_mesh.material_override = gold_mat
-	sword_pivot.add_child(hilt_mesh)
+	var hilt_mi: MeshInstance3D = MeshInstance3D.new()
+	var hilt_bm: BoxMesh = BoxMesh.new()
+	hilt_bm.size = Vector3(0.18, 0.032, 0.036)
+	hilt_mi.mesh = hilt_bm
+	hilt_mi.material_override = _make_pbr_material(Color(0.88, 0.68, 0.18), 0.25, 0.90, 1.0)
+	sword_pivot.add_child(hilt_mi)
+
+	var grip_mi: MeshInstance3D = MeshInstance3D.new()
+	var grip_cm: CylinderMesh = CylinderMesh.new()
+	grip_cm.top_radius = 0.018
+	grip_cm.bottom_radius = 0.020
+	grip_cm.height = 0.16
+	grip_mi.mesh = grip_cm
+	grip_mi.position = Vector3(0.0, -0.09, 0.0)
+	grip_mi.material_override = _make_pbr_material(Color(0.28, 0.16, 0.08), 0.85, 0.05, 1.0)
+	sword_pivot.add_child(grip_mi)
 
 	sword_blade_mesh = MeshInstance3D.new()
-	var blade_box: BoxMesh = BoxMesh.new()
-	blade_box.size = Vector3(0.045, 0.68, 0.015)
-	sword_blade_mesh.mesh = blade_box
-	sword_blade_mesh.position = Vector3(0.0, 0.34, 0.0)
-	var blade_mat: StandardMaterial3D = StandardMaterial3D.new()
-	blade_mat.albedo_color = Color(0.92, 0.96, 1.0)
-	blade_mat.emission_enabled = true
-	blade_mat.emission = Color(0.45, 0.68, 0.95)
-	blade_mat.emission_energy_multiplier = 0.45
+	var blade_pm: PrismMesh = PrismMesh.new()
+	blade_pm.size = Vector3(0.055, 0.72, 0.014)
+	sword_blade_mesh.mesh = blade_pm
+	sword_blade_mesh.position = Vector3(0.0, 0.36, 0.0)
+	var blade_mat: StandardMaterial3D = _make_pbr_material(Color(0.86, 0.90, 0.96), 0.18, 0.95, 2.0, true)
+	blade_mat.emission = Color(0.22, 0.42, 0.72)
+	blade_mat.emission_energy_multiplier = 0.30
 	sword_blade_mesh.material_override = blade_mat
 	sword_pivot.add_child(sword_blade_mesh)
 
+	# Sculpted Metallic Shield of Faith
 	shield_mesh = MeshInstance3D.new()
-	var sh_cyl: CylinderMesh = CylinderMesh.new()
-	sh_cyl.top_radius = 0.28
-	sh_cyl.bottom_radius = 0.28
-	sh_cyl.height = 0.03
-	shield_mesh.mesh = sh_cyl
-	shield_mesh.position = Vector3(-0.46, -0.34, -0.52)
+	var sh_cm: CylinderMesh = CylinderMesh.new()
+	sh_cm.top_radius = 0.28
+	sh_cm.bottom_radius = 0.26
+	sh_cm.height = 0.035
+	sh_cm.radial_segments = 24
+	shield_mesh.mesh = sh_cm
+	shield_mesh.position = Vector3(-0.46, -0.34, -0.50)
 	shield_mesh.rotation_degrees = Vector3(82.0, 18.0, 0.0)
-	var sh_mat: StandardMaterial3D = StandardMaterial3D.new()
-	sh_mat.albedo_color = Color(0.20, 0.58, 0.92)
-	sh_mat.emission_enabled = true
-	sh_mat.emission = Color(0.24, 0.72, 1.0)
-	sh_mat.emission_energy_multiplier = 0.35
-	shield_mesh.material_override = sh_mat
+	shield_mesh.material_override = _make_pbr_material(Color(0.18, 0.46, 0.78), 0.28, 0.85, 2.0)
 	camera_3d.add_child(shield_mesh)
 
 	dynamic_group = Node3D.new()
@@ -246,44 +317,86 @@ func _build_3d_viewport() -> void:
 	hud_overlay.draw.connect(_on_draw_hud_overlay)
 	add_child(hud_overlay)
 
-func _make_box_3d(parent: Node3D, pos: Vector3, sz: Vector3, col: Color, emissive: bool = false) -> MeshInstance3D:
+func _add_mesh(parent: Node3D, m: Mesh, pos: Vector3, rot_deg: Vector3, mat: StandardMaterial3D, cast_sh: bool = true) -> MeshInstance3D:
 	var mi: MeshInstance3D = MeshInstance3D.new()
-	var bm: BoxMesh = BoxMesh.new()
-	bm.size = sz
-	mi.mesh = bm
+	mi.mesh = m
 	mi.position = pos
-	var mat: StandardMaterial3D = StandardMaterial3D.new()
-	mat.albedo_color = col
-	if emissive:
-		mat.emission_enabled = true
-		mat.emission = col
-		mat.emission_energy_multiplier = 0.75
+	mi.rotation_degrees = rot_deg
 	mi.material_override = mat
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if cast_sh else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	parent.add_child(mi)
 	return mi
 
-func _make_humanoid_3d(parent: Node3D, pos: Vector3, tunic_col: Color, label_txt: String, scale_f: float = 1.0, is_enemy: bool = false) -> Node3D:
+func _make_sculpted_character_3d(parent: Node3D, pos: Vector3, tunic_col: Color, label_txt: String, scale_f: float = 1.0, is_enemy: bool = false) -> Node3D:
 	var root: Node3D = Node3D.new()
 	root.position = pos
 	parent.add_child(root)
-	_make_box_3d(root, Vector3(-0.14 * scale_f, 0.38 * scale_f, 0.0), Vector3(0.14 * scale_f, 0.76 * scale_f, 0.16 * scale_f), Color(0.24, 0.16, 0.10))
-	_make_box_3d(root, Vector3(0.14 * scale_f, 0.38 * scale_f, 0.0), Vector3(0.14 * scale_f, 0.76 * scale_f, 0.16 * scale_f), Color(0.24, 0.16, 0.10))
-	_make_box_3d(root, Vector3(0.0, 1.12 * scale_f, 0.0), Vector3(0.52 * scale_f, 0.84 * scale_f, 0.30 * scale_f), tunic_col)
-	_make_box_3d(root, Vector3(0.0, 1.05 * scale_f, 0.0), Vector3(0.55 * scale_f, 0.10 * scale_f, 0.33 * scale_f), Color(0.95, 0.78, 0.26) if not is_enemy else Color(0.88, 0.22, 0.18))
-	_make_box_3d(root, Vector3(-0.36 * scale_f, 1.14 * scale_f, 0.0), Vector3(0.14 * scale_f, 0.68 * scale_f, 0.14 * scale_f), tunic_col.lightened(0.12))
-	_make_box_3d(root, Vector3(0.36 * scale_f, 1.14 * scale_f, 0.0), Vector3(0.14 * scale_f, 0.68 * scale_f, 0.14 * scale_f), tunic_col.lightened(0.12))
-	_make_box_3d(root, Vector3(0.0, 1.74 * scale_f, 0.0), Vector3(0.32 * scale_f, 0.34 * scale_f, 0.32 * scale_f), Color(0.88, 0.72, 0.56))
-	_make_box_3d(root, Vector3(0.0, 1.94 * scale_f, 0.0), Vector3(0.35 * scale_f, 0.10 * scale_f, 0.35 * scale_f), Color(0.22, 0.22, 0.26) if is_enemy else Color(0.95, 0.82, 0.32))
+
+	var cloth_mat: StandardMaterial3D = _make_pbr_material(tunic_col, 0.88, 0.02, 2.0)
+	var trim_mat: StandardMaterial3D = _make_pbr_material(Color(0.84, 0.64, 0.18) if not is_enemy else Color(0.55, 0.12, 0.12), 0.35, 0.75, 1.0)
+	var skin_mat: StandardMaterial3D = _make_pbr_material(Color(0.76, 0.58, 0.44), 0.78, 0.0, 1.0)
+	var boot_mat: StandardMaterial3D = _make_pbr_material(Color(0.24, 0.15, 0.09), 0.85, 0.05, 1.0)
+
+	# Sculpted Cylindrical Legs & Boots
+	var leg_m: CylinderMesh = CylinderMesh.new()
+	leg_m.top_radius = 0.08 * scale_f
+	leg_m.bottom_radius = 0.07 * scale_f
+	leg_m.height = 0.75 * scale_f
+	_add_mesh(root, leg_m, Vector3(-0.14 * scale_f, 0.38 * scale_f, 0.0), Vector3.ZERO, boot_mat)
+	_add_mesh(root, leg_m, Vector3(0.14 * scale_f, 0.38 * scale_f, 0.0), Vector3.ZERO, boot_mat)
+
+	# Tapered Flowing Tunic & Mantle Cloak
+	var robe_m: CylinderMesh = CylinderMesh.new()
+	robe_m.top_radius = 0.22 * scale_f
+	robe_m.bottom_radius = 0.34 * scale_f
+	robe_m.height = 0.92 * scale_f
+	_add_mesh(root, robe_m, Vector3(0.0, 1.12 * scale_f, 0.0), Vector3.ZERO, cloth_mat)
+
+	# Ornate Belt Ring
+	var belt_m: CylinderMesh = CylinderMesh.new()
+	belt_m.top_radius = 0.26 * scale_f
+	belt_m.bottom_radius = 0.26 * scale_f
+	belt_m.height = 0.09 * scale_f
+	_add_mesh(root, belt_m, Vector3(0.0, 1.14 * scale_f, 0.0), Vector3.ZERO, trim_mat)
+
+	# Sculpted Capsule Arms
+	var arm_m: CapsuleMesh = CapsuleMesh.new()
+	arm_m.radius = 0.07 * scale_f
+	arm_m.height = 0.64 * scale_f
+	_add_mesh(root, arm_m, Vector3(-0.31 * scale_f, 1.22 * scale_f, 0.0), Vector3(0.0, 0.0, 12.0), cloth_mat)
+	_add_mesh(root, arm_m, Vector3(0.31 * scale_f, 1.22 * scale_f, 0.0), Vector3(0.0, 0.0, -12.0), cloth_mat)
+
+	# Sculpted Sphere Head & Headpiece/Helm
+	var head_m: SphereMesh = SphereMesh.new()
+	head_m.radius = 0.17 * scale_f
+	head_m.height = 0.36 * scale_f
+	_add_mesh(root, head_m, Vector3(0.0, 1.76 * scale_f, 0.0), Vector3.ZERO, skin_mat)
+
+	var helm_m: SphereMesh = SphereMesh.new()
+	helm_m.radius = 0.185 * scale_f
+	helm_m.height = 0.20 * scale_f
+	var helm_mat: StandardMaterial3D = _make_pbr_material(Color(0.22, 0.24, 0.28), 0.30, 0.85, 1.0) if is_enemy else _make_pbr_material(Color(0.86, 0.78, 0.62), 0.85, 0.0, 1.0)
+	_add_mesh(root, helm_m, Vector3(0.0, 1.86 * scale_f, 0.0), Vector3.ZERO, helm_mat)
+
+	# Weapon or Shepherd Staff
 	if is_enemy:
-		_make_box_3d(root, Vector3(0.42 * scale_f, 1.25 * scale_f, 0.28 * scale_f), Vector3(0.06 * scale_f, 0.95 * scale_f, 0.06 * scale_f), Color(0.98, 0.30, 0.24), true)
+		var wpn_m: PrismMesh = PrismMesh.new()
+		wpn_m.size = Vector3(0.08 * scale_f, 1.05 * scale_f, 0.03 * scale_f)
+		_add_mesh(root, wpn_m, Vector3(0.38 * scale_f, 1.28 * scale_f, 0.28 * scale_f), Vector3(25.0, 0.0, 0.0), _make_pbr_material(Color(0.75, 0.18, 0.16), 0.25, 0.90, 1.0, true))
 	else:
-		_make_box_3d(root, Vector3(0.44 * scale_f, 1.05 * scale_f, 0.15 * scale_f), Vector3(0.06 * scale_f, 2.05 * scale_f, 0.06 * scale_f), Color(0.54, 0.36, 0.18))
+		var stf_m: CylinderMesh = CylinderMesh.new()
+		stf_m.top_radius = 0.024 * scale_f
+		stf_m.bottom_radius = 0.028 * scale_f
+		stf_m.height = 2.05 * scale_f
+		_add_mesh(root, stf_m, Vector3(0.40 * scale_f, 1.02 * scale_f, 0.14 * scale_f), Vector3(6.0, 0.0, 0.0), boot_mat)
+
 	var lbl3d: Label3D = Label3D.new()
 	lbl3d.text = label_txt
-	lbl3d.position = Vector3(0.0, 2.25 * scale_f, 0.0)
+	lbl3d.position = Vector3(0.0, 2.28 * scale_f, 0.0)
 	lbl3d.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	lbl3d.font_size = 38
-	lbl3d.modulate = Color(1.0, 0.76, 0.70) if is_enemy else Color(1.0, 0.96, 0.82)
+	lbl3d.font_size = 36
+	lbl3d.outline_size = 8
+	lbl3d.modulate = Color(1.0, 0.76, 0.70) if is_enemy else Color(1.0, 0.96, 0.84)
 	root.add_child(lbl3d)
 	return root
 
@@ -294,128 +407,233 @@ func _rebuild_3d_stage_scene() -> void:
 		child.queue_free()
 
 	var st: Dictionary = WORLD_STAGES.get(current_stage, WORLD_STAGES["ERA_TORAH"])
-	var sky_col: Color = st["sky"]
-	var g_col: Color = st["ground"]
-	var r_col: Color = st["river"]
-	var w_col: Color = st["wall"]
-	var acc_col: Color = st["accent"]
-
+	if sky_mat != null:
+		sky_mat.sky_top_color = st["sky_top"]
+		sky_mat.sky_horizon_color = st["sky_hor"]
+	if sun_light != null:
+		sun_light.light_energy = float(st.get("sun_energy", 1.85))
 	if world_env != null and world_env.environment != null:
-		world_env.environment.background_color = sky_col
-		world_env.environment.fog_light_color = sky_col.lightened(0.12)
+		world_env.environment.fog_light_color = st["sky_hor"]
 
-	_make_box_3d(dynamic_group, Vector3(0.0, -0.25, 0.0), Vector3(44.0, 0.5, 36.0), g_col)
-	_make_box_3d(dynamic_group, Vector3(3.5, -0.18, 0.0), Vector3(3.6, 0.42, 36.0), r_col, true)
-	_make_box_3d(dynamic_group, Vector3(3.5, 0.14, 0.0), Vector3(4.8, 0.28, 3.4), Color(0.58, 0.52, 0.42))
-	_make_box_3d(dynamic_group, Vector3(3.5, 0.52, -1.6), Vector3(4.8, 0.55, 0.25), w_col.lightened(0.12))
-	_make_box_3d(dynamic_group, Vector3(3.5, 0.52, 1.6), Vector3(4.8, 0.55, 0.25), w_col.lightened(0.12))
+	var ground_mat: StandardMaterial3D = _make_pbr_material(st["ground"], 0.92, 0.0, 18.0)
+	var river_mat: StandardMaterial3D = _make_pbr_material(st["river"], 0.12, 0.35, 10.0, true)
+	river_mat.emission = st["river"]
+	river_mat.emission_energy_multiplier = 0.25
+	var stone_mat: StandardMaterial3D = _make_pbr_material(st["wall"], 0.86, 0.04, 8.0)
+	var plaster_mat: StandardMaterial3D = _make_pbr_material(Color(0.76, 0.68, 0.54), 0.90, 0.0, 4.0)
+	var timber_mat: StandardMaterial3D = _make_pbr_material(Color(0.36, 0.22, 0.11), 0.84, 0.02, 4.0)
+	var gold_mat: StandardMaterial3D = _make_pbr_material(st["accent"], 0.24, 0.88, 3.0, true)
+	gold_mat.emission = st["accent"]
+	gold_mat.emission_energy_multiplier = 0.22
+	var foliage_mat: StandardMaterial3D = _make_pbr_material(Color(0.16, 0.38, 0.18), 0.88, 0.0, 3.0)
 
-	_make_box_3d(dynamic_group, Vector3(0.0, 1.6, -17.0), Vector3(42.0, 3.2, 1.1), w_col)
-	_make_box_3d(dynamic_group, Vector3(0.0, 1.6, 17.0), Vector3(42.0, 3.2, 1.1), w_col)
-	for wx in [-19.5, 19.5]:
-		for wz in [-16.5, 16.5]:
-			_make_box_3d(dynamic_group, Vector3(wx, 2.8, wz), Vector3(2.4, 5.6, 2.4), w_col.lightened(0.08))
-			_make_box_3d(dynamic_group, Vector3(wx, 5.8, wz), Vector3(0.7, 0.7, 0.7), Color(1.0, 0.62, 0.18), true)
+	# 1. Textured PBR Terrain Ground Plane
+	var g_box: BoxMesh = BoxMesh.new()
+	g_box.size = Vector3(48.0, 0.5, 40.0)
+	_add_mesh(dynamic_group, g_box, Vector3(0.0, -0.25, 0.0), Vector3.ZERO, ground_mat, false)
 
+	# 2. Reflective River & Sculpted Arched Stone Bridge
+	var r_box: BoxMesh = BoxMesh.new()
+	r_box.size = Vector3(3.8, 0.38, 40.0)
+	_add_mesh(dynamic_group, r_box, Vector3(3.5, -0.17, 0.0), Vector3.ZERO, river_mat, false)
+
+	var br_deck: BoxMesh = BoxMesh.new()
+	br_deck.size = Vector3(5.2, 0.32, 3.6)
+	_add_mesh(dynamic_group, br_deck, Vector3(3.5, 0.16, 0.0), Vector3.ZERO, stone_mat)
+	var br_rail: BoxMesh = BoxMesh.new()
+	br_rail.size = Vector3(5.2, 0.62, 0.28)
+	_add_mesh(dynamic_group, br_rail, Vector3(3.5, 0.58, -1.68), Vector3.ZERO, stone_mat)
+	_add_mesh(dynamic_group, br_rail, Vector3(3.5, 0.58, 1.68), Vector3.ZERO, stone_mat)
+
+	# 3. Fortified Limestone Perimeter Walls, Crenellations & Cylindrical Watchtowers
+	var wall_m: BoxMesh = BoxMesh.new()
+	wall_m.size = Vector3(44.0, 3.4, 1.2)
+	_add_mesh(dynamic_group, wall_m, Vector3(0.0, 1.7, -18.0), Vector3.ZERO, stone_mat)
+	_add_mesh(dynamic_group, wall_m, Vector3(0.0, 1.7, 18.0), Vector3.ZERO, stone_mat)
+
+	var tower_m: CylinderMesh = CylinderMesh.new()
+	tower_m.top_radius = 1.45
+	tower_m.bottom_radius = 1.65
+	tower_m.height = 6.2
+	tower_m.radial_segments = 16
+	var brazier_m: SphereMesh = SphereMesh.new()
+	brazier_m.radius = 0.42
+	for wx in [-20.5, 20.5]:
+		for wz in [-17.5, 17.5]:
+			_add_mesh(dynamic_group, tower_m, Vector3(wx, 3.1, wz), Vector3.ZERO, stone_mat)
+			_add_mesh(dynamic_group, brazier_m, Vector3(wx, 6.4, wz), Vector3.ZERO, _make_pbr_material(Color(1.0, 0.55, 0.14), 0.2, 0.0, 1.0, true), false)
+
+	# 4. Biblical Limestone Houses & Sculpted Trees
+	var house_body: BoxMesh = BoxMesh.new()
+	house_body.size = Vector3(3.8, 2.9, 3.4)
+	var house_trim: BoxMesh = BoxMesh.new()
+	house_trim.size = Vector3(4.1, 0.28, 3.7)
 	for h_pos in [Vector3(-16.5, 0.0, -11.5), Vector3(-5.0, 0.0, -12.0), Vector3(-16.5, 0.0, 1.0)]:
 		var hp: Vector3 = h_pos
-		_make_box_3d(dynamic_group, hp + Vector3(0.0, 1.4, 0.0), Vector3(3.6, 2.8, 3.2), Color(0.78, 0.70, 0.56))
-		_make_box_3d(dynamic_group, hp + Vector3(0.0, 2.95, 0.0), Vector3(3.9, 0.3, 3.5), Color(0.58, 0.48, 0.36))
+		_add_mesh(dynamic_group, house_body, hp + Vector3(0.0, 1.45, 0.0), Vector3.ZERO, plaster_mat)
+		_add_mesh(dynamic_group, house_trim, hp + Vector3(0.0, 3.0, 0.0), Vector3.ZERO, timber_mat)
 
+	var trunk_m: CylinderMesh = CylinderMesh.new()
+	trunk_m.top_radius = 0.16
+	trunk_m.bottom_radius = 0.24
+	trunk_m.height = 3.0
+	var canopy_m: SphereMesh = SphereMesh.new()
+	canopy_m.radius = 1.35
+	canopy_m.height = 1.6
 	for t_pos in [Vector3(-17.5, 0.0, -4.0), Vector3(-2.0, 0.0, -8.5), Vector3(7.5, 0.0, -12.0), Vector3(16.5, 0.0, 12.5)]:
 		var tp: Vector3 = t_pos
-		_make_box_3d(dynamic_group, tp + Vector3(0.0, 1.4, 0.0), Vector3(0.32, 2.8, 0.32), Color(0.42, 0.28, 0.15))
-		_make_box_3d(dynamic_group, tp + Vector3(0.0, 3.1, 0.0), Vector3(2.1, 1.2, 2.1), Color(0.18, 0.46, 0.22))
+		_add_mesh(dynamic_group, trunk_m, tp + Vector3(0.0, 1.5, 0.0), Vector3.ZERO, timber_mat)
+		_add_mesh(dynamic_group, canopy_m, tp + Vector3(0.0, 3.2, 0.0), Vector3.ZERO, foliage_mat)
 
+	# 5. Sculpted Tabernacle / Sanctuary with Pitched Canopy, Pillars & Warm Fire PointLight3D
 	var tab_p: Vector3 = st["tabernacle_pos"]
-	_make_box_3d(dynamic_group, tab_p + Vector3(0.0, 1.6, 0.0), Vector3(4.8, 3.2, 4.2), Color(0.38, 0.24, 0.12))
-	_make_box_3d(dynamic_group, tab_p + Vector3(0.0, 3.45, 0.0), Vector3(5.3, 0.55, 4.7), acc_col, true)
-	_make_box_3d(dynamic_group, tab_p + Vector3(0.0, 1.5, 2.5), Vector3(0.65, 1.4, 0.65), Color(1.0, 0.65, 0.18), true)
+	var tab_walls: BoxMesh = BoxMesh.new()
+	tab_walls.size = Vector3(5.0, 3.2, 4.4)
+	_add_mesh(dynamic_group, tab_walls, tab_p + Vector3(0.0, 1.6, 0.0), Vector3.ZERO, timber_mat)
+	var tab_roof: PrismMesh = PrismMesh.new()
+	tab_roof.size = Vector3(5.6, 1.35, 5.0)
+	_add_mesh(dynamic_group, tab_roof, tab_p + Vector3(0.0, 3.85, 0.0), Vector3.ZERO, gold_mat)
+
+	var pillar_m: CylinderMesh = CylinderMesh.new()
+	pillar_m.top_radius = 0.18
+	pillar_m.bottom_radius = 0.20
+	pillar_m.height = 3.4
+	_add_mesh(dynamic_group, pillar_m, tab_p + Vector3(-2.2, 1.7, 2.3), Vector3.ZERO, gold_mat)
+	_add_mesh(dynamic_group, pillar_m, tab_p + Vector3(2.2, 1.7, 2.3), Vector3.ZERO, gold_mat)
+
+	altar_light = OmniLight3D.new()
+	altar_light.position = tab_p + Vector3(0.0, 2.2, 2.8)
+	altar_light.light_color = Color(1.0, 0.72, 0.28)
+	altar_light.light_energy = 2.6
+	altar_light.omni_range = 14.0
+	dynamic_group.add_child(altar_light)
+
 	var tab_lbl: Label3D = Label3D.new()
 	tab_lbl.text = "%s
 [SAFE ZONE: HEAL & TRADE (T)]" % str(st["tabernacle_name"])
-	tab_lbl.position = tab_p + Vector3(0.0, 4.6, 0.0)
+	tab_lbl.position = tab_p + Vector3(0.0, 5.1, 0.0)
 	tab_lbl.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	tab_lbl.font_size = 42
+	tab_lbl.outline_size = 8
 	tab_lbl.modulate = Color(1.0, 0.94, 0.55)
 	dynamic_group.add_child(tab_lbl)
 
+	# Sacred Scroll Lectern [L]
 	var lec_p: Vector3 = tab_p + Vector3(3.4, 0.0, 1.8)
-	_make_box_3d(dynamic_group, lec_p + Vector3(0.0, 0.65, 0.0), Vector3(0.65, 1.3, 0.55), Color(0.46, 0.28, 0.14))
-	_make_box_3d(dynamic_group, lec_p + Vector3(0.0, 1.38, 0.0), Vector3(0.85, 0.16, 0.65), Color(0.98, 0.94, 0.78), true)
+	var lec_base: CylinderMesh = CylinderMesh.new()
+	lec_base.top_radius = 0.22
+	lec_base.bottom_radius = 0.32
+	lec_base.height = 1.3
+	_add_mesh(dynamic_group, lec_base, lec_p + Vector3(0.0, 0.65, 0.0), Vector3.ZERO, timber_mat)
+	var scroll_m: BoxMesh = BoxMesh.new()
+	scroll_m.size = Vector3(0.85, 0.14, 0.62)
+	_add_mesh(dynamic_group, scroll_m, lec_p + Vector3(0.0, 1.36, 0.0), Vector3(18.0, 0.0, 0.0), _make_pbr_material(Color(0.96, 0.90, 0.72), 0.75, 0.0, 1.0, true))
 	var lec_lbl: Label3D = Label3D.new()
 	lec_lbl.text = "ACADEMY LECTERN [L]"
 	lec_lbl.position = lec_p + Vector3(0.0, 2.0, 0.0)
 	lec_lbl.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	lec_lbl.font_size = 34
+	lec_lbl.outline_size = 8
 	lec_lbl.modulate = Color(0.48, 0.96, 0.72)
 	dynamic_group.add_child(lec_lbl)
 
+	# 6. Traveling Merchant Caravan [M]
 	var m_p: Vector3 = st["merchant_pos"]
-	_make_box_3d(dynamic_group, m_p + Vector3(0.0, 0.9, 0.0), Vector3(2.8, 1.4, 1.8), Color(0.46, 0.28, 0.14))
-	_make_box_3d(dynamic_group, m_p + Vector3(0.0, 2.1, 0.0), Vector3(3.1, 0.35, 2.1), Color(0.76, 0.22, 0.24), true)
-	_make_humanoid_3d(dynamic_group, m_p + Vector3(1.8, 0.0, 0.0), Color(0.82, 0.60, 0.20), "ARMORY MERCHANT [M]", 0.95, false)
+	var wagon_m: BoxMesh = BoxMesh.new()
+	wagon_m.size = Vector3(2.8, 1.3, 1.8)
+	_add_mesh(dynamic_group, wagon_m, m_p + Vector3(0.0, 0.85, 0.0), Vector3.ZERO, timber_mat)
+	var canopy_roof: PrismMesh = PrismMesh.new()
+	canopy_roof.size = Vector3(3.2, 0.85, 2.2)
+	_add_mesh(dynamic_group, canopy_roof, m_p + Vector3(0.0, 1.95, 0.0), Vector3.ZERO, _make_pbr_material(Color(0.68, 0.18, 0.20), 0.85, 0.0, 2.0))
+	_make_sculpted_character_3d(dynamic_group, m_p + Vector3(1.8, 0.0, 0.0), Color(0.76, 0.56, 0.18), "ARMORY MERCHANT [M]", 0.95, false)
 
+	# 7. Homestead Land Plot & 4-Stage 3D House Construction [B]
 	var hp: Vector3 = st["plot_pos"]
 	var lvl: int = int(house_stages.get(current_stage, 0))
-	_make_box_3d(dynamic_group, hp + Vector3(0.0, 0.05, 0.0), Vector3(4.4, 0.1, 4.0), acc_col if bool(land_deeds.get(current_stage, false)) else Color(0.45, 0.40, 0.30))
+	var plot_pad: BoxMesh = BoxMesh.new()
+	plot_pad.size = Vector3(4.6, 0.1, 4.2)
+	_add_mesh(dynamic_group, plot_pad, hp + Vector3(0.0, 0.05, 0.0), Vector3.ZERO, gold_mat if bool(land_deeds.get(current_stage, false)) else stone_mat, false)
 	if lvl >= 1:
-		_make_box_3d(dynamic_group, hp + Vector3(0.0, 0.25, 0.0), Vector3(3.8, 0.5, 3.4), Color(0.55, 0.52, 0.48))
+		var f_m: BoxMesh = BoxMesh.new()
+		f_m.size = Vector3(3.9, 0.5, 3.5)
+		_add_mesh(dynamic_group, f_m, hp + Vector3(0.0, 0.25, 0.0), Vector3.ZERO, stone_mat)
 	if lvl >= 2:
-		_make_box_3d(dynamic_group, hp + Vector3(0.0, 1.5, 0.0), Vector3(3.6, 2.2, 3.2), Color(0.84, 0.76, 0.60))
+		var w_m: BoxMesh = BoxMesh.new()
+		w_m.size = Vector3(3.7, 2.2, 3.3)
+		_add_mesh(dynamic_group, w_m, hp + Vector3(0.0, 1.5, 0.0), Vector3.ZERO, plaster_mat)
 	if lvl >= 3:
-		_make_box_3d(dynamic_group, hp + Vector3(0.0, 2.8, 0.0), Vector3(4.0, 0.45, 3.6), Color(0.60, 0.28, 0.16))
+		var r_m: PrismMesh = PrismMesh.new()
+		r_m.size = Vector3(4.2, 1.1, 3.8)
+		_add_mesh(dynamic_group, r_m, hp + Vector3(0.0, 3.15, 0.0), Vector3.ZERO, timber_mat)
 	if lvl >= 4:
-		_make_box_3d(dynamic_group, hp + Vector3(0.0, 3.3, 0.0), Vector3(2.4, 0.6, 2.2), acc_col, true)
+		var cr_m: CylinderMesh = CylinderMesh.new()
+		cr_m.top_radius = 0.6
+		cr_m.bottom_radius = 0.8
+		cr_m.height = 0.75
+		_add_mesh(dynamic_group, cr_m, hp + Vector3(0.0, 4.0, 0.0), Vector3.ZERO, gold_mat)
 	var plot_lbl: Label3D = Label3D.new()
 	plot_lbl.text = "HOMESTEAD PLOT (STAGE %d/4) [B]" % lvl
-	plot_lbl.position = hp + Vector3(0.0, 2.2 + float(lvl) * 0.6, 0.0)
+	plot_lbl.position = hp + Vector3(0.0, 2.3 + float(lvl) * 0.7, 0.0)
 	plot_lbl.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	plot_lbl.font_size = 34
+	plot_lbl.outline_size = 8
 	plot_lbl.modulate = Color(1.0, 0.92, 0.48)
 	dynamic_group.add_child(plot_lbl)
 
+	# 8. Secret Chests [E]
+	var chest_m: BoxMesh = BoxMesh.new()
+	chest_m.size = Vector3(1.15, 0.78, 0.78)
 	for c_item in st.get("chests", []):
 		var ch: Dictionary = c_item
 		var cpos: Vector3 = ch["pos"]
 		var is_open: bool = opened_chests.has(str(ch["id"]))
-		_make_box_3d(dynamic_group, cpos + Vector3(0.0, 0.42, 0.0), Vector3(1.1, 0.84, 0.75), Color(0.35, 0.30, 0.24) if is_open else Color(0.82, 0.58, 0.18), not is_open)
+		_add_mesh(dynamic_group, chest_m, cpos + Vector3(0.0, 0.39, 0.0), Vector3.ZERO, timber_mat if is_open else gold_mat)
 		var clbl: Label3D = Label3D.new()
 		clbl.text = "OPENED" if is_open else "SECRET CHEST [E]"
 		clbl.position = cpos + Vector3(0.0, 1.35, 0.0)
 		clbl.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 		clbl.font_size = 32
+		clbl.outline_size = 8
 		clbl.modulate = Color(1.0, 0.92, 0.48) if not is_open else Color(0.65, 0.65, 0.68)
 		dynamic_group.add_child(clbl)
 
+	# 9. Sculpted Biblical NPCs
 	for n_item in st.get("npcs", []):
 		var npc: Dictionary = n_item
-		_make_humanoid_3d(dynamic_group, npc["pos"], npc["color"], "%s [E]" % str(npc["name"]), 1.0, false)
+		_make_sculpted_character_3d(dynamic_group, npc["pos"], npc["color"], "%s [E]" % str(npc["name"]), 1.0, false)
 
-	_make_box_3d(dynamic_group, Vector3(-18.5, 1.8, 0.0), Vector3(0.6, 3.6, 3.2), acc_col, true)
+	# 10. Glowing Stage Portals
+	var portal_m: CylinderMesh = CylinderMesh.new()
+	portal_m.top_radius = 1.4
+	portal_m.bottom_radius = 1.4
+	portal_m.height = 0.18
+	_add_mesh(dynamic_group, portal_m, Vector3(-18.5, 1.9, 0.0), Vector3(0.0, 0.0, 90.0), gold_mat)
 	var lp_lbl: Label3D = Label3D.new()
 	lp_lbl.text = "< PREV ERA PORTAL"
 	lp_lbl.position = Vector3(-18.5, 4.1, 0.0)
 	lp_lbl.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	lp_lbl.font_size = 38
-	lp_lbl.modulate = acc_col
+	lp_lbl.outline_size = 8
+	lp_lbl.modulate = st["accent"]
 	dynamic_group.add_child(lp_lbl)
 
-	_make_box_3d(dynamic_group, Vector3(18.5, 1.8, 0.0), Vector3(0.6, 3.6, 3.2), acc_col, true)
+	_add_mesh(dynamic_group, portal_m, Vector3(18.5, 1.9, 0.0), Vector3(0.0, 0.0, 90.0), gold_mat)
 	var rp_lbl: Label3D = Label3D.new()
 	rp_lbl.text = "NEXT ERA PORTAL >"
 	rp_lbl.position = Vector3(18.5, 4.1, 0.0)
 	rp_lbl.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	rp_lbl.font_size = 38
-	rp_lbl.modulate = acc_col
+	rp_lbl.outline_size = 8
+	rp_lbl.modulate = st["accent"]
 	dynamic_group.add_child(rp_lbl)
 
+	# 11. Sculpted 3D Enemies
 	for i in range(stage_enemies.size()):
 		var ed: Dictionary = stage_enemies[i]
 		if int(ed.get("hp", 0)) > 0:
 			var arch: String = str(ed.get("archetype", "raider"))
-			var sc: float = 1.35 if arch == "giant" else 1.05
-			var enode: Node3D = _make_humanoid_3d(dynamic_group, ed["pos3d"], Color(0.56, 0.12, 0.16), "%s (%d/%d HP)" % [str(ed["name"]), int(ed["hp"]), int(ed["max_hp"])], sc, true)
+			var sc: float = 1.38 if arch == "giant" else 1.06
+			var enode: Node3D = _make_sculpted_character_3d(dynamic_group, ed["pos3d"], Color(0.46, 0.10, 0.14), "%s (%d/%d HP)" % [str(ed["name"]), int(ed["hp"]), int(ed["max_hp"])], sc, true)
 			ed["node3d"] = enode
 			stage_enemies[i] = ed
 
@@ -797,6 +1015,9 @@ func _process(delta: float) -> void:
 	if attack_cooldown > 0.0:
 		attack_cooldown = maxf(0.0, attack_cooldown - delta)
 
+	if altar_light != null:
+		altar_light.light_energy = 2.4 + sin(anim_time * 9.0) * 0.45
+
 	if player_head != null and camera_3d != null:
 		player_head.rotation.y = cam_yaw
 		camera_3d.rotation.x = cam_pitch
@@ -804,15 +1025,15 @@ func _process(delta: float) -> void:
 	if sword_pivot != null:
 		if attack_swing_timer > 0.0:
 			var prog: float = 1.0 - (attack_swing_timer / 0.28)
-			sword_pivot.rotation_degrees = Vector3(12.0 - prog * 68.0, -14.0 + prog * 45.0, 8.0 + prog * 35.0)
+			sword_pivot.rotation_degrees = Vector3(14.0 - prog * 68.0, -16.0 + prog * 45.0, 8.0 + prog * 35.0)
 		else:
-			sword_pivot.rotation_degrees = Vector3(12.0 + sin(anim_time * 3.0) * 1.5, -14.0, 8.0)
+			sword_pivot.rotation_degrees = Vector3(14.0 + sin(anim_time * 3.0) * 1.5, -16.0, 8.0)
 
 	if shield_mesh != null:
 		if shield_active:
 			shield_mesh.position = Vector3(-0.18, -0.14, -0.44)
 		else:
-			shield_mesh.position = Vector3(-0.46, -0.34, -0.52)
+			shield_mesh.position = Vector3(-0.46, -0.34, -0.50)
 
 	var forward: Vector3 = Vector3(-sin(cam_yaw), 0.0, -cos(cam_yaw))
 	var right: Vector3 = Vector3(cos(cam_yaw), 0.0, -sin(cam_yaw))
@@ -860,6 +1081,7 @@ func _process(delta: float) -> void:
 				if ed.has("node3d") and is_instance_valid(ed["node3d"]):
 					var n3d: Node3D = ed["node3d"]
 					n3d.position = epos
+					n3d.look_at(Vector3(player_pos_3d.x, epos.y, player_pos_3d.z), Vector3.UP)
 			var atk_t: float = float(ed.get("atk_timer", 1.2)) - delta
 			if atk_t <= 0.0 and dist_p <= 3.0:
 				atk_t = 1.65
